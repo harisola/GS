@@ -1,0 +1,518 @@
+.container {
+	width: 100%;
+}
+.LeftListing_ContentSection {
+	border:1px solid #ccc;
+	float:left;
+	width:100%;
+}	
+.LeftListing_ContentSection .headingArea h2 {
+	margin:0;
+	padding:10px;
+	color:#fff;
+	font-size: 18px;
+    font-weight: normal;
+}
+.LeftListing_ContentSection .headingArea {
+	background: #a35555;
+	width:100%;
+}
+.LeftListing_ContentSection table {
+	padding:0 15px;	
+}
+.ClassBox {
+	background: #364150;
+}
+.ClassBox h2 {
+	color: #fff;
+    background: #1c2735;
+}
+.JinnahBox {
+	background: url(images/stripesjinnah.png);
+	opacity:0.7
+}
+.JinnahBox h2 {
+	background: #d4c30b !important;
+	color:#000;
+}
+.JinnahBox .StuNum {
+	color: #383838 !important;	
+}
+.SyedBox {
+	background: url(images/stripessyed.png);
+	opacity:0.7
+}
+.SyedBox h2 {
+	background: #195eb1;
+}
+.IqbalBox {
+	background: url(images/stripesiqbal.png);
+	opacity:0.7
+}
+.IqbalBox h2 {
+	background: #21713f;
+}
+.SyedBox.houseBoxDetail h2,
+.IqbalBox.houseBoxDetail h2 {
+	color:#fff;
+}
+.houseBoxDetail {
+	position:relative;	
+	height:140px;
+}
+.houseBoxDetail h2 {
+    font-size: 18px;
+	    margin: 0;
+    padding: 5px 12px;
+}
+.maleStu small,
+.femaleStu small {
+	font-size:10px;
+}
+.maleStu {
+    border-right: 1px dotted #fff;
+    font-size: 22px;
+    text-align: center;
+	color:#fff;
+}
+.maleStu span.StuNum,
+.femaleStu span.StuNum {
+	font-size:44px;
+	color:#fff;
+	 font-family: 'open_sansbold';
+}
+.femaleStu {
+    font-size: 22px;
+	text-align: center;
+	color:#fff;
+}
+.titleSmall {
+	position:relative;	
+}
+.titleSmall img {
+    opacity: 0.5;
+    margin-top: -18px;
+    margin-left: 7px;
+	position:absolute
+}
+.allStu {
+	border-bottom: 1px dotted #fff;
+    font-size: 34px;
+    text-align: center;
+    color: #fff;
+	padding-bottom:10px;
+	font-family: 'open_sansbold';
+}
+.allStu small {
+	font-size:12px;	
+}
+/* */
+.ProfileDetail {
+	border:1px solid #ccc;
+	padding:0;
+}
+.ProfileDetail .headingArea {
+	background: #a35555;
+	padding:10px;
+	margin-bottom: 20px;
+}
+.ProfileDetail .headingArea h2 {
+	color:#fff;
+	font-weight:normal;
+	font-size:18px;
+	margin:0;
+}
+.ProfileDetail input[type="text"],
+.ProfileDetail input[type="date"],
+.ProfileDetail input[type="time"],
+.ProfileDetail input[type="number"] {
+	padding:5px;
+	width:100%;
+	line-height:15px;
+}
+.ProfileDetail input[type="time"],
+.ProfileDetail input[type="date"] {
+	padding:3px !important;	
+}
+#TTListing_wrapper {
+	 padding:0 10px;	
+	 padding-top:20px;
+	 float:left;
+	 width:100%;
+	     height: 670px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.ProfileDetail .col-md-6.borderRight {
+	min-height:650px;
+	border-right:1px solid #888;	
+}
+.borderTop {
+	border-top:1px solid #ccc;
+	padding:15px 0;
+	margin-top:30px;
+}	
+#StaffListHere_wrapper .row .col-xs-6:last-child,
+#TTListing_wrapper .row .col-xs-6:last-child {
+    width: 100%;
+}
+.no-paddingLeft {
+	padding-left:0;	
+}
+input[type="checkbox"] {
+	display:inline-block !important;	
+}
+.ProfileDetail h3 {
+	font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    font-weight: normal;
+    float: left;
+    width: 96%;
+    margin: 0 10px 20px;
+}
+.class_Name {
+	border: 1px solid;
+    background: #fff;
+    padding: 0px 0 0 2px;
+}	
+.BoySta {
+	border-color:#4f3d80;
+	font-size:10px;
+}
+.table > thead > tr > th {
+	font-size:12px !important;	
+}
+.BoySta .StuStatus {
+	    background: #4f3d80;
+}
+.GirlSta {
+	border-color:#7c1f4a;
+	font-size:10px;
+}
+h3.secTitle {
+    font-size: 16px;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 10px 10px 0;
+    font-weight: normal;
+    float: left;
+    width: 96%;
+    margin: 0 10px 20px 0;
+}
+.GirlSta .StuStatus {
+	    background: #7c1f4a;
+}
+
+.StuStatus {
+	color:#fff;	
+    padding: 0 4px;
+    margin-left: 2px;
+}
+.LeftAreaHead .innerHead {
+	background:#fff;
+	padding:5px 0;	
+}
+.LeftAreaHead .innerBody {
+	padding: 15px 0;
+    font-size: 28px;
+    font-weight: normal;
+    color: #fff;
+    letter-spacing: 1px;
+
+}
+.LeftAreaHead .innerFooter .col-md-4:last-child {
+	margin:0 !important	
+}
+.LeftAreaHead .innerFooter .col-md-4 {
+	    background: #d25e5e;
+    padding: 5px 0;
+    margin: 0 3% 10px 0;
+    width: 30%;
+    border: 1px solid #752f2f;
+    color: #fff;
+    font-size: 14px;
+}
+.LeftAreaHead .innerFooter .col-md-4 .grayish {
+	color:#f9f9f9;
+	font-size:	
+}
+.RightAreaHead {
+	font-size: 14px;
+}
+.RightAreaHead .innerHead {
+	    background: #d25e5e;
+    padding: 5px;
+    color: #fff;
+    border: 1px solid #752f2f;	
+    margin-bottom: 10px;
+}
+.RightAreaHead .innerBody {
+	    background: #d25e5e;
+    padding: 5px;
+    color: #fff;
+    border: 1px solid #752f2f;	
+}
+.RightAreaHead .innerFooter .col-md-4:last-child {
+	margin:0 !important	
+}
+.RightAreaHead .innerFooter .col-md-4 {
+	    background: #fff;
+    padding: 5px 0;
+    margin: 0 5% 0 0;
+    width: 30%;
+}
+.RightAreaHead .innerFooter .col-md-4 .grayish {
+	color:#888;
+	font-size:	
+}
+.TeachPP img {
+	border:1px solid #ccc
+}
+.marginRight10 {
+	margin-right:10px;	
+}
+.RightInformation_headerSection {
+		border:1px solid #c34a4a;
+		float:left;
+		background: #fff;
+		padding:10px 0;
+		min-height:123px;
+		max-height:123px;
+}
+.entitiyPlace, .GSPlace {
+	background:#fff;	
+	padding:10px 0;
+	font-size:16px
+}
+.namePlace {
+	font-size:24px;
+	padding:10px 0;	
+}
+.detailHeaderRight {
+	
+}
+.detailHeaderRight .col-md-6 {
+	background: #fff;
+    padding: 11px 0;
+    width: 44%;
+    margin: 2px 3%;
+}
+.detailHeaderRight .col-md-6 .noBG:last-child {
+	margin:0 !important;	
+}
+.detailHeaderRight .col-md-6 .noBG {
+	background: #fff;
+    padding: 11px 0;
+    margin: 0px 12% 0 0;
+    width: 44%;
+}
+#EntitityListing_wrapper table {
+    overflow-y: scroll;
+    width: 98%;
+    padding-right: 1px;
+    height: 577px;
+	overflow-x:hidden;
+}
+#EntitityListing_wrapper .row .col-sm-6:first-child {
+	display:block !important;	
+}
+#EntitityListing {
+	background:#fff;	
+}
+#EntitityListing_wrapper .dataTables_filter {
+	float:right;
+}
+.BrowsingList {
+    border-right: 2px dashed #888;
+	padding-left:25px;
+}
+div.tab-pane {
+    padding: 0 !important;
+    border: 0 none !important;
+}
+h2.headHeading {
+    font-size: 14px;
+    font-weight: normal;
+    color: #c34a4a;
+    letter-spacing: 1px;	
+}
+.normalFont {
+	font-weight:normal;	
+}
+.borderRightRed {
+	border-right: 2px solid #e26a6a;	
+}
+.navbar-brand {
+    padding: 6px 0 0 12px !important;
+	width: 220px;
+	margin-right:30px;
+}
+.borderRedImage {
+	border:1px solid #752f2f;
+}
+/* Presence Verified */
+.PV {
+	border-color:green;	
+}
+.PV .AttStatus {
+	background:green;
+	color:#fff;	
+}
+/* Presence Pending Verification */
+.PP {
+	border-color:#00ff00;	
+}
+.PP .AttStatus {
+	background:#00ff00;
+	color:#000;	
+}
+/* Absence Pending Verification */
+.AP {
+	border-color:#ff8000;	
+}
+.AP .AttStatus {
+	background:#ff8000;
+	color:#000;	
+}
+/* Absent Authorized */
+.AA {
+	border-color:#ff6600;	
+}
+.AA .AttStatus {
+	background:#ff6600;
+	color:#000;	
+}
+/* Absent Unauthorized */
+.AU {
+	border-color:#ff0000;	
+}
+.AU .AttStatus {
+	background:#ff0000;
+	color:#fff;	
+}
+/* Tap in Awaited */
+.TA {
+	border-color:#7f7f7f;	
+}
+.TA .AttStatus {
+	background:#7f7f7f;
+	color:#000;	
+}
+/* Not Expected Today */
+.NE {
+	border-color:#000;	
+}
+.NE .AttStatus {
+	background:#000;
+	color:#fff;	
+}
+.AttBox {
+	border:1px solid;
+	float:left;
+	width:100%;	
+	font-size:10px;
+}
+.AttStatus {
+	width:33%;
+	text-align:center;
+	float:left;
+	padding:1px 0;
+}
+.Att10Days {
+	width:33%;
+	background:#fff;
+	text-align:center;
+	float:left;
+	padding:1px 0;
+}
+.Att60Days {
+	width:34%;
+	background:#ccc;
+	text-align:center;
+	float:left;
+	padding:1px 0;
+}
+.breadcrumb li {
+    float: left;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0 7px 0 14px;
+    text-transform: uppercase;
+    font-size: 12px;
+    line-height: 17px;
+    letter-spacing: 1px;
+    font-weight: normal;
+}
+.breadcrumb .active {
+    margin-top: 5px;
+    margin-left: 9px;
+    color: #777;
+    font-weight: bold;
+}
+.content-wrapper {
+    min-height: 860px !important;
+	max-width: 1700px;
+    margin: 0 auto;
+}
+.leftLab {
+	float:left;	
+	width:80px;
+}
+.leftLab2 {
+	float:left;	
+	width:60px;
+}
+.lightHR {
+	margin:4px 0;
+	border-top: 1px solid #ccc;
+}
+div.dataTables_filter input {
+	max-width:140px;	
+}
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    padding: 4px 4px;
+}
+.xedit span.grayish {
+    color: #888;
+    float: left;
+    width: 140px;
+}
+tr.selected{
+    background-color: #d8e3e6;
+}
+.anchorCol:hover {
+	text-decoration:none;	
+}
+.anchorCol {
+	color:#000;
+	text-decoration:none !important;
+	border-bottom:1px solid #000;
+}
+#user > tbody > tr > td {
+    padding: 4px 8px;
+    height: 34px;
+}
+tr.selected td {
+    background: #d8e3e6 !important;
+}
+.EntitityListing_length select {
+	padding:3px !important;	
+}
+div.dataTables_filter input {
+	padding:4px 6px !important;	
+}
+.show {
+	display:block !important;	
+}
+.showOnScroll {
+    float: left;
+    width: 100%;
+    height: 43px;
+    margin-bottom: 5px;
+    border: 1px solid #c34a4a;
+}
+tr.Fence td,
+tr.Fence td a {
+	color:#666;	
+}

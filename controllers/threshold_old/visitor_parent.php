@@ -1,0 +1,156 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+
+class Visitor_parent extends MY_Controller {
+	public function __construct(){
+		parent::__construct();		
+	}
+
+
+	public function index()		
+	{
+		$this->form_validation->set_rules($this->validation_visitor_parent);
+		$this->form_validation->set_message('validate_rfid','Please tap only authorized PARENT / GUARDIAN card!');
+
+		$this->GFID = "";
+		$this->parent_visit_purpose = "";
+		$this->parent_visit_to_person = "";
+		$this->parent_visit_to_dapartment = "";
+		$this->parent_assigned_card = "";
+		$this->father_img_path = "";
+
+								
+		if($this->form_validation->run() == FALSE){
+			if(count($_POST))
+			{
+				$this->GFID = $this->input->post('gf_id');
+				$this->parent_visit_purpose = $this->input->post('parent_visit_purpose');
+				$this->parent_visit_to_person = $this->input->post('parent_visit_to_person');
+				$this->parent_visit_to_dapartment = $this->input->post('parent_visit_to_dapartment');
+				$this->parent_assigned_card = $this->input->post('parent_assigned_card');
+				$this->father_img_path = $this->input->post('father_img_path');
+				$this->load->view('threshold/parent/visitor_parent_assigncard_form', 'refresh');
+			}else{
+				$this->load->model('class_list/class_list_current_model');
+				$this->data['class_list_data'] = $this->class_list_current_model->getThresholdParentsData();
+
+				$this->load->view('threshold/parent/visitor_parent_assigncard_form');
+				$this->load->view('threshold/parent/visitor_parent_assigncard');
+				$this->load->view('threshold/parent/visitor_parent_footer_orb');
+			}			
+		} else {
+			$this->add();
+		}
+	}
+
+	
+	public $validation_visitor_parent = array(
+		array('field' => 'gf_id', 'label' => 'GF ID', 'rules' => 'trim|sanitize|required'),
+		array('field' => 'no_of_persons', 'label' => 'Visitor', 'rules' => 'trim|sanitize|required'),
+		array('field' => 'parent_visit_purpose', 'label' => 'Parent visit purpose', 'rules' => 'trim|sanitize|required'),
+		array('field' => 'parent_visit_to_dapartment', 'label' => 'Parent visit department', 'rules' => 'trim|sanitize|required'),
+		array('field' => 'parent_assigned_card', 'label' => 'Visitor Card No.', 'rules' => 'trim|sanitize|required|min_length[10]|max_length[10]|callback_validate_rfid')
+	);
+
+
+
+	function validate_rfid($str)
+	{
+	   $result = false;
+	   $field_value = $str;
+	   $this->load->model('threshold/visitors_card_model');
+
+	   if($this->input->post('no_of_persons') == 'F' || $this->input->post('no_of_persons') == 'M' || $this->input->post('no_of_persons') == 'B'){
+		   $visitor_type = 1;	   
+		   
+		   if($this->visitors_card_model->checkRFIDCard($field_value, $visitor_type))
+		   {
+		     $result = TRUE;
+		   }
+		   else
+		   {
+		     $result = FALSE;
+		   }
+	   }	   
+
+	   if($this->input->post('no_of_persons') == 'O'){
+		   $visitor_type = 8;
+		   if($this->visitors_card_model->checkRFIDCard($field_value, $visitor_type))
+		   {
+		     $result = TRUE;
+		   }
+		   else
+		   {
+		     $result = FALSE;
+		   }
+		}
+
+	   return $result;
+	}	
+
+
+
+	public function add()
+	{
+		if(count($_POST))
+		{
+			$this->load->model('threshold/visitor_parent_model');
+			$now = date('Y-m-d H:i:s');
+
+			if($this->input->post('no_of_persons') == 'F' || $this->input->post('no_of_persons') == 'M' || $this->input->post('no_of_persons') == 'B'){
+				$type_id = 1;
+			}else if($this->input->post('no_of_persons') == 'O'){
+				$type_id = 8;
+			}
+			
+			$no_of_person = 0;
+			$name = "";
+			$nic = "";
+			$mobile_phone = "";
+			$purpose = $this->input->post('parent_visit_purpose');
+			$contact_person = $this->input->post('parent_visit_to_person');
+			$contact_department = $this->input->post('parent_visit_to_dapartment');
+			$description = $this->input->post('gf_id');
+			$rfid_dec = $this->input->post('parent_assigned_card');
+			$rfid_hex = dechex(intval($rfid_dec));			
+			$time_in = human_to_unix($now);
+			var_dump($this->input->post());
+
+
+			if ($this->input->post('no_of_persons') == 'F' || $this->input->post('no_of_persons') == 'M'){				
+				$no_of_person = 1;
+				if($this->input->post('no_of_persons') == 'F'){
+					$name = $this->input->post('parent_father_name');
+					$nic  = $this->input->post('parent_father_nic');
+					$mobile_phone  = $this->input->post('parent_father_mobile_phone');
+				}else if($this->input->post('no_of_persons') == 'M'){
+					$name = $this->input->post('parent_mother_name');
+					$nic  = $this->input->post('parent_mother_nic');
+					$mobile_phone  = $this->input->post('parent_mother_mobile_phone');
+				}
+			}else if($this->input->post('no_of_persons') == 'B'){
+				$no_of_person = 2;
+				$name = $this->input->post('parent_father_name');
+				$nic  = $this->input->post('parent_father_nic');
+			}
+
+			$data = array(
+				'type_id' => $type_id,
+				'no_of_persons' => $no_of_person,
+				'name' => $name,
+				'nic' => $nic,
+				'mobile_phone' => $mobile_phone,
+				'purpose' => ucwords(strtolower($purpose)),
+				'contact_person' => ucwords(strtolower($contact_person)),
+				'contact_department' => ucwords(strtolower($contact_department)),
+				'description' => $description,
+				'rfid_dec' => $rfid_dec,
+				'rfid_hex' => ucwords($rfid_hex),
+				'time_in' => $time_in
+			);
+
+			$this->visitor_parent_model->save($data);
+			redirect('/threshold/visitor_parent');
+		}
+	}
+}

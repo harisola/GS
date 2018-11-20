@@ -1,0 +1,105 @@
+<?php
+class Notify_header{
+	private $ci;
+	function __construct(){
+		$this->ci =& get_instance(); 
+	}
+	
+	public function group_menus_count(){
+		
+		$this->ci->load->model('etab/teacher_side/teacher_side_model', 'ETS');
+		$userid = (int)$this->ci->session->userdata('user_id');
+		$reg_user = $this->ci->ETS->getStaffID( $userid );
+		$reg_user_id = $reg_user['id'];
+		$branch_id = (int)$reg_user['branch_id'];
+		$this->ci->load->model('etab/academic/academic_model','AM');
+		$sessions = $this->ci->AM->getSession($branch_id);
+		$c_sss_id = $sessions[0]["id"];
+		$sessionsTerm = $this->ci->AM->getSesstrm($c_sss_id);
+		$term = (int)$sessionsTerm[0]["TermID"];
+		$html = '';
+		$isLead = NULL;
+		$dbRoleMatrix = 'role_matrix';
+		$tablename = 'setup_grade_lt';
+		$select = "id,staff_id";
+		$where = array( "staff_id" => $reg_user_id );
+		$isLead = $this->ci->ETS->getAll( $dbRoleMatrix, $tablename, $select, $where);
+		
+		$this->ci->load->model('student_attendance/notification_log', 'NTF');
+		if( $zero_or_one = $this->ci->NTF->check_user_group2($userid) ){
+			$checking = $zero_or_one["result"];
+			if( $checking == 1 ){
+				if( $notify_list = $this->ci->NTF->get_notification($userid)){}else{ $notify_list=TRUE;}	
+			}else{ $notify_list = FALSE; }
+			
+		}else{ $notify_list = FALSE; }
+		if( $unread_list = $this->ci->NTF->get_unread_notification($userid) ){}else{ $unread_list = FALSE; }
+		if( !empty( $unread_list )){
+			if( count( $unread_list ) > 0 ){ $countN = count( $unread_list ); }else{ $countN =0; }
+		}else{ $countN = 0; }
+		
+		
+				
+		if( $isLead != NULL && !empty( $isLead ) ) {
+		$html .= '<div class="btn-groups pull-left">';
+		$html .= '<button type="button" class="btn btn-default" data-toggle="dropdown">';
+		$html .= '<i class="entypo-megaphone"></i>';
+		//print_r( $is_lead );
+		$count = 0;
+		$prameters = "teacher_id=".$reg_user_id;
+		$notify_url = site_url().'/process/notifications?'.$prameters.'';
+		foreach($isLead AS $prg ){
+			if( $prg["staff_id"] > 0 ){
+				$count +=  $this->prgAssmnt2( $prg["staff_id"],$c_sss_id,$term );
+			}
+			
+		}// end foreach
+		//if( $count > 0 ){
+			$html .= '<span class="new"></span>';
+		//}
+		$html .= '</button>';
+		$html .= '<div id="notification-dropdown" class="dropdown-menu">';
+		$html .= '<div class="dropdown-header">Notifications <span class="badge pull-right">';
+		$html .= $count;
+		$html .= '</span></div>';
+		$html .= ' <div class="dropdown-footer">';
+		$html .= '<a class="btn btn-dark" href="'.$notify_url.'">';
+		$html .= 'See All';
+		$html .= '</a>';
+		$html .= '</div>';
+        $html .= '</div>';
+		$html .= '</div>';
+		$html .= $this->notify_list2($countN);
+		}else{ 
+			if( !empty( $notify_list )  ){ 
+					$html .= $this->notify_list2($countN);
+				}else{ $countN =0; }
+			}
+			$this->ci->load->database('default',TRUE);
+		return $html;
+	}
+	
+	public function prgAssmnt2( $proID, $session,$term ){
+		$this->ci->load->model('etab/teacher_side/teacher_side_model', 'ETS');
+		$notifications = $this->ci->ETS->countNotifications($proID,$session,$term);
+		return $notifications["Notification"];
+		
+	}
+	
+	
+	public function notify_list2($countN){
+		$html = '';
+		$html .= '<div class="btn-groups pull-left">';
+		$html .= '<button type="button" class="btn btn-default" data-toggle="dropdown">';
+		$html .= '<i class="entypo-megaphone"></i>';
+		$html .= '<span class="newNofitication" id="newNofitication" style="display: block;"> '. $countN.' </span>';	
+		$html .= '</button>';
+		$html .= '<div id="notification-dropdown" class="dropdown-menu">';
+		$html .= '<div class="dropdown-header">Notifications <span class="badge pull-right" id="newNotify">'. $countN.'</span></div>';
+		$notify_url2 = base_url() ."index.php/fo/notify_log";
+		$html .= '<div class="dropdown-footer"><a class="btn btn-dark" href="'. $notify_url2.'">See All</a></div>';
+		$html .= '</div>';
+		$html .= '</div>';
+		return $html;
+	}
+}	

@@ -1,0 +1,31 @@
+<?php 
+$boolean = true;
+	if(!empty($mainCatSub) ){ 
+?>
+<?php foreach( $mainCatSub as $cat ): ?>
+<section class="col col-5">
+<?php if( $boolean ){ ?>
+<label class="label">Category Type  </label>
+<?php } ?>
+<strong> <?=ucwords( strtolower( $cat->name ) );?></strong>
+<input type="hidden" name="subCategory[]" value="<?=$cat->id;?>" />
+</section>
+<section class="col col-3">
+<?php if( $boolean ){ ?>
+<label class="label">Weighate  </label>	
+<?php } ?>
+<input type="hidden" value="" class="catWeighateHide" name="1" />
+<input type="hidden" name="assessmentID[]" value='no_data' />
+<label class="select">
+<select name="weightage[]" class="weighateges">
+<option value="0">  Choose Weighate  </option>
+<?php for($counter = 1; $counter <= 100; $counter+= 0.5){ ?>
+<option value="<?=$counter;?>" <?php //if($counter == 30) echo "selected"; ?>> <?=$counter;?> </option>
+<?php } ?>
+</select>
+<i></i> </label>
+</section>
+<?php 
+	$boolean = false; 
+endforeach; ?>
+<?php } ?>

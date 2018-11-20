@@ -1,0 +1,145 @@
+    </div>
+    <!-- All Complete and Close -->
+  </div>
+  <!--/MainWrapper--> 
+</div>
+<!--/Smooth Scroll--> 
+
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/jquery/jquery.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/jquery/jquery-ui.min.js"></script> 
+
+
+
+<!--Horizontal Dropdown--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/horisontal/cbpHorizontalSlideOutMenu.js"></script> 
+
+
+
+
+<!--PowerWidgets--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/powerwidgets/powerwidgets.js"></script> 
+
+<!--Bootstrap--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/bootstrap/bootstrap.min.js"></script> 
+
+
+
+<?php
+    if($this->data['can_user_view'] == 1  || $this->data['can_user_add'] ==1 || $this->data['can_user_print'] == 1 || $this->data['can_user_export'] ==1 ||
+    $this->data['can_user_edit'] == 1 || $this->data['can_user_delete'] == 1 || $this->data['can_user_approve'] == 1)
+{ ?> 
+<!--X-Editable--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/bootstrap-editable.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/demo.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/demo-mock.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/select2.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/address.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/jquery.mockjax.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/moment.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/select2-bootstrap.css"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/typeahead.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/typeaheadjs.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>components/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url()?>components/js/dataTables.tableTools.min.js"></script>
+<?php } ?>
+
+
+
+
+
+<!--Main App--> 
+<script type="text/javascript">
+//ORB JavaScript
+// DOM Preload
+(function ($) {
+
+
+    $(document).ready(function () {
+
+$('#EntitityListing').dataTable({
+      "columnDefs": [ {
+          "targets": 'no-sort',
+          "orderable": false,
+    } ],
+    "aLengthMenu": [[50, 60, 70, -1], [50, 60, 70, "All"]],
+    "iDisplayLength": 50
+  });
+
+
+      
+
+
+        
+
+    });
+})(jQuery);
+</script> 
+
+
+
+
+<script type="text/javascript" src="<?php echo base_url()?>components/js/anstyle.js"></script>
+
+<script>
+
+  isDown = false;
+  $(document).ready(function(){
+	
+    $('#EntitityListing_wrapper').scroll(function() {
+       var scroll = $('#EntitityListing_wrapper').scrollTop();
+
+       if(scroll >= 100 && !isDown){  
+         $( ".a" ).addClass( "hide" ); 
+         $( ".b" ).addClass( "show" );     
+       
+        isDown = true;
+       }else if(scroll < 100 && isDown){
+          $( ".a" ).removeClass( "hide" );
+          $( ".b" ).removeClass( "show" );
+          isDown = false;
+        
+       }
+     
+    });
+  });
+  
+  
+  
+$(document).ready(function(){
+	
+$(document).on("click", ".tab_action", function(){
+
+	
+	var tid = $(this).prop("id");
+	var arr = tid.split("_");
+	var tab_id = arr[0];
+	var student_id = parseInt( $("#student_id").val() );
+	 
+	
+	 
+	if( student_id > 0 ){
+        $.ajax({
+            type: "POST",
+            url: "<?=base_url();?>index.php/student_listing/tabs/view_tab",
+			beforeSend: function(){ $("#ajaxloader").show(); },
+			data:{tab_id:tab_id,student_id:student_id},
+			dataType:"HTML",
+			success: function(res){
+               $("#"+tab_id).html('');
+			   $("#"+tab_id).html(res);
+			},
+			complete:function(){ $("#ajaxloader").hide(); },
+			error:function(){}
+
+        });
+		
+		
+	 } // not empty
+	 
+ });
+   });
+</script>
+
+
+</body>
+</html>

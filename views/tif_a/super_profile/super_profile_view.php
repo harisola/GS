@@ -1,0 +1,251 @@
+<style>
+.container {
+	width: 100% !important;
+}
+
+.content-wrapper {
+    min-height: 860px !important;
+	max-width: 1700px !important;
+    margin: 0 auto;
+}
+div.dataTables_filter input {
+	max-width:140px;	
+}
+.table > thead > tr > th, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > tbody > tr > td, 
+.table > tfoot > tr > td {
+    padding: 4px 4px;
+}
+.xedit span.grayish {
+    color: #888;
+    float: left;
+    width: 140px;
+}
+.widthSmall {
+	width:200px !important;
+	font-size:16px !important;	
+}
+.absoluteBtn {
+    position: absolute;
+    background: #1bbc9b;
+    color: #fff;
+    font-size: 16px;
+    right: 0px;
+    padding: 10px 15px;
+    top: 0px;
+}
+.absoluteBtn:hover {
+	color:#000;
+}
+.headingArea {
+	position:relative;	
+}
+.contentArea {
+	padding:0 20px;	
+}
+p.policy {
+	font-size:16px;
+}
+h3.underline {
+	display:inline-block;
+	border-bottom:2px solid #888;
+}
+.contentArea div.text-center {
+	margin-bottom:20px;	
+}
+ul.policyList {
+    font-size: 16px;
+    line-height: 28px;
+}
+ul.policyList li {
+	line-height:30px;	
+}
+/* */
+input[type="time"],
+input[type="text"] {
+	    width: 80%;
+    height: 24px;
+	padding:0 5px;
+}
+#example thead tr {
+	display:;	
+}
+.DTFC_Cloned thead tr {
+	
+}
+table.dataTable {
+	margin-top:0 !important;	
+}
+table.table.table-striped.table-bordered.table-hover.dataTable.no-footer.DTFC_Cloned tbody td {
+    background: #ececec;
+}
+#example_wrapper {
+    padding: 0 20px 20px;
+}	
+.SuperProfileArea {
+    border: 1px solid #ccc;
+    padding: 0;
+}
+.SuperProfileArea .headingArea {
+    background: #a35555;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.SuperProfileArea .headingArea h2 {
+    color: #fff;
+    font-weight: normal;
+    font-size: 18px;
+    margin: 0;
+}
+.SuperProfileArea table td {
+    padding: 10px 5px !important;
+}
+th.text-left.sorting.ui-state-default,
+.DTFC_Cloned th.no-sort.text-center.sorting.ui-state-default,
+th.text-left.ui-state-default,
+.DTFC_Cloned th.no-sort.text-center.ui-state-default, 
+.DTFC_Cloned th.no-sort.text-center.ui-state-default {
+    background: #ececec !important;
+}
+input[type="button"].greenBTN, input[type="submit"].greenBTN {
+    background: #1bbc9b;
+    color: #fff;
+    border: 1px solid #169d81;
+    width: 28%;
+    padding: 8px;
+    font-size: 14px;
+}
+.row.nomargin {
+	margin:0 !important;	
+}
+.modal-dialog {
+    width: 450px;
+    margin: 30px auto;
+}
+.TimeLineModal .modal-footer {
+    float: left;
+    width: 100%;
+    padding: 0;
+    text-align: center;
+    padding-bottom: 10px;
+    border-top: 1px solid #ccc;
+    padding-top: 10px;
+    margin-top: 5px;
+}
+.TimeLineModal input[type="text"] {
+	width:100%;
+	padding:15px 6px;	
+}
+.editable.editable-click {
+    font-size: 14px;
+    color: #000;
+    border-bottom: dashed 1px #000000;
+    font-weight: normal;
+}
+a.editable {
+    font-size: 18px;
+    font-weight: bold;
+    color: #d87474;
+    border-bottom: 1px solid;
+}
+a.editable:hover {
+	text-decoration:none;	
+}
+
+
+</style>
+
+<link id="main-style" href="<?php echo base_url('components/gs_theme/css/super_profile/super_profile.css') ?>" rel="stylesheet" type="text/css">
+<script src="<?php echo base_url('components/gs_theme/css/super_profile/js/index.js') ?>"></script>
+<div class="container">
+	<div class="row">
+    	<div class="col-md-12">
+        	<div class="container-fluid">
+              <div class="col-md-12 SuperProfileArea">
+
+             
+              <div class="modal fade TimeLineModal" id="NewSuperProfile" role="dialog"  >
+                        <div class="modal-dialog">
+                        
+                          <!-- Modal content-->
+                          <div class="modal-content">
+                          <div id="replace_modal"></div>
+                         
+                          </div>
+                          
+                        </div>
+                    </div><!-- SetHolidayParameter -->
+               
+              	<div class="headingArea"><h2>Super Profiles <button  class="absoluteBtn" data-toggle="modal" data-target="#NewSuperProfile" id="add_button" >Add new Profile</button></h2></div>
+                <div class="replace_table">
+                <table width="" border="1" id="example" class="table table-striped table-bordered table-hover" style="padding:0 20px">
+                  <thead>
+                      <tr>
+                        <th class="text-left" width="300">TT Profiles</th>
+                        <th class="no-sort text-center" width="200">TT Profile Timing</th>
+                        <?php foreach($super_profile_desc as $super_profile) { ?>
+                            <th class="no-sort text-center" width="200" data-super_id="<?php echo $super_profile->ID ?>"><?php echo $super_profile->cat_name ?></th>
+                        <?php } ?>
+                      </tr>
+                  </thead><!-- thead -->
+                  <!-- thead -->
+                  <tbody>
+                    <?php foreach($tt_profile as $profile) { ?>
+                      <tr class="">
+                        <td class="text-left"><strong><?php echo $profile->name  ?></strong></td>
+                        <td class="text-center"><div class="col-md-12 no-padding"><div class="col-md-5 no-padding"><?php echo date("g:i A",strtotime($profile->mon_in)) ?></div><div class="col-md-2">-</div><div class="col-md-5 no-padding"><?php echo date("g:i A",strtotime($profile->mon_out)) ?></div></div></td>
+
+                        <?php foreach($super_profile_desc as $super_profile) { ?>
+
+                         <?php  foreach ($super_profile_time as $super_time) { ?>
+
+                           <?php  if($super_profile->ID == $super_time->super_profile_id && $super_time->profile_id == $profile->id) { ?>
+
+                            <?php if($super_time->is_on_mon == 1) { ?>
+                           <td class="text-center"><div class="col-md-12 no-padding">
+						   <div class="col-md-5 no-padding">
+						   <a href="#" class="MonIN" data-placement="bottom" data-title="Morning" data-profile_id ="<?php echo $super_time->profile_id ?>" data-super_profile="<?php echo $super_time->super_profile_id ?>" data-pk="<?php echo $super_time->id ?>" data-type="combodate">
+						   <?php echo date("g:i A",strtotime($super_time->mon_in)) ?>
+						   </a>
+						   </div>
+						   <div class="col-md-2">-</div>
+						   <div class="col-md-5 no-padding">
+						   <a href="#" class="MonOUT" data-placement="bottom" data-title="Afternoon" data-profile_id ="<?php echo $super_time->profile_id ?>" data-super_profile="<?php echo $super_time->super_profile_id ?>" data-pk="<?php echo $super_time->id ?>" data-type="combodate"><?php echo date("g:i A",strtotime($super_time->mon_out)) ?></a></div></div></td>
+                            <?php } else  { ?>
+
+                            <td class="text-center"><div class="col-md-12 no-padding"><div class="col-md-5 no-padding"><a href="#" class="MonIN" data-placement="bottom" data-title="Morning" data-profile_id ="<?php echo $super_time->profile_id ?>" data-super_profile="<?php echo $super_time->super_profile_id ?>" data-pk="<?php echo $super_time->id ?>" data-type="combodate">00:00</a></div><div class="col-md-2">-</div><div class="col-md-5 no-padding"><a href="#" class="MonOUT" data-placement="bottom" data-title="Afternoon" data-profile_id ="<?php echo $super_time->profile_id ?>" data-super_profile="<?php echo $super_time->super_profile_id ?>" data-pk="<?php echo $super_time->id ?>" data-type="combodate">00:00</a></div></div></td>
+
+                            <?php } //end else ?>
+
+                           <?php  }  // end if ?>
+
+                         <?php  } // end super time ?>
+
+                        <?php } //end super profile  ?> 
+
+                      </tr>
+                      <?php } ?>
+
+                  </tbody>
+                </table>
+                </div>
+              </div>
+			</div>
+
+        </div><!-- col-md-12 -->
+    </div><!-- row -->
+    
+    
+
+<!-- bootstrap -->
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>  
+
+<!-- x-editable (bootstrap version) -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet"/>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.4.6/bootstrap-editable/js/bootstrap-editable.min.js"></script>
+
+</div><!-- container -->

@@ -1,0 +1,81 @@
+<?php
+class Option_level_allocation extends MY_Controller{
+	function __construct() {
+		parent::__construct();
+	}
+	
+	public function index(){
+		$this->load->model('autocomplete/anotherdb_model','ANM');
+		$data['grades'] = $this->ANM->getSomething();
+		if( $this->input->get('grade', TRUE ) ){
+			$this->load->model('subjects/subject_model','SM');
+			$gradesID =  $this->input->get('grade', TRUE);
+			$groupID =  $this->input->get('group', TRUE);
+			$subjectID =  $this->input->get('subject', TRUE);
+			
+			$data['gradesID'] = $gradesID;
+			$data['group'] = $groupID;
+			$data['subjectID'] = $subjectID;
+			$tablename = "subject";
+			$select = "dname";
+			$where = array("id" => $subjectID);
+			$data['subjectname'] = $this->SM->getSingleRow( $tablename, $select, $where );
+			//$subjectname->dname;
+			
+		$tablename3 = "`subject_selection_student2`";	
+		$where3 = array("subject_selection_grade_id" => $subjectID, "grade_id" =>$gradesID, "group_no"=>$groupID, 'subject_selection_grade_id !=' => 1);
+		//$data['countStudents'] = $this->SM->countAll( $tablename3, $where3);
+		$select3 = "subject_selection_grade_id AS subjectsID";
+		$grdGrpSubID = $this->SM->getR( $tablename3, $select3, $where3);
+		$data['countStudents'] = sizeof($grdGrpSubID);
+		//print_r( $data['countStudents']  );
+		//exit;
+		$table1 = "subject AS a";
+		$table2 = "subject_selection_student2 AS b";
+		$joinOn = "b.subject_selection_grade_id = a.id";
+		$where2 = array("b.grade_id" =>$gradesID, "b.group_no"=>$groupID, 'b.subject_selection_grade_id !=' => 1 );
+		$select2  = "a.id, a.name";
+		$data['optSubjects'] = $this->SM->joinSubjects( $table1, $table2, $joinOn, $select2, $where2 );
+		
+		
+		//$data['getStd'] = $this->SM->getStd( $gradesID, $groupID, $subjectID );
+		if( $gradesID < 6  ){
+			$acadmic =5;
+		}else{
+			$acadmic = 6;
+		}
+		$grdGroups  = $this->gradeGroups2( $gradesID, $acadmic);
+		
+		foreach( $grdGroups as $grp ){
+			$groupID = $grp["GroupID"];
+			$data["GENDER"][$groupID] = $this->SM->COUNTGENDER( $gradesID, $groupID, $subjectID );
+		}
+		
+		//var_dump( $data[4]["GENDER"] );
+		
+		}
+		
+		//exit;
+		
+		$this->load->view("subjects/option_allocation/option_allocation",$data);
+		$this->load->view("subjects/option_allocation/footer");
+	}
+	
+	
+	public function gradeGroups2($grdID , $acadmic ){
+		$this->load->model('subjects/subject_model','SM');
+		$grdID = $grdID;
+		$tablename = "`subject_selection_group_grade`";
+		$select = "`subject_selection_group_id` AS `GroupID`";
+		$where = array("academic_session_id" => $acadmic, "grade_id" =>  $grdID, "record_deleted" => 0);
+		if( $this->SM->getDistinct( $tablename, $select, $where) ){
+			$groupID = $this->SM->getDistinct( $tablename, $select, $where);		
+		}else{
+			$groupID = NULL;
+		}
+		return $groupID;
+	}
+	
+	
+	
+}	

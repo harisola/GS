@@ -1,0 +1,244 @@
+  <div class="col-md-4  bootstrap-grid sortable-grid ui-sortable">
+  <!-- <div class="col-md-6 bootstrap-grid"> --> 
+      
+    <!-- Applicant Form -->
+    
+    <div class="powerwidget <?php echo $title_background_color_add; ?> powerwidget-sortable" id="new_student_div" data-widget-editbutton="false" role="widget">
+      <header role="heading">
+        <h2>New<small>Vehicle</small></h2>
+        <div class="powerwidget-ctrls" role="menu">
+          <a href="#" class="button-icon powerwidget-fullscreen-btn"><i class="fa fa-arrows-alt "></i></a>
+          <a href="#" class="button-icon powerwidget-toggle-btn"><i class="fa fa-chevron-circle-up "></i></a>
+        </div>
+        <span class="powerwidget-loader"></span>
+      </header>
+      <div class="inner-spacer" role="content">
+        <form action="<?php echo site_url()?>/vehicle/new_vehicle/add" id="hcm_new_staff_form" name="hcm_new_staff_form" class="orb-form" novalidate="novalidate" method="POST">
+          <header>Vehicle Registration</header>
+          
+          <fieldset>            
+
+            <section>
+               <label class="select">
+              <select name="registered">
+                <option value="0"disabled="disabled" selected="selected">Choose Registered</option>
+                <?php foreach ($this->data['registered'] as $data) { ?>
+                  <?php if ($data['id'] != 0) { ?>
+                    <?php if(validation_errors() != false) { ?>
+                      <?php if($this->input->post('subject_id') == $data['id']) { ?>
+                        <option value="<?php echo $data['id']; ?>" selected="selected"><?php echo $data['name']; ?></option>
+                      <?php } ?>
+                        <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php }else{ ?>
+                    <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php } ?>
+                  <?php } ?>
+                <?php } ?>
+              </select>
+              <i></i>            
+            </label>
+            </section>
+            
+            </fieldset>
+          <fieldset>            
+                <section>
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input type="text" name="gvid" value="" placeholder="GV ID" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">GV ID</b> </label>
+                </section>
+                </fieldset>
+                <fieldset>            
+                <section>
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input type="text" name="namecode" value="" placeholder="Name Code" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">Name Code</b> </label>
+                </section>
+                </fieldset>
+                <fieldset>            
+                <section>
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input type="text" name="regno" value="" placeholder="Reg #" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">Register No:</b> </label>
+                </section>
+                </fieldset>
+                
+            <fieldset>
+            
+            
+            <section>
+            <label class="select">
+             <?php echo form_dropdown('league', $league,'','class="required" id="league"');  ?>
+             </label>
+             </section>
+        <!--Team dropdown-->
+
+
+        <section> 
+        
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input type="text" id="team" name="team" value="" placeholder="Make" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">Make </b> </label>
+                
+        </section>
+         
+            </fieldset>
+      
+            <section>
+            <label class="select">
+              <select name="colour">
+                <option value="0"disabled="disabled" selected="selected">Choose Colour</option>
+                <?php foreach ($this->data['color'] as $data) { ?>
+                  <?php if ($data['id'] != 0) { ?>
+                    <?php if(validation_errors() != false) { ?>
+                      <?php if($this->input->post('subject_id') == $data['id']) { ?>
+                        <option value="<?php echo $data['id']; ?>" selected="selected"><?php echo $data['name']; ?></option>
+                      <?php } ?>
+                        <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php }else{ ?>
+                    <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php } ?>
+                  <?php } ?>
+                <?php } ?>
+              </select>
+              <i></i>            
+            </label>
+      </section>
+            
+               <!--<section>
+             <label class="select">
+              <select name="capacity">
+                <option value="0"disabled="disabled" selected="selected">Choose Capacity</option>
+                <?php foreach ($this->data['capacity'] as $data) { ?>
+                  <?php if ($data['id'] != 0) { ?>
+                    <?php if(validation_errors() != false) { ?>
+                      <?php if($this->input->post('subject_id') == $data['id']) { ?>
+                        <option value="<?php echo $data['id']; ?>" selected="selected"><?php echo $data['name']; ?></option>
+                      <?php } ?>
+                        <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php }else{ ?>
+                    <option value="<?php echo $data['id']; ?>"><?php echo $data['name']; ?></option>
+                    <?php } ?>
+                  <?php } ?>
+                <?php } ?>
+              </select>
+              <i></i>            
+            </label>
+      </section>-->
+            <section>
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input type="text" name="rfdec" value="" placeholder="Rf dec" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">Rf dec</b> </label>
+                </section>
+                 <section>
+                  <label class="input"> <i class="icon-append fa fa-user"></i>
+                  <input input type="text" name="rfhex" value="" placeholder="Rf hex" required="required"/>
+                    <b class="tooltip tooltip-bottom-right">Rf hex</b> </label>
+                </section>
+           
+       <section>
+       <label class="select">
+      <select name="active">
+      <option value="0"disabled="disabled" selected="selected">Choose Status</option>
+        <option value="1" selected>Active </option>
+        <option value="0">Un-Active</option>
+       </select></label>
+       <input type="hidden" name="activedate" value="<?php echo $today = date("d-m-y");?>"/></section>
+          <footer>
+            <button type="submit" name="hcm_new_staff_add_button" class="btn btn-orb-org">Proceed</button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!-- End of Applicant form -->
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+   <!-- Datatables View users -->
+  <div class="col-md-8 bootstrap-grid sortable-grid ui-sortable">
+  <!-- <div class="col-md-12 bootstrap-grid"> -->
+    <div class="powerwidget <?php echo $class_list_color_view; ?> powerwidget-sortable" id="datatable-filter-column" data-widget-editbutton="false" role="widget" style="">
+      <header role="heading">
+        <h2>New Vehile Registration<small>Detail</small></h2>
+        <div class="powerwidget-ctrls" role="menu">
+          <a href="#" class="button-icon powerwidget-fullscreen-btn"><i class="fa fa-arrows-alt "></i></a>
+          <a href="#" class="button-icon powerwidget-toggle-btn"><i class="fa fa-chevron-circle-up "></i></a>
+        </div>
+        <span class="powerwidget-loader"></span>
+      </header>
+
+      <div class="inner-spacer" role="content">
+        <div id="new_admission_table_wrapper" class="dataTables_wrapper form-inline" role="grid">
+        <!-- <div class="ColVis"><button class="ColVis_Button ColVis_MasterButton"><span>Show / hide columns</span></button></div> -->
+
+          <table class="display table table-striped table-hover dataTable" id="vehicle_change_form_table" aria-describedby="class_list_info">
+
+            <thead>
+              <tr role="row">
+                <th class="sorting_asc" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="ID: activate to sort column descending" style="width: 15px;">ID</th>
+                <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="GV ID: activate to sort column ascending" style="width: 100px;">Gv id</th>
+                <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="Van Number: activate to sort column ascending" style="width: 120px;">Van Number</th>
+                 <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="Register Type: activate to sort column ascending" style="width: 120px;">Register type</th>
+                 <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="Name Code: activate to sort column ascending" style="width: 85px;">Name code</th>
+                 <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="Registration No: activate to sort column ascending" style="width: 120px;">Registration No</th>
+                <th class="sorting centered-cell" role="columnheader" tabindex="0" aria-controls="table-2" rowspan="1" colspan="1" aria-label="Is Active: activate to sort column ascending" style="width: 85px;">Is Active</th>
+               
+              </tr>
+            </thead>
+
+            <tfoot>
+              <tr>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_call_name" placeholder="Filter ID" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_photo" placeholder="Filter GV ID" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_abridged_name" placeholder="Filter Van Number" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_official_name" placeholder="Filter Register Type" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_official_name" placeholder="Filter Name Code" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_dob" placeholder="Filter Registration No" class="search_init"></th>
+                <th rowspan="1" colspan="1"><input type="text" name="filter_grade_section" placeholder="Filter Is Active" class="search_init"></th>
+               
+              </tr>
+            </tfoot>
+
+          <tbody role="alert" aria-live="polite" aria-relevant="all">
+          
+          <?php
+     foreach($this->vehicle_registration_model->gettablevehicle() as $row) 
+    {
+      ?>
+      <tr>
+      
+   <td class=" centered-cell"><?php echo $row->id; ?></td>
+   <td class=" centered-cell"><?php echo $row->gv_id; ?></td>
+   <td class=" centered-cell aneditable_van_number"><a href="#" data-type="text" data-name="van_number" data-pk="<?php echo $row->id; ?>" data-placement="top"><?php echo $row->van_number; ?></a></td>
+    <td class=" centered-cell"><?php echo$row->register_type; ?></td>
+     <td class=" centered-cell"><?php echo $row->name_code; ?></td>
+      <td class=" centered-cell"><?php echo $row->registration_no; ?></td>
+      <td class=" centered-cell"><?php echo $row->is_active; ?></td>
+      </tr>
+          <?php
+      }
+       ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of View users -->
+<!-- <td class=" centered-cell" style="background-color:#<?php echo $class_list['house_color_hex'];?>"><span style="background-color:#<?php echo $class_list['house_color_hex'];?>"><?php echo $class_list['house_dname']; ?></span></td>
+-->
+      
+      
+      
+    

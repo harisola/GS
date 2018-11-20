@@ -1,0 +1,318 @@
+<?php
+class Master_calendar_ajax extends CI_Controller{
+	public function __construct(){
+		parent::__construct();
+	}
+	
+	public function loadHtml(){
+		$StartDate = '2017-02-05';
+		$EndDate = '2017-04-30';
+		$data['CalenderDates'] = $this->getMasterCalender($StartDate,$EndDate);
+		$data["controller"]=$this;
+		$response = $this->load->view('master_calendar/load_html',$data,TRUE);
+		echo $response;
+	}
+	public function getMasterCalender($StartDate,$EndDate){
+		$this->load->model("master_calendar/master_calender","MC");
+		return $this->MC->GetDate($StartDate,$EndDate);
+	}
+	
+	/**
+	* Get week and its start and ending date
+	*
+	* @param unknown_type $date
+	*/
+	public function week_start_end_by_date($date, $format = 'Y-m-d') {
+	    //Is $date timestamp or date?
+		if (is_numeric($date) AND strlen($date) == 10) {
+		$time = $date;
+		}else{
+		$time = strtotime($date);
+		}
+		$week['week'] = date('W', $time);
+		$week['year'] = date('o', $time);
+		$week['year_week'] = date('oW', $time);
+		$first_day_of_week_timestamp = strtotime($week['year']."W".str_pad($week['week'],2,"0",STR_PAD_LEFT));
+		$week['first_day_of_week'] = date($format, $first_day_of_week_timestamp);
+		$week['first_day_of_week_timestamp'] = $first_day_of_week_timestamp;
+		$last_day_of_week_timestamp = strtotime($week['first_day_of_week']. " +6 days");
+		$week['last_day_of_week'] = date($format, $last_day_of_week_timestamp);
+		$week['last_day_of_week_timestamp'] = $last_day_of_week_timestamp;
+	    return $week;
+	}
+	
+	/*
+	* Create Holiday Parameter HTML
+	*/
+	function HParamter(){
+		$dataid = $this->input->post("dataid");
+		$html = '';
+		$html .= '<div class="col-md-12" style="padding:10px 0;">';
+			$html .= '<div class="col-md-3" style="padding-top:5px;">';
+				$html .= 'Holiday type';
+			$html .= '</div>';
+			$html .= '<div class="col-md-9">';
+				$html .= '<select name="holiday_profile" id="holiday_profile">';
+				  $html .= '<option value="1">Unscheduled Unrest</option>';
+				  $html .= '<option value="2">Voluntary Holiday</option>';
+				  $html .= '<option value="3">Directorate Holiday</option>';
+				  $html .= '<option value="4">Provincial Holiday</option>';
+				  $html .= '<option value="5">National/Public Holiday</option>';
+				$html .= '</select>';
+			$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="col-md-12" style="padding:10px 0;">';
+			$html .= '<div class="col-md-3" style="padding-top:5px;">';
+				$html .= 'Holiday Title';
+			$html .= '</div>';
+			$html .= '<div class="col-md-9">';
+				$html .= '<input type="text" placeholder="Holiday Title" name="holiday_title" id="holiday_title" />';
+			$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="col-md-12" style="padding:10px 0;">';
+			$html .= '<div class="col-md-3" style="padding-top:5px;">';
+				$html .= 'Short Title';
+			$html .= '</div>';
+			$html .= '<div class="col-md-9">';
+				$html .= '<input type="text" placeholder="Short Title" name="holiday_short_title" id="holiday_short_title" />';
+			$html .= '</div>';
+		$html .= '</div>';
+		$html .= '<div class="col-md-12" style="padding:10px 0;">';
+		$html .= '<div class="col-md-3" style="padding-top:5px;">';
+				$html .= 'Holiday Description';
+			$html .= '</div>';
+			$html .= '<div class="col-md-9">';
+				$html .= '<textarea name="holiday_description" id="holiday_description"></textarea>';
+				$html .= '<input type="hidden" value="'.$dataid.'" name="date_id" id="date_id" />';
+			$html .= '</div>';
+		$html .= '</div>';
+		echo $html;
+		
+		
+	}
+	
+	function SfParamter(){
+		$html ='';
+		$html .='<div class="col-md-12" style="padding:10px 0;">
+		<div class="col-md-3" style="padding-top:5px;">
+			Super Profile
+		</div>
+		<div class="col-md-9">
+			<select>
+			  <option value="UU">Ramadan</option>
+			  <option value="VH">June</option>
+			  <option value="DH">July</option>
+			</select>
+		</div>
+	</div>
+	<div class="col-md-12" style="padding:10px 0;">
+		<div class="col-md-3" style="padding-top:5px;">
+			Title
+		</div>
+		<div class="col-md-9">
+			<input type="text" placeholder="Title" />
+		</div>
+	</div>
+	<div class="col-md-12" style="padding:10px 0;">
+		<div class="col-md-3" style="padding-top:5px;">
+			Short Title
+		</div>
+		<div class="col-md-9">
+			<input type="text" placeholder="Short Title" />
+		</div>
+	</div>
+	<div class="col-md-12" style="padding:10px 0;">
+		<div class="col-md-3" style="padding-top:5px;">
+			Description
+		</div>
+		<div class="col-md-9">
+			<textarea></textarea>
+		</div>
+	</div>';
+		echo $html;
+	}
+	
+	function StdParameter(){
+		$html = '';
+			$html .= 'Ajax Response will be drag here..';
+		echo $html;
+	}
+	
+	function SchFParameter(){
+		$html ='';
+		$html .='	<div class="col-md-12 no-padding">
+		<div class="col-md-6 no-padding" style="margin-top: 13px !important;border-right: 1px solid #ccc;height: 361px;">
+			<div class="col-md-12" style="padding:10px 0;">
+				<div class="col-md-3" style="padding-top:5px;">
+					Title
+				</div><!-- col-md-3 -->
+				<div class="col-md-9">
+					<input type="text" placeholder="Title" />
+				</div><!-- col-md-9 -->
+			</div><!-- col-md-12 no-padding -->
+			<div class="col-md-12" style="padding:10px 0;">
+				<div class="col-md-3" style="padding-top:5px;">
+					Followup date
+				</div><!-- col-md-3 -->
+				<div class="col-md-9">
+					<input type="date" placeholder="Title" />
+				</div><!-- col-md-9 -->
+			</div><!-- col-md-12 no-padding -->
+			<div class="col-md-12" style="padding:10px 0;">
+				<div class="col-md-3" style="padding-top:5px;">
+					&nbsp;
+				</div><!-- col-md-3 -->
+				<div class="col-md-9">
+					<input type="checkbox" name="addfollow" value="value" style="display:;" id="addfollow"> <label for="addfollow"> Add followup to the respective date</label>
+				</div><!-- col-md-9 -->
+			</div><!-- col-md-12 no-padding -->
+		</div><!-- col-md-6 -->
+		<div class="col-md-6" id="OlaAccordion" style="padding-top: 22px;">
+			<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingOne">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Starter" value="Starter" style="display:;" id="Starter"> <label for="Starter" class="customCheck"></label>
+							<a class="titleColl" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Starter</div>
+							</a>
+						</h4><!-- panel-title -->
+					</div><!-- panel-heading -->
+					<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="PG" value="PG" style="display:;" id="PG"> <label for="PG" class="">PG</label></li>
+								<li><input type="checkbox" name="PN" value="PN" style="display:;" id="PNN"> <label for="PNN" class="">PN</label></li></li>
+								<li><input type="checkbox" name="N" value="N" style="display:;" id="NN"> <label for="NN" class="">N</label></li>
+								<li><input type="checkbox" name="KG" value="KG" style="display:;" id="KGG"> <label for="KGG" class="">KG</label></li>
+								<li><input type="checkbox" name="I" value="I" style="display:;" id="I1"> <label for="I1" class="">I</label></li>
+								<li><input type="checkbox" name="II" value="II" style="display:;" id="II2"> <label for="II2" class="">II</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseOne -->
+				</div><!-- panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingTwo">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Junior" value="Junior" style="display:;" id="Junior"> <label for="Junior" class="customCheck"></label>
+							<a class="titleColl collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Junior</div>
+							</a>
+						</h4>
+					</div><!-- panel-heading -->
+					<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="III3" value="III3" style="display:;" id="III3"> <label for="III3" class="">III</label></li>
+								<li><input type="checkbox" name="IV4" value="IV4" style="display:;" id="IV4"> <label for="IV4" class="">IV</label></li></li>
+								<li><input type="checkbox" name="V5" value="V5" style="display:;" id="V5"> <label for="V5" class="">V</label></li>
+								<li><input type="checkbox" name="VI6" value="VI6" style="display:;" id="VI6"> <label for="VI6" class="">VI</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseTwo -->
+				</div><!-- panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingThree">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Middle" value="Middle" style="display:;" id="Junior"> <label for="Middle" class="customCheck"></label>
+							<a class="titleColl collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Middle</div>
+							</a>
+						</h4>
+					</div><!-- panel-heading -->
+					<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="VII7" value="VII7" style="display:;" id="VII7"> <label for="VII7" class="">VII</label></li>
+								<li><input type="checkbox" name="VIII8" value="VIII8" style="display:;" id="VIII8"> <label for="VIII8" class="">VIII</label></li></li>
+								<li><input type="checkbox" name="IX9" value="IX9" style="display:;" id="IX9"> <label for="IX9" class="">IX</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseThree -->
+				</div><!-- panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingFour">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Starter" value="Starter" style="display:;" id="Starter"> <label for="Starter" class="customCheck"></label>
+							<a class="titleColl collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Senior</div>
+							</a>
+						</h4><!-- panel-title -->
+					</div><!-- panel-heading -->
+					<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="PG" value="PG" style="display:;" id="PG"> <label for="PG" class="">PG</label></li>
+								<li><input type="checkbox" name="PN" value="PN" style="display:;" id="PNN"> <label for="PNN" class="">PN</label></li></li>
+								<li><input type="checkbox" name="N" value="N" style="display:;" id="NN"> <label for="NN" class="">N</label></li>
+								<li><input type="checkbox" name="KG" value="KG" style="display:;" id="KGG"> <label for="KGG" class="">KG</label></li>
+								<li><input type="checkbox" name="I" value="I" style="display:;" id="I1"> <label for="I1" class="">I</label></li>
+								<li><input type="checkbox" name="II" value="II" style="display:;" id="II2"> <label for="II2" class="">II</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseOne -->
+				</div><!-- panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingFive">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Generosity" value="Generosity" style="display:;" id="Generosity"> <label for="Generosity" class="customCheck"></label>
+							<a class="titleColl collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Generosity</div>
+							</a>
+						</h4>
+					</div><!-- panel-heading -->
+					<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="VII7" value="VII7" style="display:;" id="VII7"> <label for="VII7" class="">Gen U</label></li>
+								<li><input type="checkbox" name="VIII8" value="VIII8" style="display:;" id="VIII8"> <label for="VIII8" class="">Coordination</label></li></li>
+								<li><input type="checkbox" name="IX9" value="IX9" style="display:;" id="IX9"> <label for="IX9" class="">Software</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseTwo -->
+				</div><!-- panel -->
+				<div class="panel panel-default">
+					<div class="panel-heading" role="tab" id="headingSix">
+						<h4 class="panel-title">
+							<input type="checkbox" name="Admin" value="Admin" style="display:;" id="Admin"> <label for="Admin" class="customCheck"></label>
+							<a class="titleColl collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+								<i class="more-less glyphicon glyphicon-plus"></i>
+								<i class="more-less glyphicon glyphicon-minus"></i>
+								<div class="col-md-10 no-padding">Admin</div>
+							</a>
+						</h4>
+					</div><!-- panel-heading -->
+					<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+						<div class="panel-body">
+							<ul class="noBullets">
+								<li><input type="checkbox" name="DI" value="DI" style="display:;" id="DI"> <label for="DI" class="">DI</label></li>
+								<li><input type="checkbox" name="SIS" value="SIS" style="display:;" id="SIS"> <label for="SIS" class="">SIS</label></li></li>
+								<li><input type="checkbox" name="Finance" value="Finance" style="display:;" id="Finance"> <label for="Finance" class="">Finance</label></li>
+								<li><input type="checkbox" name="Operations" value="Operations" style="display:;" id="Operations"> <label for="Operations" class="">Operations</label></li>
+							</ul>
+						</div><!-- panel-body -->
+					</div><!-- collapseThree -->
+				</div><!-- panel -->
+			</div><!-- panel-group -->
+		</div><!-- col-md-6 -->
+	</div><!-- col-md-12 -->';
+		echo $html;
+	}
+	
+	
+	
+	function db_hp(){
+		$hp = $this->input->post("hp");
+	}
+	
+}

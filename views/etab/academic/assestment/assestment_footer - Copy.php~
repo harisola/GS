@@ -1,0 +1,169 @@
+<!--Power Widgets -->
+</div>
+<!--Wrapper--->
+</div>
+<!-- Smoth Scrolls -->
+</div> 
+
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/jquery/jquery.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/jquery/jquery-ui.min.js"></script> 
+
+<!--Fullscreen--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/fullscreen/screenfull.min.js"></script> 
+
+<!--Forms--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/forms/jquery.form.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/forms/jquery.validate.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/forms/jquery.maskedinput.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/jquery-steps/jquery.steps.min.js"></script> 
+
+<!--NanoScroller--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/nanoscroller/jquery.nanoscroller.min.js"></script> 
+
+<!--Sparkline--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/sparkline/jquery.sparkline.min.js"></script> 
+
+<!--Horizontal Dropdown--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/horisontal/cbpHorizontalSlideOutMenu.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/classie/classie.js"></script> 
+
+<!--PowerWidgets--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/powerwidgets/powerwidgets.min.js"></script> 
+
+<!--Bootstrap--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/bootstrap/bootstrap.min.js"></script> 
+
+<!--X-Editable--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/bootstrap-editable.min.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/demo.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/demo-mock.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/select2.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/address.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/jquery.mockjax.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/moment.min.js"></script>  
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/typeahead.js"></script> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/x-editable/typeaheadjs.js"></script> 
+
+<!--iOnRangeSlider--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/ionrangeslider/ion.rangeSlider.min.js"></script> 
+
+<!--Todo--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/todos/todos.js"></script> 
+
+<!--Knob--> 
+<script type="text/javascript" src="<?php echo base_url()?>components/orb/js/vendors/knob/jquery.knob.js"></script> 
+
+<!--Main App--> 
+<!--script type="text/javascript" src="<?php //echo base_url()?>components/orb/js/scripts.js"></script -->
+
+<script type="text/javascript">
+
+$(function(){
+	alert(1)
+	// Available Validations
+        if ($('#input-masking').length) {
+
+            $("#input-masking ").validate({
+                // Rules for form validation
+                rules: {
+                    required: {
+                        required: true
+                    },
+                    assest_name: {
+                        required: true,
+                    },
+                    url: {
+                        required: true,
+                        url: true
+                    },
+                    date3: {
+                        required: true,
+                        date: true
+                    },
+                    min: {
+                        required: true,
+                        minlength: 5
+                    },
+                    assest_ncode : {
+                        required: true,
+                        maxlength: 3
+                    },
+                    range: {
+                        required: true,
+                        rangelength: [5, 10]
+                    },
+                    digits: {
+                        required: true,
+                        digits: true
+                    },
+                    number: {
+                        required: true,
+                        number: true
+                    },
+                    minVal: {
+                        required: true,
+                        min: 5
+                    },
+                    maxVal: {
+                        required: true,
+                        max: 100
+                    },
+                    rangeVal: {
+                        required: true,
+                        range: [5, 100]
+                    }
+                },
+
+                // Messages for form validation
+                messages: {
+                    required: {
+                        required: 'Please enter something'
+                    },
+                    email: {
+                        required: 'Please enter your email address'
+                    },
+                    url: {
+                        required: 'Please enter your URL'
+                    },
+                    date3: {
+                        required: 'Please enter some date in mm/dd/yyyy format'
+                    },
+                    min: {
+                        required: 'Please enter some text'
+                    },
+                    max: {
+                        required: 'Please enter some text'
+                    },
+                    range: {
+                        required: 'Please enter some text'
+                    },
+                    digits: {
+                        required: 'Please enter some digits'
+                    },
+                    number: {
+                        required: 'Please enter some number'
+                    },
+                    minVal: {
+                        required: 'Please enter some value'
+                    },
+                    maxVal: {
+                        required: 'Please enter some value'
+                    },
+                    rangeVal: {
+                        required: 'Please enter some value'
+                    }
+                },
+
+                // Do not change code below
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element.parent());
+                }
+            });
+        }
+    })
+        
+</script>
+
+
+</body>
+</html>
