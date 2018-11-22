@@ -21,8 +21,6 @@ class Admission_form_issuance_model extends CI_Model{
 					ad.form_no as form_no,ad.referal_code,
 					date_format(ad.form_submission_date, '%W, %d %b %Y') as form_submission_date,
 					IFNULL(LOWER(concat(TIME_FORMAT(sch.time_start, '%h:%i %p'), ' to ', TIME_FORMAT(sch.time_end, '%h:%m %p'))), '09:00 am to 11:00 am') as form_submission_time,
-					
-					IF(ad.form_assessment_date <> '2001-01-01',IF(bt.batch_id = 1,CONCAT('Submission,@Assessment & Discussion@on ',DATE_FORMAT(bt.date, '%a, %b %d'),' at ', TIME_FORMAT(bs.time_start, '%h:%i %p')),concat('Submission@& Assessment@ on ',DATE_FORMAT(bt.date, '%a, %d %b'),' at ',TIME_FORMAT(bs.time_start, '%h:%i %p'))),'TBI') as batch_category,
 
 					if(ad.grade_id >= 15, '',if(fi.date = from_unixtime(ad.created, '%Y-%m-%d'), '', 'Late Issuance')) as is_late,
 					if(sfr.nic = fm.father_nic, 'yes', 'no') as siblings,
@@ -56,14 +54,6 @@ class Admission_form_issuance_model extends CI_Model{
 				left join
 					atif_gs_admission._form_submission_schedule as sch
 					on sch.date = ad.form_submission_date
-				left join atif_gs_admission._form_batch as bt
-						on bt.id = ad.form_batch_id
-						
-				left join atif_gs_admission._batch as b
-						on b.id = bt.batch_id
-						
-				left join atif_gs_admission._form_batch_slots as bs
-						on bs.id = ad.batch_slot_id
 					
 				Where ad.id = '$FormNo' ";
 

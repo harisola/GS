@@ -135,7 +135,9 @@ class Ajax_base extends CI_Controller{
 			$old_gs_id =  $this->input->post("old_gs_id");	
 			$batch_id =  $this->input->post("batch");
 			$Referal_code =  $this->input->post("Referal_code");
+			$ad_form_id=0;
 
+			$f_no='';
 
 			if($batch_id!=""){
 				$assistment_date=explode('|',$batch_id)[1];
@@ -397,7 +399,7 @@ class Ajax_base extends CI_Controller{
 						);
 						$where = array( "id" => $Form_ID );
 						$table_name = "admission_form";
-						$ad_form_id = $this->AB->update_function($table_name,$data,$where);
+						$this->AB->update_function($table_name,$data,$where);
 						if($batch_id!="" && $slot_id!=""){
 				             $this->AB->slot_update($Form_ID,$batch_id,$slot_id,$assistment_date);
 			             }
@@ -449,11 +451,24 @@ class Ajax_base extends CI_Controller{
 			}
 			//ISS for Issuance
 			//zk
+
+
+			if($ad_form_id == 0 )
+			{
+				#$f = $this->AB->get_form_no($Form_ID);
+				#$f_no= $f["Form_no"];
+				$Form_ID = $Form_ID;
+
+			}else {
+				$Form_ID = $ad_form_id;				
+			}
+		
 			if($comments != ''){
+				
 				$Reason ='ISS';
-				$comment_logs = $this->add_reasion($f_no,$Reason);
-				// var_dump(+"comment_logs"+$comment_logs);
-				// die();
+				$comment_logs = $this->add_reasion($Form_ID, $Reason,$comments);
+				 // var_dump(+"comment_logs"+$comment_logs);
+				 // die();
 			}
 			
 			echo  json_encode( $data3 );
@@ -730,7 +745,6 @@ class Ajax_base extends CI_Controller{
 			$flag = false;
 			$form_no = $this->input->post("form_no");
 			$form_id = (int)$this->input->post("form_id");
-
 			
 			$Fmly_Reg_ID = $this->input->post("Fmly_Reg_ID");
 			$referal_code = $this->input->post('Referal_code');
@@ -1118,10 +1132,7 @@ class Ajax_base extends CI_Controller{
 				//zk
 				if($comments != ''){
 					$Reason ='SUB';
-					// $form_no = $this->input->post("form_no");
-					// $f_no = $form_no;
-					
-					$comment_logs = $this->add_reasion($form_id,$Reason);
+					$comment_logs = $this->add_reasion($form_id,$Reason,$comments);
 				}
 				//$data4 = array("form_id" => $data, "family_id" => $data2,"slot"=>$data3,"ad"=>$ad);
 				
@@ -1252,7 +1263,7 @@ class Ajax_base extends CI_Controller{
         $this->load->model('admission/admission_form_issuance_model');
         $data['form_issuance'] = $this->admission_form_issuance_model->getFormIssuanceData($FormNo);
 
-
+        //var_dump($data['form_issuance']);
 
         $FormNo = $data['form_issuance'][0]->form_no; 
         //$AdmissionSession = '2018-19';
@@ -1278,8 +1289,6 @@ class Ajax_base extends CI_Controller{
         $MotherEmail = $data['form_issuance'][0]->mother_email;
         $referal_code = $data['form_issuance'][0]->referal_code;
         $referal_code = $data['form_issuance'][0]->referal_code;
-        $batch_detail = $data['form_issuance'][0]->batch_category;
-
         /* */
         //$BatchCategory = $data['form_submission'][0]->batch_category;
         //$Batch = $data['form_issuance'][0]->batch;
@@ -1340,53 +1349,20 @@ class Ajax_base extends CI_Controller{
 	    	$pdf->useTemplate($templateId);
 
 	    	if ($templateId == 1){
-	    		//echo ($batch_detail);
-	    		$str = explode('@',$batch_detail);
+
 	    		// Submission Date
 	    		$pdf->SetFont($font_name);
 			    $pdf->SetFont($font_name,'',8);
-			    $pdf->SetXY(90.5, 19);
+			    $pdf->SetXY(123.5, 19);
 			    //$pdf->Cell(35, 5, $Batch, $bo, 2, 'C', 0);
-			    if(sizeof($str) > 1){
-			    	$pdf->SetFont($font_name);
-				    $pdf->SetFont($font_name,'',7);
-				    $pdf->SetXY(82, 18.5);
-				    $pdf->Cell(0, 3, $str[0], $bo, 0, 'C');
-			    	/* */
-			    	//$pdf->Cell(0, 3, $str[0], $bo, 0, 'C');
-			    	$pdf->SetFont($font_name);
-				    $pdf->SetFont($font_name,'',7);
-				    $pdf->SetXY(83, 19);
-				    $pdf->Cell(0, 8, $str[1], $bo, 0,'C' );
-			    	//$pdf->Cell(0, 8, $str[1], $bo, 0,'L' );
-			    	$pdf->SetFont($font_name);
-				    $pdf->SetFont($font_name,'',7);
-				    $pdf->SetXY(82, 20.5);
-				    $pdf->Cell(0, 12, $str[2], $bo, 0, 'C');
-			    	//$pdf->Cell(10, 12, $str[2], $bo, 0, 'C');
-			    	//$pdf->SetFont($font_name);
-				    //$pdf->SetFont($font_name,'',8);
-				    //$pdf->SetXY(82, 21);
-				    //$pdf->Cell(0, 12, $str[3], $bo, 0, 'C');
-			    	//$pdf->Cell(10, 12, $str[2], $bo, 0, 'C');
-
-
-
-
-			    }else{
-			    	$pdf->SetFont($font_name);
-				    $pdf->SetFont($font_name,'B',16);
-				    $pdf->SetXY(117, 21);
-				    //$pdf->Cell(26.5, 5, $AdmissionSession, $bo, 0, 'C', 0);
-			    	$pdf->Cell(50, 6, $str[0], $bo, 2, 'C', 0); 		
-			    }
-			    //$pdf->Cell(35, 5, $SubmissionTime, $bo, 0, 'C', 0);
+			    $pdf->Cell(35, 5, $SubmissionDate, $bo, 2, 'C', 0);
+			    $pdf->Cell(35, 5, $SubmissionTime, $bo, 0, 'C', 0);
 
 			    // Session
 	    		$pdf->SetFont($font_name);
 			    $pdf->SetFont($font_name,'B',11);
 			    $pdf->SetXY(19, 32.8);
-			    $pdf->Cell(28, 5, $AdmissionSession, $bo, 0, 'C', 0);
+			    $pdf->Cell(26.5, 5, $AdmissionSession, $bo, 0, 'C', 0);
 	    		
 	    		// Form #
 	    		$pdf->SetFont($font_name);
@@ -1657,25 +1633,30 @@ class Ajax_base extends CI_Controller{
 
 		//zk create function for comments and foam id  to add comments to table 
 		// Add logs[Reasion] from log atif_gs_admission.log_form_comments table
-	public function add_reasion($f_no,$reason)
+	public function add_reasion($admission_form_id, $reason, $comments)
 	{
+		// var_dump($f_no);
+		// die();
 		
 		
-		/*$where_admission = array(
-			'form_no' => $f_no,
-		);
-		$admission_data = $this->AB->get_by_all('atif_gs_admission.admission_form','',$where_admission);
-		$admission_form_id = $admission_data[0]->id;*/
 
-		$where_reasion =  array(
-			'admission_form_id' => $f_no,
-		);
- 		$reason=$comments;
+		//$admission_data = $this->AB->get_by_all('atif_gs_admission.admission_form','',$where_admission);
+		#$admission_data =$this->AB->get_form_id($f_no);
+
+		
+
+		#echo "WEe ".$admission_form_id = $admission_data["Form_id"]; exit;
+
+		
+		 $where_reasion =  array(
+		 	'admission_form_id' => $admission_form_id,
+		 );
+ 		
 
 		$data = array(
 			'admission_form_id' => $admission_form_id,
 			'reason' => $reason,
-			//'comments' => $comments,
+			'comments' => $comments,
 			"created"=>time(),
 			"register_by" =>$this->session->userdata("user_id"),
 			"modified"=>time(),
@@ -1683,6 +1664,7 @@ class Ajax_base extends CI_Controller{
 		);
 		$this->AB->set("log_form_comments",$data);
 		//$this->AB->update_data('atif_gs_admission.log_form_comments',$where_reasion,$data);
+		
 	}
 
 	// GET ADMISSION DETAIL FORM

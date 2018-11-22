@@ -28,10 +28,10 @@
 					 <td class="text-center">
 					 <strong><?= $aso_and_process->form_assessment_date ?></strong><br />
 
-					<?php if($aso_and_process->ast_done_on == ''){ ?>
+					<?php if($aso_and_process->rst_done_on == ''){ ?>
 					 <div class="col-md-6 no-padding text-left"><small id="ast_done_on_<?= $aso_and_process->form_id?>">-</small></div>
 					<?php }else{ ?>
-					  <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->ast_done_on ?></small></div>
+					  <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
 					<?php } ?>
 
 
@@ -58,12 +58,21 @@
 					 </td>
 					 <td class="text-center">
 					 <strong><?= $aso_and_process->form_assessment_date ?></strong><br />
+					 <?php if($aso_and_process->previous_batch_id!= ''){ ?>
+						<?php if($aso_and_process->rst_done_on == ''){ ?>
+							 <div class="col-md-6 no-padding text-left"><small id="dis_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
+						<?php }else{ ?>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
+						<?php } ?>
+				     <?php }else{ ?>
+				        <?php if($aso_and_process->ast_done_on == ''){ ?>
+							 <div class="col-md-6 no-padding text-left"><small id="dis_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
+						<?php }else{ ?>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->ast_done_on ?></small></div>
+						<?php } ?>
 
-					<?php if($aso_and_process->dis_done_on == ''){ ?>
-						 <div class="col-md-6 no-padding text-left"><small id="dis_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
-					<?php }else{ ?>
-					 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->dis_done_on ?></small></div>
-					<?php } ?>
+				    <?php } ?>
+
 
 					<?php if($aso_and_process->dis_name_code == ''){ ?>
 					 <div class="col-md-6 no-padding text-right"><small id="dis_name_code_<?= $aso_and_process->form_id?>">-</small></div>
@@ -185,6 +194,7 @@
 								<?php }else{ ?>
 										 <small><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br />	</small>
 								<?php } ?>
+
 										 <small><a class="edit_btn btn_number_<?= $aso_and_process->form_id?>" href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" 
 										 id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br />	</small>
 

@@ -310,7 +310,10 @@
                     <a href="javascript:void(0)" id="mark_present_aso" data-re_assistment="<?= $aso_and_process->previous_batch_id?>" data-presesnt="<?= $aso_and_process->form_id?>">Mark as Present</a></small>
 
                 <?php }else{ ?>
-                   <td class="text-center"><small><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br /> 
+                   <td class="text-center">
+                    <small class="atd_opt atd_opt_<?= $aso_and_process->form_id?>">Mark Attendance to proceed<br /><br />  
+                    <a class="atd_opt atd_opt_<?= $aso_and_process->form_id?>" href="javascript:void(0)" id="mark_present_aso" data-re_assistment="<?= $aso_and_process->previous_batch_id?>" data-presesnt="<?= $aso_and_process->form_id?>">Mark as Present</a></small>
+                   <small ><a class="edit_btn_<?= $aso_and_process->form_id  ?>" href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br /> 
                 <?php } ?>
 
           <?php }else{ ?>
@@ -328,8 +331,12 @@
                 <?php }else if($aso_and_process->form_status_id == 3 && $aso_and_process->form_status_stage_id == 13){ ?>
                     <td class="text-center"><small>Mark Attendance to proceed<br /><br />  
                     <a href="javascript:void(0)" id="mark_present_aso" data-re_assistment="<?= $aso_and_process->previous_batch_id?>" data-presesnt="<?= $aso_and_process->form_id?>">Mark as Present</a></small>
+
                 <?php }else{ ?>
-                   <td class="text-center"><small><a href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br /> 
+                   <td class="text-center">
+                   <small class="atd_opt atd_opt_<?= $aso_and_process->form_id?>">Mark Attendance to proceed<br /><br />  
+                    <a class="atd_opt atd_opt_<?= $aso_and_process->form_id?>" href="javascript:void(0)" id="mark_present_aso" data-re_assistment="<?= $aso_and_process->previous_batch_id?>" data-presesnt="<?= $aso_and_process->form_id?>">Mark as Present</a></small>
+                   <small ><a class="edit_btn_<?= $aso_and_process->form_id  ?>" href="javascript:void(0)" data-toggle="modal" data-target="#myModal4" id="view_and_edit" data-form="<?= $aso_and_process->form_id?>">View & Edit</a><br /><br /> 
                 <?php } ?>
           <?php } ?>
 

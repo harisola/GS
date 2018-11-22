@@ -23,16 +23,20 @@ class Admission_fee_bill extends CI_Controller{
 
 		/***** Change Here ***** Fee Bill ID *****/
 		$FeeBillID = ''; $FeeBillIDSum = 0;
-		$BillID = date('y') . '81';
+		$BillID = date('y')+1 . '81';
 		if(($data['student'][0]->grade_id >= 6 && $data['student'][0]->grade_id <= 14)){
-			$BillID = date('y') . '82';
+			$BillID = date('y')+1 . '82';
 		}else if($data['student'][0]->grade_id >= 15 && $data['student'][0]->grade_id <= 16){
-			$BillID = date('y') . '72';
+			$BillID = date('y')+1 . '72';
 		}
+		
 		/***** Change Here ***** Fee Bill ID ***** END *****/
 
-
-		$BillID = $BillID . str_pad($data['student'][0]->form_no, 5, '0', STR_PAD_LEFT);
+		$m_form_no=explode('/',$data['student'][0]->form_no);
+		if(strlen($m_form_no[1])==4){
+			$m_form_no="0".$m_form_no[1];
+		}
+		$BillID = $BillID . $m_form_no;
 		for($i=0; $i<strlen($BillID); $i++){
 			$FeeBillIDSum += intval(substr($BillID, $i, 1));
 		}
@@ -43,7 +47,7 @@ class Admission_fee_bill extends CI_Controller{
 		$FeeBillID = 'Bill # ' . substr($FeeBillID_Save, 0, 2) . '-' . substr($FeeBillID_Save, 2, 2) . '-' . substr($FeeBillID_Save, 4, 5) . '-' . $FeeBillIDSum;
 
 
-		$AdmissionYear = date('Y');
+		$AdmissionYear = date('Y')+1;
 		$CallName = $data['student'][0]->call_name;
 
 		$FatherName = '';

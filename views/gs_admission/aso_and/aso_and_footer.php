@@ -13,7 +13,11 @@
 
 </body>
 </html>
-
+<style type="text/css">
+	.atd_opt{
+		display: none;
+	}
+</style>
 <script type="text/javascript">
 
 	// =========== Getting Grade ID ================//

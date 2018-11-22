@@ -739,12 +739,34 @@ class Admission_compelete_check_model extends CI_Model{
 	// }
 
 	public function get_form_check($form_id){
-		$query = "SELECT af.is_photo_submitted,af.is_birthcrt_o,af.is_birthcrt_c,af.previous_school_id,af.previous_grade,af.is_alevel_supplement, IF(fr.home_apartment_no='' AND fr.home_region='' AND fr.home_subregion='', 0, 1) AS is_address, IF(afo.due_date='0000-00-00' OR afo.due_date IS NULL, 0, 1) AS is_date_of_payment, IF(afo.concession_code='' OR afo.concession_code IS NULL,0,1) AS is_concession_code, IF(afo.joining_date='0000-00-00' OR afo.joining_date IS NULL, 0, 1) AS is_activiation_date, IFNULL(afo.offer_letter,'') AS is_printed_offer_letter, IFNULL(afo.fif_form,'') AS is_printed_fif, IFNULL(afo.photo_token,'') AS is_printed_photo_token, IFNULL(afo.hand_book,'') AS is_handbook, IFNULL(afo.signed_offer_letter,'') AS is_signed_offer_letter, IFNULL(afo.completed_fif_form,'') AS is_complete_fif_form, IFNULL(afo.signed_hand_book,'') AS is_signed_hand_book, IFNULL(afo.print_fee_bill,'') AS is_printed_fee_bill, IFNULL(afo.offer_pack_handover,'') AS offer_pack_handover, IF(IFNULL(fbr.received_amount, 0) = 0, 0, 1) AS fee_received, IF(fr.father_qualification <> '' AND fr.father_occupation <> '' AND fr.father_company <> '' AND fr.father_department <> '' AND fr.father_office_location <> '' AND fr.father_work_phone <> '' AND fr.mother_qualification <> '' AND fr.mother_occupation <> '' AND fr.mother_company <> '' AND fr.mother_department <> '' AND fr.mother_office_location <> '' AND fr.mother_work_phone <> '',1,0) AS is_family_detail
+		$query = "SELECT fb.gb_id,af.form_no,substring(af.form_no,4,4),fb.gb_id,af.is_photo_submitted,af.is_birthcrt_o,af.is_birthcrt_c,af.previous_school_id,af.previous_grade,af.is_alevel_supplement, 
+IF(fr.home_apartment_no='' AND fr.home_region='' AND fr.home_subregion='', 0, 1) AS is_address, 
+IF(afo.due_date='0000-00-00' OR afo.due_date IS NULL, 0, 1) AS is_date_of_payment, 
+IF(afo.concession_code='' OR afo.concession_code IS NULL,0,1) AS is_concession_code, 
+IF(afo.joining_date='0000-00-00' OR afo.joining_date IS NULL, 0, 1) AS is_activiation_date, 
+IFNULL(afo.offer_letter,'') AS is_printed_offer_letter, 
+IFNULL(afo.fif_form,'') AS is_printed_fif, 
+IFNULL(afo.photo_token,'') AS is_printed_photo_token, 
+IFNULL(afo.hand_book,'') AS is_handbook, 
+IFNULL(afo.signed_offer_letter,'') AS is_signed_offer_letter, 
+IFNULL(afo.completed_fif_form,'') AS is_complete_fif_form, 
+IFNULL(afo.signed_hand_book,'') AS is_signed_hand_book,
+ IFNULL(afo.print_fee_bill,'') AS is_printed_fee_bill,
+  IFNULL(afo.offer_pack_handover,'') AS offer_pack_handover,
+   IF(IFNULL(fbr.received_amount, 0) = 0, 0, 1) AS fee_received, 
+	IF(fr.father_qualification <> '' AND fr.father_occupation <> '' 
+	AND fr.father_company <> '' AND fr.father_department <> ''
+	 AND fr.father_office_location <> '' AND fr.father_work_phone <> ''
+	  AND fr.mother_qualification <> '' AND fr.mother_occupation <> '' 
+	  AND fr.mother_company <> '' AND fr.mother_department <> '' 
+	  AND fr.mother_office_location <> '' 
+	  AND fr.mother_work_phone <> '',1,0) AS is_family_detail
 FROM atif_gs_admission.admission_form af
 LEFT JOIN atif_gs_admission.admission_form_offer afo ON af.id = afo.admission_form_id
 LEFT JOIN atif_gs_admission.family_registration fr ON fr.gf_id = af.gf_id
-LEFT JOIN atif_fee_student.fee_bill AS fb ON af.form_no = IF(LENGTH(af.form_no) > 4 , mid(fb.gb_id, 5, 5),mid(fb.gb_id, 6, 4) ) AND fb.academic_session_id >= 9 AND fb.record_deleted = 0 AND
-LEFT(fb.gb_id,2) = 18 AND fb.bill_title = 'Admission'
+LEFT JOIN atif_fee_student.fee_bill AS fb ON substring(af.form_no,4,4) = 
+IF(LENGTH(substring(af.form_no,4,4)) > 4 , mid(fb.gb_id, 5, 5),mid(fb.gb_id, 6, 4) ) AND fb.academic_session_id >= 13 AND fb.record_deleted = 0 AND
+LEFT(fb.gb_id,2) = 19 AND fb.bill_title = 'Admission'
 LEFT JOIN atif_fee_student.fee_bill_received AS fbr ON fbr.fee_bill_id = fb.id
 WHERE af.id = '".$form_id."' and MID(fb.gb_id,3,2) <> '72'";
 			$result = $this->db->query( $query );

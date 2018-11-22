@@ -13,35 +13,7 @@
 
 <a href="<?=base_url();?>index.php/gs_admission/print_logs?form_id=<?=ltrim($form_id);?>" target="_blank">Print Logs</a>
 <ul>
-<!--li class="in">
-	<div class="avatarLeft col-md-2">		
-		<img src="<php echo base_url();?>assets/photos/hcm/150x150/staff/112.png" />
-	</div>
-	<div class="systemResponse col-md-10">
-		<span class="arrowHeadLeft">&nbsp;</span>
-		<p>
-			<strong>Hassan Ahmed Khan</strong><br />
-			<p>Form issued on <strong>Dec 12, 208</strong> at <strong>12:12 PM</strong></p>
-		</p>
-		<span class="commentDate">Date here</span>
-	</div>
-</li>
-<li class="out">
-	<div class="systemResponse col-md-10">
-		<p>
-			<strong>Hassan Ahmed Khan</strong><br />
-			<p>Form issued on <strong>Dec 12, 208</strong> at <strong>12:12 PM</strong></p>
-		</p>
-		<span class="commentDate">Date here</span>
-		<span class="arrowHeadRight">&nbsp;</span>
-	</div>
-	<div class="avatarLeft col-md-2">		
-		<img src="<php echo base_url();?>assets/photos/hcm/150x150/staff/112.png" />
-	</div>
-</li>
-<li class="adminResponse">
-	<p>Admission form issued on 13-Jan-2018 10:50 AM </p>
-</li -->
+
 <?php 
 
 #var_dump($formHistory); 

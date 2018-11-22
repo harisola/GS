@@ -651,17 +651,19 @@ class Admission_aso_and_process extends CI_Controller{
                         			$("#form_assessment_decision_aso_"+form_id).text(form_assessment_decision);
                         			$("#form_discussion_date_aso_"+form_id).text(form_discussion_date);
                         			$("#offer_"+form_id).text(offer);
+                        			$(".edit_btn_"+form_id).hide();
+                        			$(".atd_opt_"+form_id).show();
 
 
 
 
                         			if(flag_ast_result == 1){
-                        			$("#img_result_aso_"+form_id).prop("src","'.base_url("components/gs_theme/images/result_active.png").'");
+                        				$("#img_result_aso_"+form_id).prop("src","'.base_url("components/gs_theme/images/result_active.png").'");
 
                         			}
 
                         			if(flag_ast_decision == 1){
-                        			$("#img_decision_aso_"+form_id).prop("src","'.base_url("components/gs_theme/images/discussion_active.png").'");	
+                        				$("#img_decision_aso_"+form_id).prop("src","'.base_url("components/gs_theme/images/discussion_active.png").'");	
 
                         			}
 

@@ -529,7 +529,7 @@ class Offer_model extends CI_Controller{
 	public function insertFeeBill_ALevel($GBID, $BillIssueDate, $BillDueDate, $BillValidityDate, $BillPayable, $ConcessionCode, $ConcessionPerc, $AdmissionFee, $SecurityDeposit, $AdditionalCharges, $GrossTuitionFee, $Scholarship){
 		$this->load->library('session');
 		$FeeBIllTypeID = 1;
-		$AcademicSessionID = 9;
+		$AcademicSessionID = 13;
 		$BillCycleNo = 0;
 		$BillTitle = 'Admission';
 		$BillMonths = 0;
@@ -658,7 +658,7 @@ class Offer_model extends CI_Controller{
 	public function insertFeeBill($GBID, $BillIssueDate, $BillDueDate, $BillValidityDate, $BillPayable, $ConcessionCode, $ConcessionPerc, $AdmissionFee, $SecurityDeposit){
 		$this->load->library('session');
 		$FeeBIllTypeID = 1;
-		$AcademicSessionID = 9;
+		$AcademicSessionID = 13;
 		$BillCycleNo = 0;
 		$BillTitle = 'Admission';
 		$BillMonths = 0;

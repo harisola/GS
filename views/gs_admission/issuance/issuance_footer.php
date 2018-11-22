@@ -40,9 +40,65 @@ if ($('#token_no').length) {
 		placeholder: 'X'
 	});
 }	
+if($('.countryCodeNumber:eq(0)').val()==92){
+		$('.student_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			}); 
+		//Student_mobile_phone[]
+}
 
+if($('.countryCodeNumber:eq(0)').val()==92){
+		$('.father_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			}); 
+		//father_mobile_phone[]
+}
+if($('.countryCodeNumber:eq(0)').val()==92){
+		$('.mother_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			}); 
+		//Mother_mobile_phone[]
+}
 	
 
+$(document).on("change",".countryCodeNumber:eq(0)",function(){
+		if($(this).val()==92){
+			$('.student_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			});
+		}else{
+			$('.student_mobile_phone').mask('999999999999999999', {
+					placeholder: 'X'
+			});
+		}
+
+});
+
+$(document).on("change",".countryCodeNumber",function(){
+		if($(this).val()==92){
+			$('.father_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			});
+		}else{
+			$('.father_mobile_phone').mask('999999999999999999', {
+					placeholder: 'X'
+			});
+		}
+
+});
+
+$(document).on("change",".countryCodeNumber",function(){
+		if($(this).val()==92){
+			$('.mother_mobile_phone').mask('9999-9999999', {
+					placeholder: 'X'
+			});
+		}else{
+			$('.mother_mobile_phone').mask('999999999999999999', {
+					placeholder: 'X'
+			});
+		}
+
+});
 
 $(document).on ("keyup", "#Referal_code", function(){
 	
@@ -55,57 +111,47 @@ if ($('#gf_id').length) {
 	$('#gf_id').mask('99-999', {
 		placeholder: 'X'
 	});
-}	
+}
+
+//Date Length
+
+$(function(){
+    var dtToday = new Date();
+    
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    
+    var maxDate = year + '-' + month + '-' + day;
+   // alert(maxDate);
+    $('#date_of_birth').attr('max', maxDate);
+});
+
 	
 // Date range
 if ($('#date_of_birth').length) {
+	$('#date_of_birth').mask("99/99/9999");
+	//$('#date_of_birth').mask('99/99/9999');
+	$('#date_of_birth').focusout(function(){ 
+		var date_value = $(this).val()
+		getadmissiongradedob(date_value);
+	});
+
 	
-	// $('#date_of_birth').datepicker({
-	// 	changeMonth: true,
- //        changeYear: true,
-	// 	 yearRange: '2000:'+(new Date).getFullYear(),
-	// 	dateFormat: 'yy-mm-dd',
-	// 	prevText: '<i class="fa fa-chevron-left"></i>',
-	// 	nextText: '<i class="fa fa-chevron-right"></i>',
-	// 	onSelect: function(date) {
-	// 		getadmissiongradedob(date);
-	// 	},
-	// });	
+    // })
+    //	.on('focus', '#date_of_birth', function () {
+    //     var me = $("#date_of_birth");
+    //     me.mask('99/99/9999');
+    //     //me.mask('9999/99/99');
 
-
-
-$(document).on('click', '#date_of_birth', function () { 
-        var me = $("#date_of_birth");   
-        me.datepicker({
-            showOn: 'focus',
-            	changeMonth: true,
-         changeYear: true,
-	 	 yearRange: '2000:'+(new Date).getFullYear(),
-            altFormat: "yy-mm-dd",
-            dateFormat: "yy-mm-dd",
-
-            prevText: '<i class="fa fa-chevron-left"></i>',
-		nextText: '<i class="fa fa-chevron-right"></i>',
-		onSelect: function(date) {
-
-			getadmissiongradedob(date);
-		}
-
-
-         
-        }).focus();
-    }).on('focus', '#date_of_birth', function () {
-        var me = $("#date_of_birth");
-        me.mask('99/99/9999');
-    });
-
-
-
+    // });
 
 
 }	
-
-
 
 if ($('#f_nic').length) {
   $('#f_nic').mask('99999-9999999-9', {

@@ -871,14 +871,15 @@ class Admission_batch_model extends CI_Model{
 				IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) as flag_comm_ast_result,
 				/***** Assessment - END *****/
 				
-				/***** Re-Assessment *****/
+					/***** Re-Assessment *****/
 
 				IF(IFNULL(RST_Reminder.admission_form_id,0)=0,0,1) as flag_rst_reminder, IF(IFNULL(RST_Presence.date,0)=0,0,1) as flag_rst_presence, 
+				IFNULL(DATE_FORMAT(RST_Presence.date, '%a %d %b'),'') AS rst_done_on,
 				IF(IFNULL(RST_Followup.admission_form_id,0)=0,0,1) as flag_rst_followup,
 				af.form_assessment_result, af.form_assessment_decision,
-				IF(af.form_assessment_result='',0,1) as flag_rst_result,
-				IF(pad.form_assessment_decision='',0,1) as flag_rst_decision, IF(af.form_assessment_decision='',0,1) as flag_rst_allocation,
-				IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) as flag_comm_rst_result,
+				IF(pad.form_assessment_result='',0,1) as flag_ast_result,
+				IF(pad.form_assessment_decision='',0,1) as flag_ast_decision, IF(af.form_assessment_decision='',0,1) as flag_ast_allocation,
+				IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) as flag_comm_ast_result,
 				/***** Re-Assessment - END *****/
 				
 				
@@ -1215,6 +1216,7 @@ class Admission_batch_model extends CI_Model{
 				/***** Re-Assessment *****/
 
 				IF(IFNULL(RST_Reminder.admission_form_id,0)=0,0,1) as flag_rst_reminder, IF(IFNULL(RST_Presence.date,0)=0,0,1) as flag_rst_presence, 
+				IFNULL(DATE_FORMAT(RST_Presence.date, '%a %d %b'),'') AS rst_done_on,
 				IF(IFNULL(RST_Followup.admission_form_id,0)=0,0,1) as flag_rst_followup,
 				af.form_assessment_result, af.form_assessment_decision,
 				IF(pad.form_assessment_result='',0,1) as flag_ast_result,
@@ -1792,191 +1794,82 @@ class Admission_batch_model extends CI_Model{
 	public function getbatchadmissiondetail($batch_id){
 
 		$batch_id = SUBSTR($batch_id, 0, 1) . '-' . SUBSTR($batch_id, -2);
-		$query = "select * from
-					(select
-					af.form_id, LPAD(af.form_no, 5, '0') AS form_no,
-					if(af.gf_id >= 18000 and af.gf_id <= 19000, '', concat(left(lpad(af.gf_id, 5, 0),2),'-',right(lpad(af.gf_id, 5, 0),3))) as gf_id,
-					af.official_name as applicant_name, af.father_name, af.mother_name,
-					if(af.gender = 'B', 'Boy', 'Girl') as gender, af.sibling, af.pet_code, 
-					DATE_FORMAT(af.form_issuance_date, '%a %d %b') as form_issuance_date,
-					DATE_FORMAT(af.form_submission_date, '%a %d %b') as form_submission_date,
-					af.batch_time_submission, DATE_FORMAT(af.dob, '%d-%b-%Y') as dob,
-					CONCAT(
-						YEAR(FROM_DAYS(DATEDIFF(NOW(),af.dob))),'y, ',
-						MONTH(FROM_DAYS(DATEDIFF(NOW(),af.dob))),'m', '') as age,
-
-					/***** Assessment *****/
-					CONCAT(DATE_FORMAT(af.form_assessment_date, '%a %d %b'), '@ ', TIME_FORMAT(af.batch_time_submission, '%h:%i')) as form_assessment_date,
-					DATE_FORMAT(af.form_assessment_date, '%d %b') as simple_form_assessment_date,
-					IFNULL(DATE_FORMAT(AST_Presence.date, '%a %d %b'),'') AS ast_done_on, af.ast_name_code, 
-					IF(IFNULL(AST_Reminder.admission_form_id,0)=0,0,1) as flag_ast_reminder, IF(IFNULL(AST_Presence.date,0)=0,0,1) as flag_ast_presence, 
-					IF(IFNULL(AST_Followup.admission_form_id,0)=0,0,1) as flag_ast_followup,
-					af.form_assessment_result, af.form_assessment_decision,
-					IF(af.form_assessment_result='',0,1) as flag_ast_result,
-					IF(af.form_assessment_decision='',0,1) as flag_ast_decision, IF(af.form_assessment_decision='',0,1) as flag_ast_allocation,
-					IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) as flag_comm_ast_result,
-					/***** Assessment - END *****/
-
-					IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
-
-					/***** Assessment *****/
-					IFNULL(CONCAT(DATE_FORMAT(af.form_discussion_date, '%a %d %b'), ' @ ', TIME_FORMAT(af.form_discussion_time, '%h:%i')), '') as form_discussion_date,
-					IFNULL(DATE_FORMAT(Dis_Presence.date, '%a %d %b'),'') AS dis_done_on, af.dis_name_code,
-					IF(IFNULL(DIS_Reminder.admission_form_id,0)=0,0,1) as flag_dis_reminder, IF(IFNULL(DIS_Presence.date,0)=0,0,1) as flag_dis_presence, 
-					IF(IFNULL(DIS_Followup.admission_form_id,0)=0,0,1) as flag_dis_followup,
-					af.form_discussion_result, af.form_discussion_decision,
-					IF(af.form_discussion_result='',0,1) as flag_dis_result,
-					IF(af.form_discussion_decision='',0,1) as flag_dis_decision, IF(af.form_discussion_decision='',0,1) as flag_dis_allocation,
-					IF(IFNULL(OFR_Communication.admission_form_id,0)=0,0,1) as flag_comm_dis_result,
-					/***** Assessment - END *****/
-
-
-					/***** Other References Fields *****/
-					af.form_batch_id, af.grade_id, af.and_id, af.and_batch,
-					af.batch_category, af.batch_slot_no, af.grade_name, af.form_status_stage_id,
-					af.form_status_id, 
-					ifnull(outcome.outcome_date,'') as outcome_date, waitlist.weightage, wil.wil_decision
-					/***** Other References Fields - END *****/
-
-
-					from atif_gs_admission.view_admission_form as af
-
-					/***** Assessment *****/
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 3
-						and new_form_stage = 4
-						/*and type = 'G'*/
-						group by admission_form_id) as AST_Presence
-							on AST_Presence.admission_form_id = af.form_id
-
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 3
-						and new_form_stage = 3
-						/*and type = 'G'*/
-						group by admission_form_id) as AST_Reminder
-							on AST_Reminder.admission_form_id = af.form_id
-						
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 3
-						and new_form_stage = 5
-						/*and type = 'G'*/
-						group by admission_form_id) as AST_Followup
-							on AST_Followup.admission_form_id = af.form_id
-						
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 3
-						and new_form_stage = 2
-						/*and type = 'G'*/
-						group by admission_form_id) as DIS_Communication
-							on DIS_Communication.admission_form_id = af.form_id
-					/***** Assessment - END *****/
-
-							
-
-					/***** Discussion *****/
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 4
-						and new_form_stage = 4
-						/*and type = 'G'*/
-						group by admission_form_id) as Dis_Presence
-							on Dis_Presence.admission_form_id = af.form_id
-							
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 4
-						and new_form_stage = 3
-						/*and type = 'G'*/
-						group by admission_form_id) as DIS_Reminder
-							on DIS_Reminder.admission_form_id = af.form_id
-						
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 4
-						and new_form_stage = 5
-						/*and type = 'G'*/
-						group by admission_form_id) as DIS_Followup
-							on DIS_Followup.admission_form_id = af.form_id
-
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 4
-						and new_form_stage = 2
-						/*and type = 'G'*/
-						group by admission_form_id) as OFR_Communication
-							on OFR_Communication.admission_form_id = af.form_id
-					/***** Discussion - END *****/
-
-
-					/***** Offer *****/
-					left join (select
-						admission_form_id, from_unixtime(modified) as date
-						from atif_gs_admission.log_form_status
-						where new_form_status = 5
-						and type = 'S'
-						group by admission_form_id) as OFFER
-							on OFFER.admission_form_id = af.form_id
-					/***** Offer - END *****/
-					
-					/***** Waitlist *****/
-					left join (Select 
-									admission_form_id, form_status_id, weightage
-								From atif_gs_admission.admission_form_waitlist ) as waitlist on
-							waitlist.admission_form_id = af.form_id
-					left join (select admission_form_id, wil_decision 
-								from(select
-									id as id, admission_form_id,
-									if(new_form_stage = 6 or new_form_stage = 15, 'RGT',
-									if(new_form_stage = 8 or new_form_stage = 16, 'OHD',
-									if(new_form_stage = 9 or new_form_stage = 17, 'WIL',
-									if(new_form_stage = 7, 'NIT',
-									if(new_form_status >= 5, 'OFR',''))))) as wil_decision
-								from atif_gs_admission.log_form_status			
-								where (old_form_stage = 9 or old_form_stage = 17)
-								order by admission_form_id, id desc) as da
-								group by admission_form_id) as wil
-								on wil.admission_form_id = af.form_id
-					/***** Waitlist - END *****/
-					
-					/***** Outcome date *****/
-					left join (Select admission_form_id, 
-						from_unixtime(max(modified), '%a %d %b') as outcome_date 
-						From atif_gs_admission.log_form_status 
-						where new_form_stage = 15 or new_form_stage = 7
-						group by admission_form_id
-						union
-						select lgs.admission_form_id, 
-						from_unixtime(min(lgs.modified), '%a %d %b') as outcome_date
-						from atif_gs_admission.log_form_status as lgs
-						where lgs.new_form_status >= 6
-						group by lgs.admission_form_id) as outcome
-						on outcome.admission_form_id = af.form_id
-					/***** Outcome date - End *****/
-					
-					
-					where af.form_assessment_date != '0000-00-00'
-					and af.form_assessment_date != '2001-01-01'
-					and af.batch_category = '$batch_id'
-
-
-
-					order by af.batch_time_submission) as data
-					group by form_no
-					
-					order by batch_time_submission, form_no";
-
+		$query = "SELECT *
+		FROM (
+		SELECT af.form_id, af.form_no AS form_no, IF(af.gf_id >= 19000 AND af.gf_id <= 20000, '', CONCAT(
+		LEFT(LPAD(af.gf_id, 5, 0),2),'-',
+		RIGHT(LPAD(af.gf_id, 5, 0),3))) AS gf_id, af.official_name AS applicant_name, af.father_name, af.mother_name, IF(af.gender = 'B', 'Boy', 'Girl') AS gender, af.sibling, af.pet_code, DATE_FORMAT(af.form_issuance_date, '%a %d %b') AS form_issuance_date, DATE_FORMAT(af.form_submission_date, '%a %d %b') AS form_submission_date, af.batch_time_submission, DATE_FORMAT(af.dob, '%d-%b-%Y') AS dob, CONCAT(YEAR(FROM_DAYS(DATEDIFF(NOW(),af.dob))),'y, ', MONTH(FROM_DAYS(DATEDIFF(NOW(),af.dob))),'m', '') AS age, /***** Assessment *****/ CONCAT(DATE_FORMAT(af.form_assessment_date, '%a %d %b'), '@ ', TIME_FORMAT(af.batch_time_submission, '%h:%i')) AS form_assessment_date, DATE_FORMAT(af.form_assessment_date, '%d %b') AS simple_form_assessment_date, IFNULL(DATE_FORMAT(AST_Presence.date, '%a %d %b'),'') AS ast_done_on, af.ast_name_code, IF(IFNULL(AST_Reminder.admission_form_id,0)=0,0,1) AS flag_ast_reminder, IF(IFNULL(AST_Presence.date,0)=0,0,1) AS flag_ast_presence, IF(IFNULL(AST_Followup.admission_form_id,0)=0,0,1) AS flag_ast_followup, af.form_assessment_result, af.form_assessment_decision, IF(af.form_assessment_result='',0,1) AS flag_ast_result, IF(af.form_assessment_decision='',0,1) AS flag_ast_decision, IF(af.form_assessment_decision='',0,1) AS flag_ast_allocation, IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) AS flag_comm_ast_result, /***** Assessment - END *****/ IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) AS OFFER, /***** Assessment *****/ IFNULL(CONCAT(DATE_FORMAT(af.form_discussion_date, '%a %d %b'), ' @ ', TIME_FORMAT(af.form_discussion_time, '%h:%i')), '') AS form_discussion_date, IFNULL(DATE_FORMAT(Dis_Presence.date, '%a %d %b'),'') AS dis_done_on, af.dis_name_code, IF(IFNULL(DIS_Reminder.admission_form_id,0)=0,0,1) AS flag_dis_reminder, IF(IFNULL(DIS_Presence.date,0)=0,0,1) AS flag_dis_presence, IF(IFNULL(DIS_Followup.admission_form_id,0)=0,0,1) AS flag_dis_followup, af.form_discussion_result, af.form_discussion_decision, IF(af.form_discussion_result='',0,1) AS flag_dis_result, IF(af.form_discussion_decision='',0,1) AS flag_dis_decision, IF(af.form_discussion_decision='',0,1) AS flag_dis_allocation, IF(IFNULL(OFR_Communication.admission_form_id,0)=0,0,1) AS flag_comm_dis_result, /***** Assessment - END *****/ /***** Other References Fields *****/ af.form_batch_id, af.grade_id, af.and_id, af.and_batch, af.batch_category, af.batch_slot_no, af.grade_name, af.form_status_stage_id, af.form_status_id, IFNULL(outcome.outcome_date,'') AS outcome_date, waitlist.weightage, wil.wil_decision /***** Other References Fields - END *****/
+		FROM atif_gs_admission.view_admission_form AS af /***** Assessment *****/
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 3 AND new_form_stage = 4 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS AST_Presence ON AST_Presence.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 3 AND new_form_stage = 3 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS AST_Reminder ON AST_Reminder.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 3 AND new_form_stage = 5 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS AST_Followup ON AST_Followup.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 3 AND new_form_stage = 2 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS DIS_Communication ON DIS_Communication.admission_form_id = af.form_id /***** Assessment - END *****/ /***** Discussion *****/
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 4 AND new_form_stage = 4 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS Dis_Presence ON Dis_Presence.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 4 AND new_form_stage = 3 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS DIS_Reminder ON DIS_Reminder.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 4 AND new_form_stage = 5 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS DIS_Followup ON DIS_Followup.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 4 AND new_form_stage = 2 /*and type = 'G'*/
+		GROUP BY admission_form_id) AS OFR_Communication ON OFR_Communication.admission_form_id = af.form_id /***** Discussion - END *****/ /***** Offer *****/
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(modified) AS DATE
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_status = 5 AND TYPE = 'S'
+		GROUP BY admission_form_id) AS OFFER ON OFFER.admission_form_id = af.form_id /***** Offer - END *****/ /***** Waitlist *****/
+		LEFT JOIN (
+		SELECT admission_form_id, form_status_id, weightage
+		FROM atif_gs_admission.admission_form_waitlist) AS waitlist ON waitlist.admission_form_id = af.form_id
+		LEFT JOIN (
+		SELECT admission_form_id, wil_decision
+		FROM(
+		SELECT id AS id, admission_form_id, IF(new_form_stage = 6 OR new_form_stage = 15, 'RGT', IF(new_form_stage = 8 OR new_form_stage = 16, 'OHD', IF(new_form_stage = 9 OR new_form_stage = 17, 'WIL', IF(new_form_stage = 7, 'NIT', IF(new_form_status >= 5, 'OFR',''))))) AS wil_decision
+		FROM atif_gs_admission.log_form_status
+		WHERE (old_form_stage = 9 OR old_form_stage = 17)
+		ORDER BY admission_form_id, id DESC) AS da
+		GROUP BY admission_form_id) AS wil ON wil.admission_form_id = af.form_id /***** Waitlist - END *****/ /***** Outcome date *****/
+		LEFT JOIN (
+		SELECT admission_form_id, FROM_UNIXTIME(MAX(modified), '%a %d %b') AS outcome_date
+		FROM atif_gs_admission.log_form_status
+		WHERE new_form_stage = 15 OR new_form_stage = 7
+		GROUP BY admission_form_id UNION
+		SELECT lgs.admission_form_id, FROM_UNIXTIME(MIN(lgs.modified), '%a %d %b') AS outcome_date
+		FROM atif_gs_admission.log_form_status AS lgs
+		WHERE lgs.new_form_status >= 6
+		GROUP BY lgs.admission_form_id) AS outcome ON outcome.admission_form_id = af.form_id /***** Outcome date - End *****/
+		WHERE af.form_assessment_date != '0000-00-00' AND af.form_assessment_date != '2001-01-01' AND af.batch_category = '$batch_id'
+		ORDER BY af.batch_time_submission) AS DATA
+		GROUP BY form_no
+		ORDER BY batch_time_submission, form_no";
+		
 
 		$row = $this->db->query($query);
 		return $row->result();
@@ -1985,7 +1878,7 @@ class Admission_batch_model extends CI_Model{
 
 	public function getbatchadmissiondetailAlevel($form_id){
 
-		$query = "SELECT af.id AS form_id, LPAD(af.form_no, 5, '0') form_no,af.official_name as applicant_name, DATE_FORMAT(af.dob, '%d-%b-%Y') AS dob,fr.father_name ,fr.mother_name,af.grade_name,CONCAT(DATE_FORMAT(af.form_assessment_date, '%a %d %b'), '@ ', TIME_FORMAT(af.form_discussion_time, '%h:%i')) as form_assessment_date,if(af.gf_id >= 18000 and af.gf_id <= 19000, '', concat(left(lpad(af.gf_id, 5, 0),2),'-',right(lpad(af.gf_id, 5, 0),3))) as gf_id,af.grade_id
+		$query = "SELECT af.id AS form_id, af.form_no form_no,af.official_name as applicant_name, DATE_FORMAT(af.dob, '%d-%b-%Y') AS dob,fr.father_name ,fr.mother_name,af.grade_name,CONCAT(DATE_FORMAT(af.form_assessment_date, '%a %d %b'), '@ ', TIME_FORMAT(af.form_discussion_time, '%h:%i')) as form_assessment_date,if(af.gf_id >= 19000 and af.gf_id <= 20000, '', concat(left(lpad(af.gf_id, 5, 0),2),'-',right(lpad(af.gf_id, 5, 0),3))) as gf_id,af.grade_id
 			FROM atif_gs_admission.admission_form af
 			LEFT JOIN atif_gs_admission.family_registration fr on fr.gf_id = af.gf_id
 			WHERE af.id = ".$form_id;

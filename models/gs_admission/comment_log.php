@@ -28,7 +28,11 @@ class Comment_log extends CI_Model{
          ,
          CONCAT('Admission form issued', ' on <strong>', DATE_FORMAT(FROM_UNIXTIME(af.created), '%a, %b %e, %Y %h:%i %p'), ' </strong> with next step <strong> TBI </strong> ' )
          ) as message,
-         'Additional Comments'  as Additional_Comments,
+
+         if(lc.comments !='',
+         CONCAT(' <strong> Additional_Comments </strong> ', lc.comments ) ,'') as Additional_Comments,
+
+
          'Issuance' as type, 
          sr.employee_id as photo_id, 
          sr.abridged_name as staff_name, 
@@ -40,6 +44,16 @@ class Comment_log extends CI_Model{
          left join atif_gs_admission.log_form_batch as bb on bb.admission_form_id= af.id 
          and bb.old_form_batch=0 
          left join atif_gs_admission._form_batch as b on b.id=bb.new_form_batch 
+
+                  left join ( select  
+lc.admission_form_id,
+group_concat( lc.comments , '<br />'   ) as comments
+from
+atif_gs_admission.log_form_comments as lc where lc.reason='ISS'  and lc.admission_form_id=".$form_id." ) as lc on lc.admission_form_id=af.id
+         
+
+
+
          where af.id = ".$form_id." /***** Change Form ID *****/
          
          UNION
@@ -161,7 +175,10 @@ left join atif_gs_admission._form_batch as old_batch on old_batch.id = bb.new_fo
          left join atif.staff_registered as sr
             on sr.user_id = com.register_by
                 
-         where com.admission_form_id = ".$form_id." and com.register_by=1 
+         where com.admission_form_id = ".$form_id." 
+         and com.reason != 'ISS'
+         and com.reason != 'SUB'
+         and com.register_by=1 
 
 
          /***** Change Form ID *****/   
@@ -1033,7 +1050,10 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 
 
 left join ( select * from atif_gs_admission.log_form_comments as l where (l.reason like '%offer%' or 
-l.reason like '%OFR%') and l.register_by > 1 ) as com
+l.reason like '%OFR%') and l.register_by > 1  
+and l.reason != 'ISS'
+and l.reason != 'SUB'
+) as com
 on com.admission_form_id = af.id
 
 
