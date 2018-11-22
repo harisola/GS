@@ -1132,10 +1132,16 @@ $(document).on("keyup", "#form_no", function(){
         $("#primary_contact").val( res.primary_contact );
         
         
-        if( res.Grade_id > 2  ){ 
+        // if( res.Grade_id > 2  ){ 
+        //   $("#previousData").show();
+        // }else{
+        //   $("#previousData").hide();  
+        // }
+
+        if(res.Grade_id == 17 || res.Grade_id == 1 || res.Grade_id ==2){
+          $("#previousData").hide();
+        }else {
           $("#previousData").show();
-        }else{
-          $("#previousData").hide();  
         }
         
         //$("#gender").val( res.Gender );

@@ -429,6 +429,7 @@ class Admission_aso_and_process extends CI_Controller{
 	        $html .='<option value="RGT">RGT</option>';
 	        $html .='<option value="WIL">WIL</option>';
 	        $html .='<option value="OHD">OHD</option>';
+	        $html .='<option value="RST">RST</option>';
         }else{
             $html .='<select required id="DECD" name="discussion_decision_result" class="aso_decision">';
 	        $html .='<option value="" disabled selected>Decision *</option>';
@@ -436,6 +437,8 @@ class Admission_aso_and_process extends CI_Controller{
 	        $html .='<option value="RGT">RGT</option>';
 	        $html .='<option value="WIL">WIL</option>';
 	        $html .='<option value="OHD">OHD</option>';
+	        $html .='<option value="RST">RST</option>';
+
 
     	}
         $html .='</select>';
@@ -745,11 +748,13 @@ class Admission_aso_and_process extends CI_Controller{
                         			$("#form_discussion_decision_"+form_id).text(form_discussion_decision);
 
                         			if(form_discussion_decision == ""){
-                        				$("#offer_"+form_id).text("Approval Pending");
+                        				$("#offer_"+form_id).text("");
 
                         			}
                         			else{
-                        			 $("#offer_"+form_id).text("Offer "+offer);
+                        				if(offer!=""){
+                        					$("#offer_"+form_id).text("Offer "+offer);
+                        				}
                         			}
 
                         			$("#myModal4").modal("hide");
@@ -1285,7 +1290,6 @@ class Admission_aso_and_process extends CI_Controller{
 				   'dis_name_code' =>$assessment_result[0]->dis_name_code  
 				);
 				
-
 				$previous_batch_id=$assessment_result[0]->form_batch_id;
 				$previous_slot_id=$assessment_result[0]->batch_slot_id;
 				$this->abm->insertPreviousSlotData($previous_data);
@@ -1300,7 +1304,7 @@ class Admission_aso_and_process extends CI_Controller{
 									'form_assessment_result' =>"", 
 									'form_assessment_result_by' =>"", 
 									'form_assessment_decision' =>"", 
-									'form_discussion_date' =>'0000-00-00' , 
+									'form_discussion_date' =>'0000-00-00', 
 									'form_discussion_time' =>'00:00:00', 
 									'form_discussion_result' =>"", 
 									'form_discussion_result_by' =>"", 
@@ -3276,7 +3280,7 @@ class Admission_aso_and_process extends CI_Controller{
 
                         			}
                         			else{
-                        				$("#offer_"+form_id).text("Approval Pending");
+                        				$("#offer_"+form_id).text("");
                         			}
 
                         			$("#myModal4").modal("hide");

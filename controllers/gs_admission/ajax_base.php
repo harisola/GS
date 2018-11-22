@@ -449,11 +449,13 @@ class Ajax_base extends CI_Controller{
 			}
 			//ISS for Issuance
 			//zk
+		
 			if($comments != ''){
+				$f_no =  $ad_form_id;
 				$Reason ='ISS';
-				$comment_logs = $this->add_reasion($f_no,$Reason);
-				// var_dump(+"comment_logs"+$comment_logs);
-				// die();
+				$comment_logs = $this->add_reasion($f_no, $Reason);
+				 var_dump(+"comment_logs"+$comment_logs);
+				 die();
 			}
 			
 			echo  json_encode( $data3 );
@@ -1620,20 +1622,27 @@ class Ajax_base extends CI_Controller{
 
 		//zk create function for comments and foam id  to add comments to table 
 		// Add logs[Reasion] from log atif_gs_admission.log_form_comments table
-	public function add_reasion($f_no,$reason)
+	public function add_reasion($f_no, $reason)
 	{
+		// var_dump($f_no);
+		// die();
 		
-		//$f_no = $this->AB->getFormNo();
+		$f_no = $this->AB->getFormNo();
 		$where_admission = array(
 			'form_no' => $f_no,
 		);
+
 		$admission_data = $this->AB->get_by_all('atif_gs_admission.admission_form','',$where_admission);
 		$admission_form_id = $admission_data[0]->id;
-
-		$where_reasion =  array(
-			'admission_form_id' => $admission_form_id,
-		);
- 		$reason=$comments;
+		var_dump($admission_data);
+		die();
+			//zzk
+		// var_dump($admission_data);
+		// die();
+		// $where_reasion =  array(
+		// 	'admission_form_id' => $admission_form_id,
+		// );
+ 		//$reason=$comments;
 
 		$data = array(
 			'admission_form_id' => $admission_form_id,
@@ -1646,6 +1655,7 @@ class Ajax_base extends CI_Controller{
 		);
 		$this->AB->set("log_form_comments",$data);
 		//$this->AB->update_data('atif_gs_admission.log_form_comments',$where_reasion,$data);
+		
 	}
 
 	// GET ADMISSION DETAIL FORM

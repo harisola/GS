@@ -692,7 +692,7 @@
 
                               }
                               else{
-                                $("#offer_"+form_id).text("Approval Pending");
+                                $("#offer_"+form_id).text("");
                               }
 
                               $("#myModal4").modal("hide");

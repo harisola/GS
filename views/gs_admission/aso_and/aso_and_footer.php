@@ -171,7 +171,6 @@
 		$('#Generations_AjaxLoader').show();
 		var form_no = $(this).attr('data-presesnt');
 		var re_assistment = $(this).attr('data-re_assistment');
-		$(this).hide();
 		$.ajax({
 			type:"POST",
 			cache:false,
@@ -181,8 +180,12 @@
 			},
 			url:"<?php echo base_url(); ?>index.php/gs_admission/admission_aso_and_process/get_and_present",
 			success:function(e){
-
+				debugger;
 				if(e == 1){
+					$('.btn_number_'+form_no).show();
+					$('.attendance_text_'+form_no).hide();
+					$(this).hide();
+
 
 
 					// ASO CASE PRESENCE
@@ -489,7 +492,7 @@ $(document).on('click','#mark_present_aso',function(){
 			$('#resultWaited').val('');
 			$('.reassistment_batch_slots_decision').hide();
 		}
-		else if(astd == 'RES'){
+		else if(astd == 'RST'){
 			$('.IfWIL').css('display','none');
 			$('#cfd').css('display','none');
 			$('#cft').css('display','none');
@@ -535,7 +538,7 @@ $(document).on('click','#mark_present_aso',function(){
 			//$('#offer_time').val('');
 			$('#weightage_wil').val('');
 		}
-		else if(astd == 'CFD'){
+		else if(dd == 'CFD'){
 			$('.ddIfWILD').css('display','none');
 			$('#ddIfOFR_date').css('display','none');
 			$('.reassistment_batch_slots').css('display','none');
@@ -544,8 +547,7 @@ $(document).on('click','#mark_present_aso',function(){
 			$('#weightage_wil').val('');
 		}
 
-
-		else if(astd == 'RES'){
+		else if(dd == 'RST'){
 			$('.ddIfWILD').css('display','none');
 			$('#ddIfOFR_date').css('display','none');
 			$('#offer_date').val('');

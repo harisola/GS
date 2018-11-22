@@ -580,7 +580,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-				IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+				IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -632,7 +632,7 @@ class Admission_batch_model extends CI_Model{
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 					IF(af.form_status_id>=5 AND (af.form_status_stage_id<=3  OR af.form_status_stage_id = 7 OR af.form_status_stage_id = 11 OR af.af.form_status_stage_id = 10), CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 				  ))))) as final_decision
 				/***** Final Decision - END *****/
 				
@@ -889,7 +889,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-				IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+				IF(IFNULL(OFFER.admission_form_id, 'A')='A', '-', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -941,7 +941,7 @@ class Admission_batch_model extends CI_Model{
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 					IF(af.form_status_id>=5 AND (af.form_status_stage_id<=3  OR af.form_status_stage_id = 7 OR af.form_status_stage_id = 11 OR af.af.form_status_stage_id = 10), CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '-', '-'
 				  ))))) as final_decision
 				/***** Final Decision - END *****/
 				
@@ -1230,7 +1230,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-				IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+				IF(IFNULL(OFFER.admission_form_id, 'A')='A', '-', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -1266,7 +1266,7 @@ class Admission_batch_model extends CI_Model{
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 					IF(af.form_status_id>=5 AND (af.form_status_stage_id<=3  OR af.form_status_stage_id = 7 OR af.form_status_stage_id = 11 OR af.af.form_status_stage_id = 10), CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 				  ))))) as final_decision
 				/***** Final Decision - END *****/
 				
@@ -1461,7 +1461,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-		IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+		IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -1627,7 +1627,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-				IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+				IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -1663,7 +1663,7 @@ class Admission_batch_model extends CI_Model{
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 					IF(af.form_status_id>=5 AND (af.form_status_stage_id<=3 OR af.form_status_stage_id = 7 OR af.form_status_stage_id = 11 OR af.form_status_stage_id = 10), CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 				  ))))) as final_decision
 				/***** Final Decision - END *****/
 				
@@ -2014,7 +2014,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-		IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+		IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -2044,7 +2044,7 @@ class Admission_batch_model extends CI_Model{
 			IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 			IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 			IF(af.form_status_id>=5 AND af.form_status_stage_id<=3, CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-			IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+			IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 		  ))))) as final_decision
 		/***** Final Decision - END *****/
 
@@ -2187,7 +2187,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-		IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+		IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -2217,7 +2217,7 @@ class Admission_batch_model extends CI_Model{
 			IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 			IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 			IF(af.form_status_id>=5 AND af.form_status_stage_id<=3, CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-			IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+			IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 		  ))))) as final_decision
 		/***** Final Decision - END *****/
 
@@ -2656,7 +2656,7 @@ class Admission_batch_model extends CI_Model{
 
 
 
-				IF(IFNULL(OFFER.admission_form_id, 'A')='A', 'Approval Pending', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
+				IF(IFNULL(OFFER.admission_form_id, 'A')='A', '', DATE_FORMAT(OFFER.date, '%a %d %b')) as OFFER,
 
 
 
@@ -2692,7 +2692,7 @@ class Admission_batch_model extends CI_Model{
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=17, 'Wait List',
 					IF((af.form_status_id>=3 AND af.form_status_id<=6) AND af.form_status_stage_id=16, 'On Hold',
 					IF(af.form_status_id>=5 AND af.form_status_stage_id<=3, CONCAT('Offer ', IFNULL(DATE_FORMAT(af.offer_date, '%a %d %b'),'')),
-					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), 'Approval Pending', '-'
+					IF((af.form_status_id>=4 OR af.form_status_id<=6) AND (af.form_status_stage_id=12 OR af.form_status_stage_id=6 OR af.form_status_stage_id=8  OR af.form_status_stage_id=9), '', '-'
 				  ))))) as final_decision
 				/***** Final Decision - END *****/
 				

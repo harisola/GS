@@ -7,252 +7,248 @@ class Comment_log extends CI_Model{
 		
 		$this->ddb = $this->load->database('gs_admission',TRUE);
 		
-			$query = "SELECT * FROM
-			(
-			/************************************************* Form Issuance
-			*****************************************************************/
-			select
-			af.id as admission_form_id, FROM_UNIXTIME(af.created) as change_date, '' as reason,
+			$query = "
+
+   SELECT * FROM
+         (
+         /************************************************* Form Issuance
+         *****************************************************************/
+         select
+         af.id as admission_form_id, FROM_UNIXTIME(af.created) as change_date, 
 
 
-			if( af.form_batch_id > 1 and b.batch_category != '',
-			
-			CONCAT('Admission form issued', ' on ', DATE_FORMAT(FROM_UNIXTIME(af.created), '%a, %b %e, %Y %h:%i %p'), ' and allocated to <strong> Batch ', b.batch_category ,'</strong>' ) 
-			,
-			CONCAT('Admission form issued', ' on ', DATE_FORMAT(FROM_UNIXTIME(af.created), '%a, %b %e, %Y %h:%i %p') , ' with next step  <strong> TBI </strong>'  )
-			)
-			
-			as message,
+         '' as reason,
 
-			''  as Additional_Comments,
+         if( b.batch_category != '',
+         
+         CONCAT('Admission form issued', ' on <strong>', DATE_FORMAT((`b`.`date`), '%a, %b %e, %Y'), ' </strong> at <strong> ', 
+         time_format(`b`.`time_start`, '%h:%i %p' ) ,
 
-			'Issuance' as type, sr.employee_id as photo_id, 
-			sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 
-			1 as this_order
-			from atif_gs_admission.admission_form as af
-			left join atif.staff_registered as sr on sr.user_id = af.register_by
-			left join atif_gs_admission.log_form_batch as bb on bb.admission_form_id= af.id 
-			and bb.old_form_batch=1 
-			left join atif_gs_admission._form_batch as b on b.id=bb.new_form_batch 
-			where af.id = ".$form_id." /***** Change Form ID *****/
-			
-			
-			
-			UNION
-			select
-			af.id as admission_form_id, FROM_UNIXTIME(af.created) as change_date, IF(af.comments!='', 'Admission Form Comments', '') as reason,
-			IF(af.comments != '', CONCAT(af.comments, ' on ', DATE_FORMAT(FROM_UNIXTIME(af.created), '%a, %b %e, %Y %h:%i %p')), '') as message,
-			'' as Additional_Comments,
-			'Comments' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 1 as this_order
-			from atif_gs_admission.admission_form as af
-			left join atif.staff_registered as sr
-			   on sr.user_id = af.register_by
-			where af.id = ".$form_id." and af.comments!='' /***** Change Form ID *****/
-
-
-
-			UNION
-			select
-			lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
-
-
-if( old_batch.batch_category != '',
-CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p'), ' for batch  ', old_batch.batch_category ) 
-,
-CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p') ) 
-)
-as message,
-
-
-			
+         ' </strong> and allocated to <strong> Batch ', b.batch_category ,'</strong>' ) 
+         ,
+         CONCAT('Admission form issued', ' on <strong>', DATE_FORMAT(FROM_UNIXTIME(af.created), '%a, %b %e, %Y %h:%i %p'), ' </strong> with next step <strong> TBI </strong> ' )
+         ) as message,
+         'Additional Comments'  as Additional_Comments,
+         'Issuance' as type, 
+         sr.employee_id as photo_id, 
+         sr.abridged_name as staff_name, 
+         sr.user_id as user_id, 
+         1 as this_order
+         from atif_gs_admission.admission_form as af
+         left join atif.staff_registered as sr on sr.user_id = af.register_by
+         
+         left join atif_gs_admission.log_form_batch as bb on bb.admission_form_id= af.id 
+         and bb.old_form_batch=0 
+         left join atif_gs_admission._form_batch as b on b.id=bb.new_form_batch 
+         where af.id = ".$form_id." /***** Change Form ID *****/
+         
+         UNION
+         select
+         lgs.admission_form_id, 
+         from_unixtime(lgs.modified) as change_date, 
+         '' as reason,
+         if( old_batch.batch_category != '',
+      
+      CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p'), ' for batch  ', old_batch.batch_category ) 
+      ,
+      CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p')) 
+      )
+      as message,
 if( af.comments !='',
 CONCAT('<br /><strong>Additional Comments: </strong> ', af.comments ),'') as Additional_Comments,
 
 
-			'Status' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 2 as this_order
+         'Status' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
+         sr.user_id as user_id, 3 as this_order
 
-			from atif_gs_admission.log_form_status as lgs
-			left join atif_gs_admission._form_status as fst_old on fst_old.id = lgs.old_form_status
-			left join atif_gs_admission._form_status as fst_new on fst_new.id = lgs.new_form_status
-			left join atif.staff_registered as sr on sr.user_id = lgs.modified_by
+         from atif_gs_admission.log_form_status as lgs
+         left join atif_gs_admission._form_status as fst_old on fst_old.id = lgs.old_form_status
+         left join atif_gs_admission._form_status as fst_new on fst_new.id = lgs.new_form_status
+         left join atif.staff_registered as sr on sr.user_id = lgs.modified_by
 
-			left join atif_gs_admission.log_form_batch as  bb
+         left join atif_gs_admission.log_form_batch as  bb
  on bb.admission_form_id = lgs.admission_form_id and bb.old_form_batch = 1
  
  
 
-  left join atif_gs_admission.log_form_comments as com 
-  on com.admission_form_id = lgs.admission_form_id
+  
 
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif_gs_admission._form_batch as old_batch on old_batch.id = bb.new_form_batch
-			where lgs.admission_form_id = ".$form_id." /***** Change Form ID *****/    
-			and lgs.type = 'S' and lgs.old_form_status=1 and lgs.new_form_status=2
-			group by lgs.admission_form_id
-
-			UNION
-
-
-			/************************************ Communication - Assessment
-			*****************************************************************/
-			select
-			lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
-			CONCAT('Communication of Assessment on ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p')) as message,
-			'' as Additional_Comments,
-			'Stage' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 3 as this_order
-
-			from atif_gs_admission.log_form_status as lgs
-			left join atif_gs_admission._form_status_stage as fst_old
-			   on fst_old.id = lgs.new_form_stage
-			left join atif_gs_admission._form_status_stage as fst_new
-			   on fst_new.id = lgs.new_form_stage
-			left join atif.staff_registered as sr
-			   on sr.user_id = lgs.modified_by
-			where lgs.admission_form_id = ".$form_id." /***** Change Form ID *****/    
-			and lgs.new_form_status = 2 and lgs.new_form_stage = 2
-			group by admission_form_id
-
-
-			UNION
-
-
-			/***************************************** Presence - Assessment
-			*****************************************************************/
-			select
-			lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
-			CONCAT('Presence of Assessment on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
-			'' as Additional_Comments,
-			'Stage' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 3 as this_order
-
-			from atif_gs_admission.log_form_status as lgs
-
-			left join atif_gs_admission._form_status_stage as fst_old
-			   on fst_old.id = lgs.new_form_stage
-
-			left join atif_gs_admission._form_status_stage as fst_new
-			   on fst_new.id = lgs.new_form_stage
-			left join atif.staff_registered as sr
-			   on sr.user_id = lgs.modified_by
-			where lgs.admission_form_id = ".$form_id." /***** Change Form ID *****/    
-			and lgs.new_form_status = 3 and lgs.new_form_stage = 4
-			group by admission_form_id
-
-
-			
 
 
 
-			/************************************************* Form Comments
-			*****************************************************************/
-union
-			select
-			com.admission_form_id, FROM_UNIXTIME(com.created) as change_date, IF(com.reason = '', '', CONCAT(com.reason, ' on ', DATE_FORMAT(FROM_UNIXTIME(com.created), '%a %d, %b %Y %h:%i %p'))) as reason,
-
-			com.comments as message, 
 
 
-			'' as Additional_Comments,
 
-			'Comments' as type,
-			if(sr.employee_id='298', 'gs_logo', sr.employee_id) as photo_id, sr.abridged_name as staff_name, 
-			sr.user_id as user_id, 4 as this_order
 
-			from atif_gs_admission.log_form_comments as com
-			left join atif.staff_registered as sr
-			   on sr.user_id = com.register_by
-			       
-			where com.admission_form_id = ".$form_id." 
-			#and com.register_by=1 
-			/***** Change Form ID *****/   
+         where lgs.admission_form_id = ".$form_id." /***** Change Form ID *****/    
+         and lgs.type = 'S' and lgs.old_form_status=1 and lgs.new_form_status=2
+         group by lgs.admission_form_id
+
+         UNION
+
+
+         /************************************ Communication - Assessment
+         *****************************************************************/
+         select
+         lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
+         CONCAT('Communication of Assessment on ', DATE_FORMAT((af.form_assessment_date), '%d-%b-%Y %h:%i %p')) as message,
+         '' as Additional_Comments,
+         'Stage' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
+         sr.user_id as user_id, 4 as this_order
+
+         from atif_gs_admission.log_form_status as lgs
+         left join atif_gs_admission._form_status_stage as fst_old on fst_old.id = lgs.new_form_stage
+         left join atif_gs_admission._form_status_stage as fst_new on fst_new.id = lgs.new_form_stage
+         left join atif.staff_registered as sr on sr.user_id = lgs.modified_by
+
+		left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
+		where lgs.admission_form_id = ".$form_id." 
+        and lgs.new_form_status = 2 and lgs.new_form_stage = 2
+         group by admission_form_id
+
+
+         /***************************************** Presence - Assessment
+         *****************************************************************/
+
+         /*UNION
+		 select
+         lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
+         CONCAT('Presence of Assessment on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
+         '' as Additional_Comments,
+         'Stage' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
+         sr.user_id as user_id, 5 as this_order
+
+         from atif_gs_admission.log_form_status as lgs
+
+         left join atif_gs_admission._form_status_stage as fst_old
+            on fst_old.id = lgs.new_form_stage
+
+         left join atif_gs_admission._form_status_stage as fst_new
+            on fst_new.id = lgs.new_form_stage
+         left join atif.staff_registered as sr
+            on sr.user_id = lgs.modified_by
+
+        left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
+         where lgs.admission_form_id = ".$form_id." 
+         and lgs.new_form_status = 3 and lgs.new_form_stage = 4
+         group by admission_form_id */
+
+
+         
+
+
+
+         /************************************************* Form Comments
+         *****************************************************************/
+		union
+         select
+         com.admission_form_id, FROM_UNIXTIME(com.created) as change_date, 
+
+         IF(com.reason = '', '', CONCAT(com.reason, ' on ', DATE_FORMAT(FROM_UNIXTIME(com.created), '%a %d, %b %Y %h:%i %p'))) as reason,
+
+         com.comments as message, 
+
+
+         '' as Additional_Comments,
+
+         'Comments' as type,
+         if(sr.employee_id='298', 'gs_logo', sr.employee_id) as photo_id, sr.abridged_name as staff_name, 
+         sr.user_id as user_id, 6 as this_order
+
+         from atif_gs_admission.log_form_comments as com
+         left join atif.staff_registered as sr
+            on sr.user_id = com.register_by
+                
+         where com.admission_form_id = ".$form_id." and com.register_by=1 
+
+
+         /***** Change Form ID *****/   
 
 
 /************************************************* Batch changed
-			*****************************************************************/
+         *****************************************************************/
 
-			union 
+         union 
 
-			select
-			lgs.admission_form_id,  
-			from_unixtime(lgs.modified) as change_date, 
-			'' as reason,
-						CONCAT('Batch changed to from ',
-						old_batch.batch_category, 
-						' to ', new_batch.batch_category, 
-						
-						
-						' on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
-
-
-						'' as Additional_Comments,
-
-						'Status' as type, 
-						sr1.employee_id as photo_id, 
-						sr1.abridged_name as staff_name, 
-						sr1.user_id as user_id, 
-						5 as this_order
-			from atif_gs_admission.log_form_batch as lgs 
-
-			left join atif_gs_admission._form_batch as old_batch 
-			on old_batch.id = lgs.old_form_batch
-			left join atif.staff_registered as sr1 on  
-			sr1.user_id  = lgs.modified_by
-
-			left join atif_gs_admission._form_batch as new_batch 
-			on new_batch.id = lgs.new_form_batch
+         select
+         lgs.admission_form_id,  
+         from_unixtime(lgs.modified) as change_date, 
+         '' as reason,
+                  CONCAT('Batch changed to from ',
+                  old_batch.batch_category, 
+                  ' to ', new_batch.batch_category, 
+                  
+                  
+                  ' on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
 
 
+                  '' as Additional_Comments,
+
+                  'Status' as type, 
+                  sr1.employee_id as photo_id, 
+                  sr1.abridged_name as staff_name, 
+                  sr1.user_id as user_id, 
+                  7 as this_order
+         from atif_gs_admission.log_form_batch as lgs 
+
+         left join atif_gs_admission._form_batch as old_batch 
+         on old_batch.id = lgs.old_form_batch
+         left join atif.staff_registered as sr1 on  
+         sr1.user_id  = lgs.modified_by
+
+         left join atif_gs_admission._form_batch as new_batch 
+         on new_batch.id = lgs.new_form_batch
 
 
 
-			where lgs.register_by != 0 and lgs.admission_form_id=".$form_id." 
-			and lgs.old_form_batch > 1
 
 
-			union
-
-			select
-			lgs.admission_form_id,  
-			from_unixtime(lgs.modified) as change_date, 
-			'' as reason,
-						CONCAT('Batch Reallocated to ', new_batch.batch_category, 
-						
-						
-						' on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
+         where lgs.register_by != 0 and lgs.admission_form_id=".$form_id." 
+         and lgs.old_form_batch > 1
 
 
-						'' as Additional_Comments,
+         union
 
-						'Status' as type, 
-						sr1.employee_id as photo_id, 
-						sr1.abridged_name as staff_name, 
-						sr1.user_id as user_id, 
-						5 as this_order
-			from atif_gs_admission.log_form_batch as lgs 
+         select
+         lgs.admission_form_id,  
+         from_unixtime(lgs.modified) as change_date, 
+         '' as reason,
+                  CONCAT('Batch Reallocated to ', new_batch.batch_category, 
+                  
+                  
+                  ' on ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p')) as message,
 
-			left join atif_gs_admission._form_batch as old_batch 
-			on old_batch.id = lgs.old_form_batch
-			left join atif.staff_registered as sr1 on  
-			sr1.user_id  = lgs.modified_by
 
-			left join atif_gs_admission._form_batch as new_batch on new_batch.id = lgs.new_form_batch
+                  '' as Additional_Comments,
 
-			left join (
-			select * from atif_gs_admission.log_form_status as lg 
-			where lg.new_form_status < 4 
-			#lg.new_form_stage < 3 this condition for both Issuance and Submission
-			and lg.`type`='S' 
-			) as lg
-			on lg.admission_form_id=lgs.admission_form_id
-			
-			where lgs.register_by != 0
-			and lgs.admission_form_id=".$form_id." 
-			and lgs.old_form_batch > 1   and lg.id is not null
-			
+                  'Status' as type, 
+                  sr1.employee_id as photo_id, 
+                  sr1.abridged_name as staff_name, 
+                  sr1.user_id as user_id, 
+                  8 as this_order
+         from atif_gs_admission.log_form_batch as lgs 
+
+         left join atif_gs_admission._form_batch as old_batch 
+         on old_batch.id = lgs.old_form_batch
+         left join atif.staff_registered as sr1 on  
+         sr1.user_id  = lgs.modified_by
+
+         left join atif_gs_admission._form_batch as new_batch on new_batch.id = lgs.new_form_batch
+
+         left join (
+         select * from atif_gs_admission.log_form_status as lg 
+         where lg.new_form_status < 4 
+         #lg.new_form_stage < 3 this condition for both Issuance and Submission
+         and lg.`type`='S' 
+         ) as lg
+         on lg.admission_form_id=lgs.admission_form_id
+         
+         where lgs.register_by != 0
+         and lgs.admission_form_id=".$form_id." 
+         and lgs.old_form_batch > 1   and lg.id is not null
+         
 
 
 
@@ -260,14 +256,14 @@ union
 union
 select
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(c.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 'No Response'  as reason,
 CONCAT
 ('<strong> No Response </strong> on calling the Applicant for <strong> Submission and Assessment </strong>'
 ) as message,
 CONCAT('<strong> Additional Comments : </strong> ', c.comments ) as Additional_Comments,
 'Comments' as type, 
-sr.employee_id as photo_id, sr.abridged_name as staff_name, sr.user_id as user_id, 6 as this_order
+sr.employee_id as photo_id, sr.abridged_name as staff_name, sr.user_id as user_id, 9 as this_order
 from atif_gs_admission.log_form_status as lgs 
 left join atif_gs_admission.admission_form as af on af.id=lgs.admission_form_id
 left join atif_Gs_admission.log_form_comments as c 
@@ -283,7 +279,7 @@ and lgs.new_form_stage=11
 union
 select
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(lgs.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 'No Response'  as reason,
 CONCAT
 ('<strong>  Not Interested </strong> for <strong> Submission and Assessment </strong>'
@@ -291,7 +287,7 @@ CONCAT
 
 CONCAT('<strong> Additional Comments : </strong> ', c.comments ) as Additional_Comments,
 'Comments' as type, 
-sr.employee_id as photo_id, sr.abridged_name as staff_name, sr.user_id as user_id, 7 as this_order
+sr.employee_id as photo_id, sr.abridged_name as staff_name, sr.user_id as user_id, 10 as this_order
 from atif_gs_admission.log_form_status as lgs 
 left join atif_gs_admission.admission_form as af on af.id=lgs.admission_form_id
 left join atif_Gs_admission.log_form_comments as c 
@@ -316,7 +312,7 @@ CONCAT
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
- 8 as this_order		
+ 11 as this_order    
 from atif_gs_admission.log_form_status as lgs 
 left join atif_gs_admission.admission_form as af on af.id=lgs.admission_form_id
 left join atif_Gs_admission.log_form_comments as c on c.admission_form_id = lgs.admission_form_id and c.reason='Ext'
@@ -325,10 +321,10 @@ left join atif_gs_admission.log_form_batch as  bb
  on bb.admission_form_id = lgs.admission_form_id and bb.old_form_batch != 1
 
 left join atif_gs_admission._form_batch as old_batch on old_batch.id = bb.old_form_batch
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 
 left join atif_gs_admission._form_batch as new_batch on new_batch.id = bb.new_form_batch
-				
+            
 where 
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=2 
@@ -338,18 +334,18 @@ and lgs.new_form_stage=10
 union 
 select  
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(lgs.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 ''  as reason,
-CONCAT('Marked as Present for Assessment ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))  as message,
+CONCAT('Marked as Present for Assessment ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'))  as message,
 ''  as Additional_Comments,
 'Comments' as type, 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
- 9 as this_order		
+12 as this_order     
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
-left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id	
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
+left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id   
 where 
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=3
@@ -360,25 +356,25 @@ and lgs.new_form_stage=4
 union 
 select  
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(lgs.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 ''  as reason,
-CONCAT('Marked as Present for Discussion ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))  as message,
+CONCAT('Marked as Present for <strong> Discussion </strong>', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'))  as message,
 ''  as Additional_Comments,
 'Comments' as type, 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-10  as this_order		
+10  as this_order    
 from atif_gs_admission.log_form_status as lgs 
 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
-left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id	
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
+left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id   
 where 
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=4
 and lgs.new_form_stage=4 
 and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
-			
+         
 
 
 union
@@ -398,9 +394,9 @@ srr4.abridged_name, ' with <strong> (', af.form_assessment_result, ')
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-11  as this_order	
+13  as this_order 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where  lgs.admission_form_id=".$form_id." and  lgs.new_form_status=3 and  lgs.new_form_stage=4 
@@ -437,10 +433,10 @@ DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+14  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -463,10 +459,10 @@ CONCAT(' Moved to Communication. Applicant to appear for Discussion on ', DATE_F
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+15  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -487,10 +483,10 @@ CONCAT(' Communicated for <strong> Discussion </strong> on ', DATE_FORMAT((af.fo
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+16  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -510,10 +506,10 @@ CONCAT('<strong> No Response </strong>  on calling the Applicant for <strong> Di
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+17  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -533,10 +529,10 @@ CONCAT(' Applicant moved to <strong> Not Interested  </strong>  for <strong> Dis
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+18  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -558,10 +554,10 @@ CONCAT(' <strong> Extension </strong>for <strong> Dicussion </strong> till ', DA
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+19  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -591,10 +587,10 @@ DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+20  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -610,18 +606,18 @@ and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 union 
 select  
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(lgs.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 ''  as reason,
-CONCAT('Marked as Present for ReAssessment ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))  as message,
+CONCAT('Marked as Present for ReAssessment ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'))  as message,
 ''  as Additional_Comments,
 'Comments' as type, 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
- 9 as this_order		
+ 21 as this_order    
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
-left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id	
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
+left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id   
 where 
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=8
@@ -632,25 +628,25 @@ and lgs.new_form_stage=4
 union 
 select  
 lgs.admission_form_id as admission_form_id, 
-FROM_UNIXTIME(lgs.created) as change_date, 
+FROM_UNIXTIME(lgs.modified) as change_date, 
 ''  as reason,
-CONCAT('Marked as Present for ReDiscussion ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))  as message,
+CONCAT('Marked as Present for ReDiscussion ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'))  as message,
 ''  as Additional_Comments,
 'Comments' as type, 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-10  as this_order		
+22  as this_order    
 from atif_gs_admission.log_form_status as lgs 
 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
-left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id	
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
+left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id   
 where 
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=9
 and lgs.new_form_stage=4 
 and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
-			
+         
 
 
 union
@@ -670,9 +666,9 @@ srr4.abridged_name, ' with <strong> (', af.form_assessment_result, ')
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-11  as this_order	
+23  as this_order 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where  lgs.admission_form_id=".$form_id." and  lgs.new_form_status=3 and  lgs.new_form_stage=4 
@@ -707,10 +703,10 @@ DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+24  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -732,11 +728,11 @@ CONCAT(' Moved to Communication. Applicant to appear for ReDiscussion on ', DATE
 'Comments' as type, 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
-srr3.user_id as user_id,
-12  as this_order
+srr3.user_id as user_id, 
+25  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -757,10 +753,10 @@ CONCAT(' Communicated for <strong> ReDiscussion </strong> on ', DATE_FORMAT((af.
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+26  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -780,10 +776,10 @@ CONCAT('<strong> No Response </strong>  on calling the Applicant for <strong> Re
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+27  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -803,10 +799,10 @@ CONCAT(' Applicant moved to <strong> Not Interested  </strong>  for <strong> ReD
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+28  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -828,10 +824,10 @@ CONCAT(' <strong> Extension </strong>for <strong> ReDicussion </strong> till ', 
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+29  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -861,10 +857,10 @@ DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+30  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -888,9 +884,9 @@ DATE_FORMAT((af.offer_date), '%d-%b-%Y %h:%i %p')
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+31  as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -908,9 +904,9 @@ CONCAT( ' Communicated for Offer.' ) as message,
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+32  as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -928,9 +924,9 @@ CONCAT(' Moved to Followup on ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+33  as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -952,9 +948,9 @@ CONCAT(' Moved to Followup on ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+34 as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -978,9 +974,9 @@ CONCAT(' Moved to Followup on ', DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+ 35 as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_by
 where 
@@ -998,7 +994,7 @@ lgs.admission_form_id as admission_form_id,
 FROM_UNIXTIME(lgs.created) as change_date, 
 ''  as reason,
 CONCAT(' <strong> No Response  </strong> on calling the Applicant for <strong> Offer </strong> ', 
-	DATE_FORMAT( FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p') 
+   DATE_FORMAT( FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p') 
  ) as message,
 
 ''  as Additional_Comments,
@@ -1006,9 +1002,9 @@ CONCAT(' <strong> No Response  </strong> on calling the Applicant for <strong> O
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+36  as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 where 
 lgs.admission_form_id=".$form_id." and 
@@ -1029,15 +1025,15 @@ if( com.reason != '', com.reason, '' )
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+37 as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 
 
 left join ( select * from atif_gs_admission.log_form_comments as l where (l.reason like '%offer%' or 
-l.reason like '%OFR%') ) as com
+l.reason like '%OFR%') and l.register_by > 1 ) as com
 on com.admission_form_id = af.id
 
 
@@ -1064,14 +1060,14 @@ CONCAT(' <strong> Extension </strong>for <strong> Offer ', DATE_FORMAT((af.offer
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+38  as this_order
 
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 
 left join ( select * from atif_gs_admission.log_form_comments as l where (l.reason like '%offer%' or 
-l.reason like '%OFR%') ) as com
+l.reason like '%OFR%') and l.register_by > 1 ) as com
 on com.admission_form_id = af.id
 
 where 
@@ -1092,9 +1088,9 @@ CONCAT(' <strong> Offer </strong>', fst_new.name  ) as message,
 srr3.employee_id as photo_id, 
 srr3.abridged_name as staff_name, 
 srr3.user_id as user_id,
-12  as this_order
+39  as this_order
 from atif_gs_admission.log_form_status as lgs 
-left join atif.staff_registered as srr3 on srr3.user_id = if(lgs.register_by=0,lgs.modified_by,lgs.register_by)
+left join atif.staff_registered as srr3 on srr3.user_id = lgs.register_by
 left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_id
 left join atif_gs_admission._form_status_stage as fst_new on fst_new.id = lgs.new_form_stage
 where 
@@ -1106,16 +1102,17 @@ lgs.new_form_status=5
   and lgs.new_form_stage!=7
    and lgs.new_form_stage!=10
     and  lgs.new_form_stage!=11  
-	 
-	 and lgs.new_form_stage!=1
-	 and lgs.new_form_stage!=2
-	 and lgs.new_form_stage!=3
+    
+    and lgs.new_form_stage!=1
+    and lgs.new_form_stage!=2
+    and lgs.new_form_stage!=3
 
 
 ) AS DATA  
-	 
+order by admission_form_id, change_date;
 
-			order by admission_form_id, change_date";
+";
+
 
 
 

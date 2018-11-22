@@ -41,6 +41,9 @@ if ($('#token_no').length) {
 	});
 }	
 
+	
+
+
 $(document).on ("keyup", "#Referal_code", function(){
 	
 	$(this).val( $(this).val().toUpperCase() );

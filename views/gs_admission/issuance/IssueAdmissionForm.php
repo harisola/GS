@@ -455,7 +455,7 @@
                                           <option data-countryCode="ZM" value="260">+260</option>
                                           <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                        <input name="student_mobile_phone[]"  type="number" class="col-md-10" placeholder="Mobile" id="" value="" style="padding-left:60px;" /> 
+                                        <input name="student_mobile_phone[]"  type="number" class="col-md-10 student_mobile_phone" placeholder="Mobile" id="" value="" style="padding-left:60px;" /> 
                                         <button class="add_field_button">+</button>
                                     </div><!-- input_fields_wrap -->
                                  </div><!-- col-md-6 -->
