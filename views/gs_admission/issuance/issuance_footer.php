@@ -117,7 +117,6 @@ if ($('#gf_id').length) {
 
 $(function(){
     var dtToday = new Date();
-    
     var month = dtToday.getMonth() + 1;
     var day = dtToday.getDate();
     var year = dtToday.getFullYear();
