@@ -28,11 +28,21 @@
 					 <td class="text-center">
 					 <strong><?= $aso_and_process->form_assessment_date ?></strong><br />
 
-					<?php if($aso_and_process->rst_done_on == ''){ ?>
-					 <div class="col-md-6 no-padding text-left"><small id="ast_done_on_<?= $aso_and_process->form_id?>">-</small></div>
-					<?php }else{ ?>
-					  <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
-					<?php } ?>
+					<?php if($aso_and_process->previous_batch_id!= ''){ ?>
+						<?php if($aso_and_process->rst_done_on == ''){ ?>
+							 <div class="col-md-6 no-padding text-left"><small id="ast_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
+						<?php }else{ ?>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
+						<?php } ?>
+				     <?php }else{ ?>
+				        <?php if($aso_and_process->ast_done_on == ''){ ?>
+							 <div class="col-md-6 no-padding text-left"><small id="ast_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
+						<?php }else{ ?>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
+						<?php } ?>
+
+				    <?php } ?>
+
 
 
 					<?php if($aso_and_process->ast_name_code == ''){  ?>
@@ -59,16 +69,16 @@
 					 <td class="text-center">
 					 <strong><?= $aso_and_process->form_assessment_date ?></strong><br />
 					 <?php if($aso_and_process->previous_batch_id!= ''){ ?>
-						<?php if($aso_and_process->rst_done_on == ''){ ?>
+						<?php if($aso_and_process->rdis_done_on == ''){ ?>
 							 <div class="col-md-6 no-padding text-left"><small id="dis_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
 						<?php }else{ ?>
-						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rst_done_on ?></small></div>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rdis_done_on ?></small></div>
 						<?php } ?>
 				     <?php }else{ ?>
 				        <?php if($aso_and_process->ast_done_on == ''){ ?>
 							 <div class="col-md-6 no-padding text-left"><small id="dis_done_on_<?= $aso_and_process->form_id?>">-</small></div>	
 						<?php }else{ ?>
-						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->ast_done_on ?></small></div>
+						 <div class="col-md-6 no-padding text-left"><small><?= $aso_and_process->rdis_done_on ?></small></div>
 						<?php } ?>
 
 				    <?php } ?>

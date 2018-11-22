@@ -40,21 +40,21 @@ if ($('#token_no').length) {
 		placeholder: 'X'
 	});
 }	
+
 if($('.countryCodeNumber:eq(0)').val()==92){
-		$('.student_mobile_phone').mask('9999-9999999', {
+		$('.student_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			}); 
 		//Student_mobile_phone[]
 }
-
-if($('.countryCodeNumber:eq(0)').val()==92){
-		$('.father_mobile_phone').mask('9999-9999999', {
+if($('.countryCodeNumber:eq(1)').val()==92){
+		$('.father_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			}); 
 		//father_mobile_phone[]
 }
-if($('.countryCodeNumber:eq(0)').val()==92){
-		$('.mother_mobile_phone').mask('9999-9999999', {
+if($('.countryCodeNumber:eq(2)').val()==92){
+		$('.mother_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			}); 
 		//Mother_mobile_phone[]
@@ -63,7 +63,7 @@ if($('.countryCodeNumber:eq(0)').val()==92){
 
 $(document).on("change",".countryCodeNumber:eq(0)",function(){
 		if($(this).val()==92){
-			$('.student_mobile_phone').mask('9999-9999999', {
+			$('.student_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			});
 		}else{
@@ -74,22 +74,21 @@ $(document).on("change",".countryCodeNumber:eq(0)",function(){
 
 });
 
-$(document).on("change",".countryCodeNumber",function(){
+$(document).on("change",".countryCodeNumber:eq(1)",function(){
 		if($(this).val()==92){
-			$('.father_mobile_phone').mask('9999-9999999', {
+			$('.father_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			});
 		}else{
 			$('.father_mobile_phone').mask('999999999999999999', {
-					placeholder: 'X'
-			});
+			placeholder: 'X'
+		});
 		}
-
 });
 
-$(document).on("change",".countryCodeNumber",function(){
+$(document).on("change",".countryCodeNumber:eq(2)",function(){
 		if($(this).val()==92){
-			$('.mother_mobile_phone').mask('9999-9999999', {
+			$('.mother_mobile_phone').mask('999-9999999', {
 					placeholder: 'X'
 			});
 		}else{
@@ -124,16 +123,14 @@ $(function(){
         month = '0' + month.toString();
     if(day < 10)
         day = '0' + day.toString();
-    
     var maxDate = year + '-' + month + '-' + day;
-   // alert(maxDate);
+  	 // alert(maxDate);
     $('#date_of_birth').attr('max', maxDate);
 });
 
 	
 // Date range
 if ($('#date_of_birth').length) {
-	$('#date_of_birth').mask("99/99/9999");
 	//$('#date_of_birth').mask('99/99/9999');
 	$('#date_of_birth').focusout(function(){ 
 		var date_value = $(this).val()

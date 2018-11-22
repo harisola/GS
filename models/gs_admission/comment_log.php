@@ -63,9 +63,9 @@ atif_gs_admission.log_form_comments as lc where lc.reason='ISS'  and lc.admissio
          '' as reason,
          if( old_batch.batch_category != '',
       
-      CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p'), ' for batch  ', old_batch.batch_category ) 
+      CONCAT( ' Admission form <strong>', fst_new.name_code , ' </strong> on <strong>', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p'), ' </strong> for batch  <strong>', old_batch.batch_category, '</strong>' ) 
       ,
-      CONCAT( ' Admission form ', fst_new.name_code , ' on ', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p')) 
+      CONCAT( ' Admission form <strong>', fst_new.name_code , ' </strong> on <strong>', DATE_FORMAT((af.form_submission_date), '%a, %b %e, %Y %h:%i %p'), '</strong>') 
       )
       as message,
 if( af.comments !='',
@@ -107,7 +107,7 @@ left join atif_gs_admission._form_batch as old_batch on old_batch.id = bb.new_fo
          *****************************************************************/
          select
          lgs.admission_form_id,  from_unixtime(lgs.modified) as change_date, '' as reason,
-         CONCAT('Communication of Assessment on ', DATE_FORMAT((af.form_assessment_date), '%d-%b-%Y %h:%i %p')) as message,
+         CONCAT('Communication of Assessment on <strong>', DATE_FORMAT((af.form_assessment_date), '%d-%b-%Y %h:%i %p'), '</strong>' ) as message,
          '' as Additional_Comments,
          'Stage' as type, sr.employee_id as photo_id, sr.abridged_name as staff_name, 
          sr.user_id as user_id, 4 as this_order
@@ -353,7 +353,7 @@ select
 lgs.admission_form_id as admission_form_id, 
 FROM_UNIXTIME(lgs.modified) as change_date, 
 ''  as reason,
-CONCAT('Marked as Present for Assessment ', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'))  as message,
+CONCAT('Marked as Present for Assessment <strong>', DATE_FORMAT(FROM_UNIXTIME(lgs.modified), '%d-%b-%Y %h:%i %p'), '</strong>')  as message,
 ''  as Additional_Comments,
 'Comments' as type, 
 srr3.employee_id as photo_id, 
@@ -401,8 +401,8 @@ lgs.admission_form_id as admission_form_id,
 FROM_UNIXTIME(lgs.created) as change_date, 
 ''  as reason,
 
-CONCAT(' Assessment done by  ',  
-srr4.abridged_name, ' with <strong> (', af.form_assessment_result, ') 
+CONCAT(' Assessment done by  <strong> ',  
+srr4.abridged_name, ' </strong> with <strong> (', af.form_assessment_result, ') 
 </strong> grade <br />',DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))  as message,
 
 
@@ -428,18 +428,18 @@ FROM_UNIXTIME(lgs.created) as change_date,
 
 if( af.form_assessment_decision = 'RGT' or af.form_assessment_decision = 'OHD' or af.form_assessment_decision = 'WIL',
 
-CONCAT(' Assessment done by  ',  
-srr4.abridged_name, ' with <strong> (', af.form_assessment_result, ') 
+CONCAT(' Assessment done by <strong> ',  
+srr4.abridged_name, ' </strong> with <strong> (', af.form_assessment_result, ') 
 </strong> grade <br /> Next step decision <strong> (', af.form_assessment_decision, ' )</strong>')  
 
 ,
 
-CONCAT(' Assessment done by  ',  
-srr4.abridged_name, ' with <strong> (', af.form_assessment_result, ') 
-</strong> grade <br /> Next step decision <strong> (', af.form_assessment_decision, ' ) </strong>', ' on ',
+CONCAT(' Assessment done by  <strong>',  
+srr4.abridged_name, ' </strong> with <strong> (', af.form_assessment_result, ') 
+</strong> grade <br /> Next step decision <strong> (', af.form_assessment_decision, ' ) </strong>', ' on <strong>',
 if(af.form_discussion_date != '0000-00-00',
 DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
-'' ),DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))
+'' ),  '</strong>')
 
 ) as message,
 
@@ -469,7 +469,7 @@ select
 lgs.admission_form_id as admission_form_id, 
 FROM_UNIXTIME(lgs.created) as change_date, 
 ''  as reason,
-CONCAT(' Moved to Communication. Applicant to appear for Discussion on ', DATE_FORMAT((af.form_discussion_date), '%d-%b-%Y %h:%i %p') )as message,
+CONCAT(' Moved to Communication. Applicant to appear for Discussion on <strong> ', DATE_FORMAT((af.form_discussion_date), '%d-%b-%Y %h:%i %p'), '</strong>' )as message,
 
 ''  as Additional_Comments,
 'Comments' as type, 
@@ -493,7 +493,7 @@ select
 lgs.admission_form_id as admission_form_id, 
 FROM_UNIXTIME(lgs.created) as change_date, 
 ''  as reason,
-CONCAT(' Communicated for <strong> Discussion </strong> on ', DATE_FORMAT((af.form_discussion_date), '%d-%b-%Y %h:%i %p') )as message,
+CONCAT(' Communicated for <strong> Discussion </strong> on <strong> ', DATE_FORMAT((af.form_discussion_date), '%d-%b-%Y %h:%i %p'), '</strong>' )as message,
 
 ''  as Additional_Comments,
 'Comments' as type, 
@@ -588,16 +588,20 @@ lgs.admission_form_id as admission_form_id,
 FROM_UNIXTIME(lgs.created) as change_date, 
 ''  as reason,
 if( af.form_discussion_decision = 'RGT' or af.form_discussion_decision = 'OHD' or af.form_discussion_decision = 'WIL',
-CONCAT(' Discussion done by  ',  
-srr4.abridged_name, ' with <strong> (', af.form_discussion_result, ') 
-</strong> grade <br /> Next step decision <strong> (', af.form_discussion_decision, ' )</strong>')  
+CONCAT(' Discussion done by  <strong> ',  
+srr4.abridged_name, ' </strong> with <strong> (', af.form_discussion_result, ') 
+</strong> grade <br /> Next step decision <strong> (', af.form_discussion_decision, ' ) </strong>')  
 ,
-CONCAT(' Discussion done by  ',  
-srr4.abridged_name, ' with <strong> (', af.form_discussion_result, ') 
-</strong> grade <br /> Next step decision <strong> (', af.form_discussion_decision, ' ) </strong>', ' on ',
+CONCAT(' Discussion done by  <strong>',  
+srr4.abridged_name, ' </strong> with <strong> (', af.form_discussion_result, ') 
+</strong> grade <br /> Next step decision <strong> (', af.form_discussion_decision, ' ) </strong>', ' on <strong> ',
 if(af.form_discussion_date != '0000-00-00',
-DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y %h:%i %p'),
-'' ),DATE_FORMAT(FROM_UNIXTIME(lgs.created), '%d-%b-%Y %h:%i %p'))
+concat( DATE_FORMAT(af.form_discussion_date, '%d-%b-%Y '),' at ',
+DATE_FORMAT(af.form_discussion_date, '%h:%i %p') )
+,
+'' 
+
+), '</strong>')
 ) as message,
 ''  as Additional_Comments,
 'Comments' as type, 

@@ -223,7 +223,7 @@
 
                                 </div><!-- col-md-6 -->
                                 <div class="col-md-6">
-                                    <input type="text" placeholder="Admission Grade *" name="admission_grade" id="admission_grade"  />
+                                    <input type="text" disabled=""  placeholder="Admission Grade *" name="admission_grade" id="admission_grade"  />
                                     <select  id="alevel_grade_selectBox" style="display: none;">
                                         <option value="" disabled="" selected="">Grade *</option>
                                         <option value="15" selected="">A1</option>

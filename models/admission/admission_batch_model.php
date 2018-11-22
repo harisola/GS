@@ -566,6 +566,7 @@ class Admission_batch_model extends CI_Model{
 
 				IF(IFNULL(RST_Reminder.admission_form_id,0)=0,0,1) as flag_rst_reminder, IF(IFNULL(RST_Presence.date,0)=0,0,1) as flag_rst_presence, 
 				IF(IFNULL(RST_Followup.admission_form_id,0)=0,0,1) as flag_rst_followup,
+				IFNULL(DATE_FORMAT(RST_Presence.date, '%a %d %b'),'') AS rst_done_on,
 				af.form_assessment_result, af.form_assessment_decision,
 				IF(pad.form_assessment_result='',0,1) as flag_rst_result,
 				IF(pad.form_assessment_decision='',0,1) as flag_rst_decision, IF(af.form_assessment_decision='',0,1) as flag_rst_allocation,
