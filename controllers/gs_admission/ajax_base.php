@@ -135,7 +135,9 @@ class Ajax_base extends CI_Controller{
 			$old_gs_id =  $this->input->post("old_gs_id");	
 			$batch_id =  $this->input->post("batch");
 			$Referal_code =  $this->input->post("Referal_code");
+			$ad_form_id=0;
 
+			$f_no='';
 
 			if($batch_id!=""){
 				$assistment_date=explode('|',$batch_id)[1];
@@ -397,7 +399,7 @@ class Ajax_base extends CI_Controller{
 						);
 						$where = array( "id" => $Form_ID );
 						$table_name = "admission_form";
-						$ad_form_id = $this->AB->update_function($table_name,$data,$where);
+						$this->AB->update_function($table_name,$data,$where);
 						if($batch_id!="" && $slot_id!=""){
 				             $this->AB->slot_update($Form_ID,$batch_id,$slot_id,$assistment_date);
 			             }
@@ -449,13 +451,24 @@ class Ajax_base extends CI_Controller{
 			}
 			//ISS for Issuance
 			//zk
+
+
+			if($ad_form_id == 0 )
+			{
+				#$f = $this->AB->get_form_no($Form_ID);
+				#$f_no= $f["Form_no"];
+				$Form_ID = $Form_ID;
+
+			}else {
+				$Form_ID = $ad_form_id;				
+			}
 		
 			if($comments != ''){
-				$f_no =  $ad_form_id;
+				
 				$Reason ='ISS';
-				$comment_logs = $this->add_reasion($f_no, $Reason);
-				 var_dump(+"comment_logs"+$comment_logs);
-				 die();
+				$comment_logs = $this->add_reasion($Form_ID, $Reason,$comments);
+				 // var_dump(+"comment_logs"+$comment_logs);
+				 // die();
 			}
 			
 			echo  json_encode( $data3 );
@@ -1119,9 +1132,7 @@ class Ajax_base extends CI_Controller{
 				//zk
 				if($comments != ''){
 					$Reason ='SUB';
-					// $form_no = $this->input->post("form_no");
-					// $f_no = $form_no;
-					$comment_logs = $this->add_reasion($f_no,$Reason);
+					$comment_logs = $this->add_reasion($form_id,$Reason,$comments);
 				}
 				//$data4 = array("form_id" => $data, "family_id" => $data2,"slot"=>$data3,"ad"=>$ad);
 				
@@ -1622,32 +1633,30 @@ class Ajax_base extends CI_Controller{
 
 		//zk create function for comments and foam id  to add comments to table 
 		// Add logs[Reasion] from log atif_gs_admission.log_form_comments table
-	public function add_reasion($f_no, $reason)
+	public function add_reasion($admission_form_id, $reason, $comments)
 	{
 		// var_dump($f_no);
 		// die();
 		
-		$f_no = $this->AB->getFormNo();
-		$where_admission = array(
-			'form_no' => $f_no,
-		);
+		
 
-		$admission_data = $this->AB->get_by_all('atif_gs_admission.admission_form','',$where_admission);
-		$admission_form_id = $admission_data[0]->id;
-		var_dump($admission_data);
-		die();
-			//zzk
-		// var_dump($admission_data);
-		// die();
-		// $where_reasion =  array(
-		// 	'admission_form_id' => $admission_form_id,
-		// );
- 		//$reason=$comments;
+		//$admission_data = $this->AB->get_by_all('atif_gs_admission.admission_form','',$where_admission);
+		#$admission_data =$this->AB->get_form_id($f_no);
+
+		
+
+		#echo "WEe ".$admission_form_id = $admission_data["Form_id"]; exit;
+
+		
+		 $where_reasion =  array(
+		 	'admission_form_id' => $admission_form_id,
+		 );
+ 		
 
 		$data = array(
 			'admission_form_id' => $admission_form_id,
 			'reason' => $reason,
-			//'comments' => $comments,
+			'comments' => $comments,
 			"created"=>time(),
 			"register_by" =>$this->session->userdata("user_id"),
 			"modified"=>time(),

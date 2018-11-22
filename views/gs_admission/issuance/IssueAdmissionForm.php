@@ -218,7 +218,7 @@
                             <div class="col-md-12 paddingBottom10">
                                 <div class="col-md-6">
                                     <!--input placeholder="Date of Birth *"  class="textbox-n" type="text" onfocus="(this.type='date')"  id="date_of_birth" onblur="(this.type='text')" name="date_of_birth" / -->
-                                    <input placeholder="Date of Birth *"  type="date"  id="date_of_birth" name="date_of_birth" class="date_of_birth" />
+                                    <input placeholder="Date of Birth *"  type="text"  id="date_of_birth" name="date_of_birth" class="date_of_birth" />
 
 
                                 </div><!-- col-md-6 -->

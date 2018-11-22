@@ -48,8 +48,6 @@ class Admission_compelete_check extends CI_Controller{
 	}
 
 	public function getApplicantData(){
-		// var_dump($this->input->post());
-		// exit;
 		$this->load->model('admission/admission_compelete_check_model','accm');
 		$form_id = $this->input->post('form_id');
 		$applicant_data = $this->accm->get_form_check($form_id);

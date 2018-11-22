@@ -164,7 +164,7 @@ $(document).ready(function() {
   // Check List Model
 
   function checkList(form_id,grade_id){
-
+      console.log('test');
       $('input[name="form_no"]').val(form_id);
       $('input[name="grade_id"]').val(grade_id);
       if(grade_id <= 13  || grade_id == 17){

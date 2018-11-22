@@ -1205,5 +1205,38 @@ and grade_id = ".$grade_id."";
 				return FALSE;
 			}
 	}
+
+
+	public function get_form_id($form_no)
+	{
+		$this->ddb2 = $this->load->database('gs_admission',TRUE);
+		$query = "select af.id as Form_id from 
+atif_gs_admission.admission_form as af where af.form_no='".$form_no."'";
+		$result = $this->ddb2->query($query);
+		if( $result->num_rows() > 0 ){
+		return $result->row_array();
+		}else{
+		return FALSE;
+		}
+
+
+	}
+
+
+	public function get_form_no($form_id)
+	{
+		$this->ddb2 = $this->load->database('gs_admission',TRUE);
+		$query = "select af.form_no as Form_no from 
+atif_gs_admission.admission_form as af where af.id='".$form_id."'";
+		$result = $this->ddb2->query($query);
+		if( $result->num_rows() > 0 ){
+		return $result->row_array();
+		}else{
+		return FALSE;
+		}
+
+
+	}
+
 }
 ?>

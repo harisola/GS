@@ -60,19 +60,52 @@ if ($('#gf_id').length) {
 // Date range
 if ($('#date_of_birth').length) {
 	
-	$('#date_of_birth').datepicker({
-		changeMonth: true,
-        changeYear: true,
-		 yearRange: '2000:'+(new Date).getFullYear(),
-		dateFormat: 'yy-mm-dd',
-		prevText: '<i class="fa fa-chevron-left"></i>',
+	// $('#date_of_birth').datepicker({
+	// 	changeMonth: true,
+ //        changeYear: true,
+	// 	 yearRange: '2000:'+(new Date).getFullYear(),
+	// 	dateFormat: 'yy-mm-dd',
+	// 	prevText: '<i class="fa fa-chevron-left"></i>',
+	// 	nextText: '<i class="fa fa-chevron-right"></i>',
+	// 	onSelect: function(date) {
+	// 		getadmissiongradedob(date);
+	// 	},
+	// });	
+
+
+
+$(document).on('click', '#date_of_birth', function () { 
+        var me = $("#date_of_birth");   
+        me.datepicker({
+            showOn: 'focus',
+            	changeMonth: true,
+         changeYear: true,
+	 	 yearRange: '2000:'+(new Date).getFullYear(),
+            altFormat: "yy-mm-dd",
+            dateFormat: "yy-mm-dd",
+
+            prevText: '<i class="fa fa-chevron-left"></i>',
 		nextText: '<i class="fa fa-chevron-right"></i>',
 		onSelect: function(date) {
+
 			getadmissiongradedob(date);
-		},
-	});	
+		}
+
+
+         
+        }).focus();
+    }).on('focus', '#date_of_birth', function () {
+        var me = $("#date_of_birth");
+        me.mask('99/99/9999');
+    });
+
+
+
+
 
 }	
+
+
 
 if ($('#f_nic').length) {
   $('#f_nic').mask('99999-9999999-9', {
