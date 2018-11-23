@@ -324,7 +324,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                               </select>
-                              <input name="student_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
+                              <input name="student_mobile_phone[]" type="text" class="col-md-10 student_mobile_phone " placeholder="Mobile" id="student_mobile_phone[]" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
                               <?php if($flag == 0) {
 													      $flag = 1;
                             	?>
@@ -670,7 +670,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="father_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="<?php echo str_replace("-","",substr( $data_id["Father_mobile"], 1)); ?>" style="padding-left:60px;" /> 
+                                            <input name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone " placeholder="Mobile" id="father_mobile_phone[]" value="<?php echo str_replace("-","",substr( $data_id["Father_mobile"], 1)); ?>" style="padding-left:60px;" /> 
                                             <button class="add_field_button_father">+</button>
                                         </div>
                                 <?php } else { ?>
@@ -896,7 +896,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="father_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id=""  style="padding-left:60px;" /> 
+                                            <input name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone" placeholder="Mobile" id="father_mobile_phone[]"  style="padding-left:60px;" /> 
                                             <button class="add_field_button_father">+</button>
                                         </div>
                                <?php } ?>                           				
@@ -1128,7 +1128,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                             </select>
-                                            <input name="father_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
+                                            <input name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone" placeholder="Mobile" id="father_mobile_phone[]" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
                                             <?php if($flag == 0) { ?> 
 
                                             	<button class="add_field_button_father">+</button>
@@ -1376,7 +1376,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="<?php echo str_replace("-","",substr( $data_id["Mother_mobile"], 1)); ?>" style="padding-left:60px;" /> 
+                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10 mother_mobile_phone " placeholder="Mobile" id="mother_mobile_phone[]" value="<?php echo str_replace("-","",substr( $data_id["Mother_mobile"], 1)); ?>" style="padding-left:60px;" /> 
                                             <button class="add_field_button_mother">+</button>
                                         </div>
                                 <?php } else { ?>
@@ -1602,7 +1602,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id=""  style="padding-left:60px;" /> 
+                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10 mother_mobile_phone" placeholder="Mobile" id=""  style="padding-left:60px;" /> 
                                             <button class="add_field_button_mother">+</button>
                                         </div>
                                 <?php } ?>
@@ -1836,7 +1836,7 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
+                                            <input name="mother_mobile_phone[]" type="text" class="col-md-10 mother_mobile_phone" placeholder="Mobile" id="mother_mobile_phone[]" value="<?php echo $number[1]; ?>" style="padding-left:60px;" /> 
                                             <?php if($flag == 0) { ?> 
 
                                             	<button class="add_field_button_father">+</button>
@@ -2159,22 +2159,51 @@ $(document).ready(function() {
 </script>
 <script>
 $(document).ready(function(){
-	// Date range
-if ($('#date_of_birth').length) {
-	
-	$('#date_of_birth').datepicker({
-		changeMonth: true,
-        changeYear: true,
-		dateFormat: 'yy-mm-dd',
-		yearRange: '1980:'+(new Date).getFullYear(),
-		prevText: '<i class="fa fa-chevron-left"></i>',
-		nextText: '<i class="fa fa-chevron-right"></i>',
-		onSelect: function(date) {
-			getadmissiongradedob(date);
-		},
-	});	
 
-}
+  //Masking for mobile number Start here...
+  //Masking for mobile numbers END here...
+
+//Date Length
+$(function(){
+    var dtToday = new Date();
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+     // alert(maxDate);
+    $('#date_of_birth').attr('max', maxDate);
+});
+
+// Date range
+if ($('#date_of_birth').length) {
+  //$('#date_of_birth').mask('99/99/9999');
+  $('#date_of_birth').focusout(function(){ 
+    var date_value = $(this).val()
+    getadmissiongradedob(date_value);
+  });
+  
+} 
+
+	// Date range
+// if ($('#date_of_birth').length) {
+	
+// 	$('#date_of_birth').datepicker({
+// 		changeMonth: true,
+//         changeYear: true,
+// 		dateFormat: 'yy-mm-dd',
+// 		yearRange: '1980:'+(new Date).getFullYear(),
+// 		prevText: '<i class="fa fa-chevron-left"></i>',
+// 		nextText: '<i class="fa fa-chevron-right"></i>',
+// 		onSelect: function(date) {
+// 			getadmissiongradedob(date);
+// 		},
+// 	});	
+
+// }
 
 
 
