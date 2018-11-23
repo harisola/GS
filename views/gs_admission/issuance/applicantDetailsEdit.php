@@ -2160,7 +2160,63 @@ $(document).ready(function() {
 <script>
 $(document).ready(function(){
 
-  //Masking for mobile number Start here...
+  //Masking for mobile number Start here...zk
+
+if($('.countryCodeNumber:eq(0)').val()==92){
+    $('.student_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //Student_mobile_phone[]
+}
+if($('.countryCodeNumber:eq(1)').val()==92){
+    $('.father_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //father_mobile_phone[]
+}
+if($('.countryCodeNumber:eq(2)').val()==92){
+    $('.mother_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //Mother_mobile_phone[]
+}
+  
+
+$(document).on("change",".countryCodeNumber:eq(0)",function(){
+    if($(this).val()==92){
+      $('.student_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.student_mobile_phone').mask('999999999999999999', {
+          placeholder: 'X'
+      });
+    }
+});
+
+$(document).on("change",".countryCodeNumber:eq(1)",function(){
+    if($(this).val()==92){
+      $('.father_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.father_mobile_phone').mask('999999999999999999', {
+      placeholder: 'X'
+    });
+    }
+});
+
+$(document).on("change",".countryCodeNumber:eq(2)",function(){
+    if($(this).val()==92){
+      $('.mother_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.mother_mobile_phone').mask('999999999999999999', {
+          placeholder: 'X'
+      });
+    }
+});
   //Masking for mobile numbers END here...
 
 //Date Length

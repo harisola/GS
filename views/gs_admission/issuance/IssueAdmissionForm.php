@@ -219,6 +219,7 @@
                                 <div class="col-md-6">
                                     <!--input placeholder="Date of Birth *"  class="textbox-n" type="text" onfocus="(this.type='date')"  id="date_of_birth" onblur="(this.type='text')" name="date_of_birth" / -->
                                     <input placeholder="Date of Birth *"  type="date"  id="date_of_birth" name="date_of_birth" class="date_of_birth" />
+                                    
 
 
                                 </div><!-- col-md-6 -->
@@ -1110,7 +1111,7 @@
                       <a href="javascript:void(0)" class="hoverAction">Action <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                       <div class="actionItems">
                         <ul>
-                          <li><a href="<?php echo base_url();?>index.php/gs_admission/ajax_base/print_admission_form?FormNo=<?php echo $fl['Form_id'];?>" target="_blank">Print Form</a></li>
+                          <li><a onclick="window.open('<?php echo base_url();?>index.php/gs_admission/admission_form_print_ajax/print_admission_assessment_slip?FormID=<?php echo $fl['Form_id'];?>');" href="<?php echo base_url();?>index.php/gs_admission/ajax_base/print_admission_form?FormNo=<?php echo $fl['Form_id'];?>" target="_blank">Print Form</a></li>
                           <li><a href="#" class="view_n_Edit" data-grade_id="<?=$fl["Grade_id"];?>" data-id="<?=$fl["Form_id"];?>">View and Edit Details</a></li>
                         </ul><!-- actionIteamsUL-->
                       </div><!-- actionItems -->
@@ -1133,6 +1134,35 @@
 
 <script>
 $(document).ready(function() {
+
+
+
+
+  //Date Length
+$(function(){
+    var dtToday = new Date();
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+     // alert(maxDate);
+    $('#date_of_birth').attr('max', maxDate);
+});
+
+// Date range
+if ($('#date_of_birth').length) {
+  //$('#date_of_birth').mask('99/99/9999');
+  $('#date_of_birth').focusout(function(){ 
+    var date_value = $(this).val()
+    getadmissiongradedob(date_value);
+  });
+  
+} 
+
     var max_fields      = 2; //maximum input boxes allowed
     var wrapper         = $(".input_fields_wrap"); //Fields wrapper
     var wrapper1        = $(".fatherContactArea"); //Fields wrapper

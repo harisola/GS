@@ -125,7 +125,11 @@ if(followup.admission_form_id = af.id, 1, 0) as done_followup,
 if(af.form_assessment_date = '2001-01-01', 'TBI', concat(fb.batch_category, '-',lpad(fbs.sno, 2,0))) as batch_name, 
 if(af.form_assessment_date <= '2001-01-01', '-', date_format(af.form_assessment_date, '%a, %d %b')) as form_assessment_date,
 if(af.form_assessment_date <= '2001-01-01', '-', time_format(fbs.time_start, '%h:%i %p')) as form_assessment_time,
-af.referal_code
+af.referal_code,
+
+if(af.grade_id=1 or af.grade_id=2 or af.grade_id=15 or af.grade_id=16, 1, 0 ) as Print_Form,
+REPLACE(fb.batch_category, '-', '') as Batch_Title
+
 from atif_gs_admission.admission_form AS af 
 left join atif_gs_admission.family_registration AS fr on (fr.gf_id = af.gf_id)
 left join atif_gs_admission._form_batch as fb on fb.id = af.form_batch_id
@@ -1237,6 +1241,28 @@ atif_gs_admission.admission_form as af where af.id='".$form_id."'";
 
 
 	}
+
+
+
+		public function get_form_batch_title($form_id)
+	{
+		$this->ddb2 = $this->load->database('gs_admission',TRUE);
+		$SQL = "select 
+	REPLACE(b.batch_category, '-', '') as Batch_Title
+from 
+atif_gs_admission.admission_form as af 
+inner join atif_gs_admission._form_batch as b on b.id = af.form_batch_id
+where af.id=".$form_id."";
+	
+	$result = $this->ddb2->query($SQL);
+		if( $result->num_rows() > 0 ){
+		return $result->row_array();
+		}else{
+		return FALSE;
+		}
+	}
+
+
 
 }
 ?>

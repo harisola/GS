@@ -179,6 +179,13 @@ left join atif_gs_admission._form_batch as old_batch on old_batch.id = bb.new_fo
          and com.reason != 'ISS'
          and com.reason != 'SUB'
          and com.register_by=1 
+         and ( com.reason not like '%Result%' )
+         and ( com.reason not like '%CFD%' )
+         and ( com.reason not like '%OFR%' )
+         and (com.reason not like '%RGT%' )
+         and (com.reason not like '%RST%' )
+         and(com.reason not like '%WIL%' )
+         and ( com.reason not like '%OHD%')
 
 
          /***** Change Form ID *****/   
@@ -390,7 +397,7 @@ where
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=4
 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
          
 
 
@@ -459,7 +466,7 @@ left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_b
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=3 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 group by af.id
 
 
@@ -484,7 +491,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=3 and lgs.new_form_stage=13 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 group by af.id
 
 
@@ -508,7 +515,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=4 and lgs.new_form_stage=1 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union 
@@ -531,7 +538,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=4 and lgs.new_form_stage=11 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union 
@@ -554,7 +561,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=4 and lgs.new_form_stage=7 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 
@@ -579,7 +586,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=4 and lgs.new_form_stage=10 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union
@@ -617,7 +624,7 @@ left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_b
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=4 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 
@@ -666,7 +673,7 @@ where
 lgs.admission_form_id=".$form_id."
 and lgs.new_form_status=9
 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
          
 
 
@@ -733,7 +740,7 @@ left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_b
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=8 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 group by af.id
 
 
@@ -758,7 +765,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=8 and lgs.new_form_stage=13 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 group by af.id
 
 
@@ -782,7 +789,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=9 and lgs.new_form_stage=1 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union 
@@ -805,7 +812,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=9 and lgs.new_form_stage=11 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union 
@@ -828,7 +835,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=9 and lgs.new_form_stage=7 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 
@@ -853,7 +860,7 @@ left join atif_gs_admission.admission_form as af on af.id = lgs.admission_form_i
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=9 and lgs.new_form_stage=10 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 
 union
@@ -887,7 +894,7 @@ left join atif.staff_registered as srr4 on srr4.id = af.form_assessment_result_b
 where 
 lgs.admission_form_id=".$form_id." and 
 lgs.new_form_status=9 and lgs.new_form_stage=4 
-and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
+#and af.grade_id != 17 and af.grade_id != 1 and af.grade_id != 2
 
 /*End Reassessment and rediscussion*/
 

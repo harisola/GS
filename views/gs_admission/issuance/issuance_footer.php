@@ -801,11 +801,20 @@ function getadmissiongradedob(dateOfBirth){
 				beforeSend: function(){},
 				success: function(res){
 					
-					console.log('admission');
+					
+					if($.isEmptyObject(res.dob[0])){
+
+					   $("#admission_grade").val('');
+						$("#admission_grade_id").val(0);
+
+					}else{
+
+					  $("#admission_grade").val( res.dob[0].grade_name );
+						$("#admission_grade_id").val( parseInt( res.dob[0].grade_id ) );	
+
+					}
 					
 					
-					$("#admission_grade").val( res.dob[0].grade_name );
-					$("#admission_grade_id").val( parseInt( res.dob[0].grade_id ) );
 					
 					if( parseInt(  res.form_no )  > 0 ){
 						var form_id = parseInt(  res.form_no );

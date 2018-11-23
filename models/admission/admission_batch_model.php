@@ -844,7 +844,7 @@ class Admission_batch_model extends CI_Model{
 	}
 
 	public function get_aso_and_new($batch_id){
-		   		$query = "select
+		   	    $query = "select
 				af.form_id,af.form_no, af.official_name as applicant_name, af.father_name,pad.form_number,
 				pad.previous_batch_id,pad.previous_slot_id,pad.form_assessment_date,pad.form_discussion_decision_by,
 				pad.form_assessment_date as pvs_form_assestment_date,
@@ -878,8 +878,8 @@ class Admission_batch_model extends CI_Model{
 				IFNULL(DATE_FORMAT(RST_Presence.date, '%a %d %b'),'') AS rst_done_on,
 				IF(IFNULL(RST_Followup.admission_form_id,0)=0,0,1) as flag_rst_followup,
 				af.form_assessment_result, af.form_assessment_decision,
-				IF(pad.form_assessment_result='',0,1) as flag_ast_result,
-				IF(pad.form_assessment_decision='',0,1) as flag_ast_decision, IF(af.form_assessment_decision='',0,1) as flag_ast_allocation,
+				IF(pad.form_assessment_result='',0,1) as pvs_flag_ast_result,
+				IF(pad.form_assessment_decision='',0,1) as pvs_flag_ast_decision, IF(af.form_assessment_decision='',0,1) as flag_ast_allocation,
 				IF(IFNULL(DIS_Communication.admission_form_id,0)=0,0,1) as flag_comm_ast_result,
 				/***** Re-Assessment - END *****/
 				

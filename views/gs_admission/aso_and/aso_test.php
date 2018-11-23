@@ -134,12 +134,14 @@
            <div class="text-center no-padding">
                <hr class="lowMargin" />
           <?php if($aso_and_process->previous_batch_id!= ''){ ?>
+
               <?php if(@$aso_and_process->flag_rst_result == 0){ ?>
                 <img src="<?= base_url(); ?>/components/gs_theme/images/result.png") title="" width="20" data-toggle="tooltip" data-placement="top" data-original-title="Result" data-pin-nopin="true" id="img_result_aso_<?= $aso_and_process->form_id ?>"> &nbsp; 
               <?php  }else{ ?>
                 <img src="<?= base_url(); ?>/components/gs_theme/images/result_active.png") title="" width="20" data-toggle="tooltip" data-placement="top" data-original-title="Result" data-pin-nopin="true" id="img_result_aso_<?= $aso_and_process->form_id ?>"> &nbsp; 
            <?php } ?>
          <?php }else { ?>
+
           <?php if($aso_and_process->flag_ast_result == 0){ ?>
                 <img src="<?= base_url(); ?>/components/gs_theme/images/result.png") title="" width="20" data-toggle="tooltip" data-placement="top" data-original-title="Result" data-pin-nopin="true" id="img_result_aso_<?= $aso_and_process->form_id ?>"> &nbsp; 
               <?php  }else{ ?>

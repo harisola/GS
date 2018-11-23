@@ -2187,7 +2187,7 @@ $html .= '<input type="checkbox" name="admission_fee_waiver"  id="admission_fee_
 			
 		$html .= '<a target="_blank" href="'.base_url().'index.php/gs_admission/admission_fee_bill/fb?FormID='.$form_id.'" class="smallLink">';
 		}
-		$html .= '<em>Print</em></a></label>';
+		$html .= '<em class="marked_checked">Print</em></a></label>';
 		$html .= '</div><!-- col-md-8 -->';
 		$html .= '<div class="col-md-2">&nbsp;</div>';
 		$html .= '</div><!-- col-md-12 -->';

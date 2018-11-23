@@ -70,6 +70,11 @@
 	});
 
 
+	//fee_bill mark checked
+	$(document).on('click','.marked_checked',function(){
+		$('.printed_fee_bill').prop('checked',true)
+	})
+
 	//==========================OFFER SUBMISSION ===============================//
 	//==========================================================================//
 

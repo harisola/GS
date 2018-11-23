@@ -863,10 +863,12 @@ class Admission_aso_and_process extends CI_Controller{
 
 			//Insert Into Comment's Log Table
 
+			
 			$data_comments = array(
 				'admission_form_id' => $form_id,
 				'reason' => $reason,
 				'comments' => $result_comment,
+				
 				'created' => time(),
 				'register_by' => (int)$this->session->userdata['user_id'],
 				'modified' => time(),
@@ -1106,6 +1108,7 @@ class Admission_aso_and_process extends CI_Controller{
 				'admission_form_id' => $form_id,
 				'reason' => $reason,
 				'comments' => $discussion_comment,
+				
 				'created' => time(),
 				'register_by' => $this->user_id,
 				'modified' => time(),

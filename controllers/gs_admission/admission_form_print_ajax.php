@@ -39,6 +39,14 @@ class Admission_form_print_ajax extends CI_Controller{
         $BatchCategory = $data['form_submission'][0]->batch_category;
         $Batch = $data['form_submission'][0]->batch;
         $Process = $data['form_submission'][0]->process;
+        $myProcess=explode(',', $Process);
+        $ProcessPartA=$myProcess[0];
+        if($ProcessPartA=='Submission'){
+        	$ProcessPartA=$ProcessPartA.',';
+        }
+
+        $Process=$myProcess[1];
+
         $DateTime = $data['form_submission'][0]->date_time;
 
         if ($Grade == 'A1' or $Grade == 'A2') {
@@ -61,7 +69,8 @@ class Admission_form_print_ajax extends CI_Controller{
 		$pdf = new FPDI();
 
 		// get the page count
-		$pageCount = $pdf->setSourceFile('components/pdf/admission/ActionSlip(1819).pdf');
+		//$pageCount = $pdf->setSourceFile('components/pdf/admission/ActionSlip(1819).pdf');
+		$pageCount = $pdf->setSourceFile('components/pdf/admission/ActionSlip(19).pdf');
 		// Border On
 		$bo = 0;
 		// iterate through all pages
@@ -114,11 +123,20 @@ class Admission_form_print_ajax extends CI_Controller{
 			    // Process
 	    		$pdf->SetFont($font_name);
 			    $pdf->SetFont($font_name,'B',11);
+
 			    $pdf->SetXY(12.5, 87);
-			    $pdf->Cell(62.5, 23, $Process, $bo, 0, 'C', 0);
+			    $pdf->Cell(62.5, 16, $ProcessPartA, $bo, 0, 'C', 0);
 
 			    $pdf->SetXY(148.5, 87);
-			    $pdf->Cell(62.5, 23, $Process, $bo, 0, 'C', 0);
+			    $pdf->Cell(62.5, 16, $ProcessPartA, $bo, 0, 'C', 0);
+
+			    $pdf->SetXY(12.5, 87);
+			    $pdf->Cell(62.5, 25, $Process, $bo, 0, 'C', 0);
+
+			    $pdf->SetXY(148.5, 87);
+			    $pdf->Cell(62.5, 25, $Process, $bo, 0, 'C', 0);
+
+
 
 			    // Appointment Date and Time
 	    		$pdf->SetFont($font_name);
@@ -887,9 +905,11 @@ class Admission_form_print_ajax extends CI_Controller{
 
 		// get the page count
 		if ($data['admission_batch'][0]->grade_id >= 10 and $data['admission_batch'][0]->grade_id <= 16){
-			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(1819).pdf');
+			//$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(1819).pdf');
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(19).pdf');
 		}else{
-			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(1819).pdf');
+			//$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(1819).pdf');
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(19).pdf');
 		}
 		// Border On
 		$bo = 0;
@@ -935,35 +955,35 @@ class Admission_form_print_ajax extends CI_Controller{
 
 				    // Form #
 				    $pdf->SetXY(105, 6.5);
-				    $pdf->Cell(39, 7.5, $FormNo, $bo, 2, 'C', 0);
+				    $pdf->Cell(39, 9, $FormNo, $bo, 2, 'C', 0);
 
 				    // GF-ID
 				    $pdf->SetXY(163.5, 6.5);
-				    $pdf->Cell(39, 7.5, $GFID, $bo, 2, 'C', 0);
+				    $pdf->Cell(39, 9, $GFID, $bo, 2, 'C', 0);
 
 				    // Discussion Date
 				    $pdf->SetTextColor(255,255,255);
 				    $pdf->SetXY(7, 15.7);
-				    $pdf->Cell(72, 6.5, 'Date: '.$DisDate, $bo, 0, 'L', 0);
-				    $pdf->Cell(52, 6.5, $Grade, $bo, 0, 'C', 0);
-				    $pdf->Cell(72, 6.5, $Batch.'-'.$BatchNum, $bo, 2, 'R', 0);
+				    $pdf->Cell(72, 8, 'Date: '.$DisDate, $bo, 0, 'L', 0);
+				    $pdf->Cell(52, 8, $Grade, $bo, 0, 'C', 0);
+				    $pdf->Cell(71, 8, $Batch.'-'.$BatchNum, $bo, 2, 'R', 0);
 
 				    // Applicat Name
 				    $pdf->SetTextColor(0,0,0);
 				    $pdf->SetXY(35, 23.7);
-				    $pdf->Cell(109, 7.5, $ApplicantName, $bo, 2, 'C', 0);
+				    $pdf->Cell(109, 9, $ApplicantName, $bo, 2, 'C', 0);
 
 				    // Date of Birth
 				    $pdf->SetXY(163.5, 23.7);
-				    $pdf->Cell(38.5, 7.5, $DOB, $bo, 2, 'C', 0);
+				    $pdf->Cell(38.5, 9, $DOB, $bo, 2, 'C', 0);
 
 				    // Father Name
 				    $pdf->SetXY(35, 32.7);
-				    $pdf->Cell(69, 7.5, $FatherName, $bo, 2, 'C', 0);
+				    $pdf->Cell(69, 9, $FatherName, $bo, 2, 'C', 0);
 
 				    // Mother Name
 				    $pdf->SetXY(130, 32.7);
-				    $pdf->Cell(72, 7.5, $MotherName, $bo, 2, 'C', 0);
+				    $pdf->Cell(72, 9, $MotherName, $bo, 2, 'C', 0);
 
 				    /*$pdf->SetXY(179, 53);
 				    $pdf->Cell(34, 9, $Grade, $bo, 2, 'C', 0);
@@ -1007,9 +1027,11 @@ class Admission_form_print_ajax extends CI_Controller{
 
 		// get the page count
 		if ($data['admission_batch'][0]->grade_id >= 10 and $data['admission_batch'][0]->grade_id <= 16){
-			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(1819).pdf');
+			//$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(1819).pdf');
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(19).pdf');
 		}else{
-			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(1819).pdf');
+			//$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(1819).pdf');
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(19).pdf');
 		}
 		// Border On
 		$bo = 0;

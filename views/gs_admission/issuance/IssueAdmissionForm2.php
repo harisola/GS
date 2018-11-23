@@ -314,7 +314,7 @@
                           <option data-countryCode="ZM" value="260">+260</option>
                           <option data-countryCode="ZW" value="263">+263</option>
                         </select>
-                        <input name="student_mobile_phone[]"  type="text" class="col-md-10" placeholder="Mobile" id="" value="" style="padding-left:60px;" /> 
+                         <input name="student_mobile_phone[]"  type="text" class="col-md-10 student_mobile_phone" placeholder="Mobile" id="student_mobile_phone[]" value="" style="padding-left:60px;" />
                         <button class="add_field_button">+</button>
                     </div><!-- input_fields_wrap -->
                  </div><!-- col-md-6 -->
@@ -599,7 +599,7 @@
                           <option data-countryCode="ZM" value="260">+260</option>
                           <option data-countryCode="ZW" value="263">+263</option>
                         </select>
-                        <input required="" name="father_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="" style="padding-left:60px;" /> 
+                        <input required="" name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone" placeholder="Mobile" id="father_mobile" value="" style="padding-left:60px;" />  
                         <button class="add_field_button_father">+</button>
                     </div><!-- input_fields_wrap --><br /><br />
                     <!-- <input type="text" class="" placeholder="Father Mobile *" name="father_mobile" id="father_mobile" /><br /><br /> -->
@@ -831,7 +831,7 @@
                                         <option data-countryCode="ZM" value="260">+260</option>
                                         <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                        <input name="mother_mobile_phone[]" type="text" class="col-md-10" placeholder="Mobile" id="" value="" style="padding-left:60px;" /> 
+                                        <input name="mother_mobile_phone[]" type="text" class="col-md-10 mother_mobile_phone" placeholder="Mobile" id="mother_mobile" value="" style="padding-left:60px;" /> 
                                         <button class="add_field_button_mother">+</button>
                                     </div><!-- input_fields_wrap --><br /><br />
                                     <!-- <input type="text" class="" placeholder="Mother Mobile" name="mother_mobile" id="mother_mobile" /><br /><br /> -->
@@ -849,7 +849,7 @@
 			<div class="col-md-12 paddingBottom0">
 				<div class="col-md-6" style="margin-top: -20px;">
 					<!--input type="checkbox" id="ps" name="photo_submitted"  style="block"> <label for="ps">Photos Submitted</label -->
-					<input type="checkbox" id="ps" name="photo_submitted" style="display:block; visibility:hidden;"> <label for="ps">Photos Submitted <span class="required">*</span></label>
+					<input type="checkbox" id="ps" name="photo_submitted" style="display:block; visibility:hidden;"> <label for="ps">Photos Submitted</label>
 				</div><!-- col-md-6 -->
 			</div><!-- col-md-12 -->
 			<div class="col-md-12 paddingBottom0">
@@ -956,22 +956,109 @@ width: 29px;
 
 <script>
 $(document).ready(function(){
-	// Date range
-if ($('#date_of_birth').length) {
-	
-	$('#date_of_birth').datepicker({
-		changeMonth: true,
-        changeYear: true,
-		yearRange: '1980:'+(new Date).getFullYear(),
-		dateFormat: 'yy-mm-dd',
-		prevText: '<i class="fa fa-chevron-left"></i>',
-		nextText: '<i class="fa fa-chevron-right"></i>',
-		onSelect: function(date) {
-			getadmissiongradedob(date);
-		},
-	});	
 
+	  //Masking for mobile number Start here...zk
+
+if($('.countryCodeNumber:eq(0)').val()==92){
+    $('.student_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //Student_mobile_phone[]
 }
+if($('.countryCodeNumber:eq(1)').val()==92){
+    $('.father_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //father_mobile_phone[]
+}
+if($('.countryCodeNumber:eq(2)').val()==92){
+    $('.mother_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      }); 
+    //Mother_mobile_phone[]
+}
+  
+
+$(document).on("change",".countryCodeNumber:eq(0)",function(){
+    if($(this).val()==92){
+      $('.student_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.student_mobile_phone').mask('999999999999999999', {
+          placeholder: 'X'
+      });
+    }
+});
+
+$(document).on("change",".countryCodeNumber:eq(1)",function(){
+    if($(this).val()==92){
+      $('.father_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.father_mobile_phone').mask('999999999999999999', {
+      placeholder: 'X'
+    });
+    }
+});
+
+$(document).on("change",".countryCodeNumber:eq(2)",function(){
+    if($(this).val()==92){
+      $('.mother_mobile_phone').mask('999-9999999', {
+          placeholder: 'X'
+      });
+    }else{
+      $('.mother_mobile_phone').mask('999999999999999999', {
+          placeholder: 'X'
+      });
+    }
+});
+  //Masking for mobile numbers END here...
+
+
+//Date Length
+$(function(){
+    var dtToday = new Date();
+    var month = dtToday.getMonth() + 1;
+    var day = dtToday.getDate();
+    var year = dtToday.getFullYear();
+    if(month < 10)
+        month = '0' + month.toString();
+    if(day < 10)
+        day = '0' + day.toString();
+    var maxDate = year + '-' + month + '-' + day;
+     // alert(maxDate);
+    $('#date_of_birth').attr('max', maxDate);
+});
+
+// Date range
+if ($('#date_of_birth').length) {
+  //$('#date_of_birth').mask('99/99/9999');
+  $('#date_of_birth').focusout(function(){ 
+    var date_value = $(this).val()
+    getadmissiongradedob(date_value);
+  });
+  
+} 
+
+
+	// Date range
+// if ($('#date_of_birth').length) {
+	
+// 	$('#date_of_birth').datepicker({
+// 		changeMonth: true,
+//         changeYear: true,
+// 		yearRange: '1980:'+(new Date).getFullYear(),
+// 		dateFormat: 'yy-mm-dd',
+// 		prevText: '<i class="fa fa-chevron-left"></i>',
+// 		nextText: '<i class="fa fa-chevron-right"></i>',
+// 		onSelect: function(date) {
+// 			getadmissiongradedob(date);
+// 		},
+// 	});	
+
+// }
 $("#father_nic").prop("readonly",true);
 
 // GF ID	

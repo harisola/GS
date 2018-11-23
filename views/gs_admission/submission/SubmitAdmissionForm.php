@@ -456,7 +456,7 @@ border:#888;
                                           <option data-countryCode="ZM" value="260">+260</option>
                                           <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                        <input required="" name="father_mobile_phone[]" type="number" class="col-md-10" placeholder="Mobile" id="father_mobile" value="" style="padding-left:60px;" /> 
+                                        <input required="" name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone" placeholder="Mobile" id="father_mobile" value="" style="padding-left:60px;" /> 
                                         <button class="add_field_button_father">+</button>
                                     </div><!-- input_fields_wrap --><br /><br />                                    
                                     </div>
@@ -688,7 +688,7 @@ border:#888;
                                           <option data-countryCode="ZM" value="260">+260</option>
                                           <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                        <input required="" name="mother_mobile_phone[]" type="number" class="col-md-10" placeholder="Mobile" id="mother_mobile" value="" style="padding-left:60px;" /> 
+                                        <input required="" name="mother_mobile_phone[]" type="text" class="col-md-10 mother_mobile_phone" placeholder="Mobile" id="mother_mobile" value="" style="padding-left:60px;" /> 
                                         <button class="add_field_button_mother">+</button>
                                         <br /><br />   
                                     </div><!-- input_fields_wrap -->   
