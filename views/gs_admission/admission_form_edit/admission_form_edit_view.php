@@ -251,8 +251,14 @@
       }
    </style>
    <div class="row">
+
+      <div class="col-md-12 no-padding" style="width: 335px; text-align: center; position: absolute; top: 40%; left: 40%; background: rgb(241, 239, 239); border: 1px solid rgb(204, 204, 204); padding: 10px; z-index:99999;display:none" id="Generations_AjaxLoader">
+   <img src="http://10.10.10.50/gs/components/image/gsLoader.gif" width="200"><br><hr style="margin: 7px 0;border-top: 1px solid #ccc;"> Please Wait...
+   </div>
+
+
       <div class="col-md-12">
-         <h2 class="withBorderBottom">Admission Form Issuance</h2>
+         <h2 class="withBorderBottom"> List Of All Admission Form </h2>
       </div>
       <!-- col-md-12 -->
       <div class="col-md-12" id="followup_lists">

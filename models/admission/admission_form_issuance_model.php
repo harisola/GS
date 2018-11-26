@@ -74,7 +74,7 @@ class Admission_form_issuance_model extends CI_Model{
 
 	public function getFormSubmissionData($FormNo){
 		$query = "select
-					af.form_no as form_no, upper(af.official_name) as official_name, af.grade_name,
+					af.form_no as form_no, upper(af.official_name) as official_name, gg.name as grade_name,
 					IF(af.form_assessment_date = '2001-01-01', '-', bt.batch_category) as batch_category,
 					IF(af.form_assessment_date = '2001-01-01', 'TBI', b.name) as batch, 
 					IF(af.form_assessment_date = '2001-01-01', 'To Be Informed',b.description) as process,
@@ -93,6 +93,10 @@ class Admission_form_issuance_model extends CI_Model{
 						
 					left join atif_gs_admission._batch as b
 						on b.id = bt.batch_id
+
+					Left Join
+					atif._grade as gg
+					on gg.id = af.grade_id
 						
 					left join atif_gs_admission._form_batch_slots as bs
 						on bs.id = af.batch_slot_id

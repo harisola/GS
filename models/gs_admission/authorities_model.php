@@ -8,7 +8,79 @@ class Authorities_model extends CI_Model{
 	
 	public function confirm_admission(){
 		$this->ddb = $this->load->database('gs_admission',TRUE);	
-		$query = "select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_id = 5 or af.form_status_id = 6)";
+		$query = "SELECT `af`.`id` AS `form_id`,
+
+`af`.`form_no` AS `form_no`,
+
+`af`.`alevel_checklist` AS `alevel_checklist`,
+
+`af`.`official_name` AS `official_name`,
+`af`.`abridged_name` AS `abridged_name`,
+
+`af`.`form_batch_id` AS `form_batch_id`,
+`bt`.`batch_category` AS `batch_category`,
+`af`.`batch_slot_id` AS `batch_slot_id`,
+`bs`.`sno` AS `batch_slot_no`,
+`bs`.`time_start` AS `batch_time_submission`,
+`af`.`grade_id` AS `grade_id`,
+`af`.`grade_name` AS `grade_name`,
+`af`.`academic_session_id` AS `academic_session_id`, 
+
+ `af`.`form_status_id` AS `form_status_id`,`st`.`name` AS `status_name`,
+ `af`.`form_status_stage_id` AS `form_status_stage_id`,`sg`.`name` AS `stage_name`,
+ 
+ 
+ DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `form_issuance_date`,
+ `af`.`form_submission_date` AS `form_submission_date`,
+ `af`.`form_assessment_date` AS `form_assessment_date`,
+ `af`.`form_discussion_date` AS `form_discussion_date`,
+ `af`.`form_discussion_time` AS `form_discussion_time`,
+
+
+ `af`.`request_grade` AS `RequestGrade`,
+ `fr`.`father_name` AS `father_name`,
+ `fr`.`father_mobile` AS `father_mobile`,
+
+ `fr`.`mother_name` AS `mother_name`,
+ `fr`.`mother_mobile` AS `mother_mobile`,
+
+ `fr`.`home_address` AS `home_address`,
+ `fr`.`home_phone` AS `home_phone`,
+
+
+
+
+`fr`.`father_work_phone` AS `father_work_phone`,
+ `fr`.`father_email` AS `father_email`,
+ `fr`.`mother_company` AS `mother_company`,
+ `fr`.`mother_office_location` AS `mother_office_location`,
+ `fr`.`mother_work_phone` AS `mother_work_phone`,
+ `fr`.`mother_email` AS `mother_email`,
+ `fr`.`single_parent` AS `single_parent`,
+  IF((`fr`.`primary_contact` = 0),`fr`.`father_mobile`,`fr`.`mother_mobile`) AS `primary_contact`,
+  `b`.`id` AS `and_id`,
+  `b`.`name` AS `and_batch`, 
+  `af`.`form_discussion_result` AS `form_discussion_result`,
+  `af`.`form_discussion_decision` AS `form_discussion_decision`,
+  `af`.`offer_date` AS `offer_date`, 
+  CONCAT(
+REPLACE(`bt`.`batch_category`,'-',''),'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batchslot`, 
+CONCAT(`bt`.`batch_category`,'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batch_slot`, 
+DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `issuance_date`, 
+FROM_UNIXTIME(`af`.`modified`) AS `modified`
+FROM (((((((`atif_gs_admission`.`admission_form` `af`
+LEFT JOIN `atif_gs_admission`.`family_registration` `fr` ON((`fr`.`gf_id` = `af`.`gf_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch` `bt` ON((`bt`.`id` = `af`.`form_batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_batch` `b` ON((`b`.`id` = `bt`.`batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch_slots` `bs` ON((`bs`.`id` = `af`.`batch_slot_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status` `st` ON((`st`.`id` = `af`.`form_status_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status_stage` `sg` ON((`sg`.`id` = `af`.`form_status_stage_id`)))
+LEFT JOIN `atif`.`staff_registered` `ast` ON((`ast`.`id` = `af`.`form_assessment_result_by`)))
+where (af.form_status_id = 5 or af.form_status_id = 6)
+
+
+GROUP BY `af`.`form_no`
+ORDER BY `af`.`form_no`";
 		$result = $this->ddb->query( $query );
 		if( $result->num_rows() > 0 ){
 			$results = $result->result_array();
@@ -19,7 +91,79 @@ class Authorities_model extends CI_Model{
 	
 	public function not_interested(){
 		$this->ddb = $this->load->database('gs_admission',TRUE);	
-		$query = "select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_stage_id = 7)";
+		$query = "SELECT `af`.`id` AS `form_id`,
+
+`af`.`form_no` AS `form_no`,
+
+`af`.`alevel_checklist` AS `alevel_checklist`,
+
+`af`.`official_name` AS `official_name`,
+`af`.`abridged_name` AS `abridged_name`,
+
+`af`.`form_batch_id` AS `form_batch_id`,
+`bt`.`batch_category` AS `batch_category`,
+`af`.`batch_slot_id` AS `batch_slot_id`,
+`bs`.`sno` AS `batch_slot_no`,
+`bs`.`time_start` AS `batch_time_submission`,
+`af`.`grade_id` AS `grade_id`,
+`af`.`grade_name` AS `grade_name`,
+`af`.`academic_session_id` AS `academic_session_id`, 
+
+ `af`.`form_status_id` AS `form_status_id`,`st`.`name` AS `status_name`,
+ `af`.`form_status_stage_id` AS `form_status_stage_id`,`sg`.`name` AS `stage_name`,
+ 
+ 
+ DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `form_issuance_date`,
+ `af`.`form_submission_date` AS `form_submission_date`,
+ `af`.`form_assessment_date` AS `form_assessment_date`,
+ `af`.`form_discussion_date` AS `form_discussion_date`,
+ `af`.`form_discussion_time` AS `form_discussion_time`,
+
+
+ `af`.`request_grade` AS `RequestGrade`,
+ `fr`.`father_name` AS `father_name`,
+ `fr`.`father_mobile` AS `father_mobile`,
+
+ `fr`.`mother_name` AS `mother_name`,
+ `fr`.`mother_mobile` AS `mother_mobile`,
+
+ `fr`.`home_address` AS `home_address`,
+ `fr`.`home_phone` AS `home_phone`,
+
+
+
+
+`fr`.`father_work_phone` AS `father_work_phone`,
+ `fr`.`father_email` AS `father_email`,
+ `fr`.`mother_company` AS `mother_company`,
+ `fr`.`mother_office_location` AS `mother_office_location`,
+ `fr`.`mother_work_phone` AS `mother_work_phone`,
+ `fr`.`mother_email` AS `mother_email`,
+ `fr`.`single_parent` AS `single_parent`,
+  IF((`fr`.`primary_contact` = 0),`fr`.`father_mobile`,`fr`.`mother_mobile`) AS `primary_contact`,
+  `b`.`id` AS `and_id`,
+  `b`.`name` AS `and_batch`, 
+  `af`.`form_discussion_result` AS `form_discussion_result`,
+  `af`.`form_discussion_decision` AS `form_discussion_decision`,
+  `af`.`offer_date` AS `offer_date`, 
+  CONCAT(
+REPLACE(`bt`.`batch_category`,'-',''),'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batchslot`, 
+CONCAT(`bt`.`batch_category`,'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batch_slot`, 
+DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `issuance_date`, 
+FROM_UNIXTIME(`af`.`modified`) AS `modified`
+FROM (((((((`atif_gs_admission`.`admission_form` `af`
+LEFT JOIN `atif_gs_admission`.`family_registration` `fr` ON((`fr`.`gf_id` = `af`.`gf_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch` `bt` ON((`bt`.`id` = `af`.`form_batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_batch` `b` ON((`b`.`id` = `bt`.`batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch_slots` `bs` ON((`bs`.`id` = `af`.`batch_slot_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status` `st` ON((`st`.`id` = `af`.`form_status_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status_stage` `sg` ON((`sg`.`id` = `af`.`form_status_stage_id`)))
+LEFT JOIN `atif`.`staff_registered` `ast` ON((`ast`.`id` = `af`.`form_assessment_result_by`)))
+where (af.form_status_stage_id = 7)
+
+
+GROUP BY `af`.`form_no`
+ORDER BY `af`.`form_no`";
 		$result = $this->ddb->query( $query );
 		if( $result->num_rows() > 0 ){
 			$results = $result->result_array();
@@ -31,7 +175,79 @@ class Authorities_model extends CI_Model{
 	
 	public function regret(){
 		$this->ddb = $this->load->database('gs_admission',TRUE);	
-		$query = "select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_stage_id = 15)";
+		$query = "SELECT `af`.`id` AS `form_id`,
+
+`af`.`form_no` AS `form_no`,
+
+`af`.`alevel_checklist` AS `alevel_checklist`,
+
+`af`.`official_name` AS `official_name`,
+`af`.`abridged_name` AS `abridged_name`,
+
+`af`.`form_batch_id` AS `form_batch_id`,
+`bt`.`batch_category` AS `batch_category`,
+`af`.`batch_slot_id` AS `batch_slot_id`,
+`bs`.`sno` AS `batch_slot_no`,
+`bs`.`time_start` AS `batch_time_submission`,
+`af`.`grade_id` AS `grade_id`,
+`af`.`grade_name` AS `grade_name`,
+`af`.`academic_session_id` AS `academic_session_id`, 
+
+ `af`.`form_status_id` AS `form_status_id`,`st`.`name` AS `status_name`,
+ `af`.`form_status_stage_id` AS `form_status_stage_id`,`sg`.`name` AS `stage_name`,
+ 
+ 
+ DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `form_issuance_date`,
+ `af`.`form_submission_date` AS `form_submission_date`,
+ `af`.`form_assessment_date` AS `form_assessment_date`,
+ `af`.`form_discussion_date` AS `form_discussion_date`,
+ `af`.`form_discussion_time` AS `form_discussion_time`,
+
+
+ `af`.`request_grade` AS `RequestGrade`,
+ `fr`.`father_name` AS `father_name`,
+ `fr`.`father_mobile` AS `father_mobile`,
+
+ `fr`.`mother_name` AS `mother_name`,
+ `fr`.`mother_mobile` AS `mother_mobile`,
+
+ `fr`.`home_address` AS `home_address`,
+ `fr`.`home_phone` AS `home_phone`,
+
+
+
+
+`fr`.`father_work_phone` AS `father_work_phone`,
+ `fr`.`father_email` AS `father_email`,
+ `fr`.`mother_company` AS `mother_company`,
+ `fr`.`mother_office_location` AS `mother_office_location`,
+ `fr`.`mother_work_phone` AS `mother_work_phone`,
+ `fr`.`mother_email` AS `mother_email`,
+ `fr`.`single_parent` AS `single_parent`,
+  IF((`fr`.`primary_contact` = 0),`fr`.`father_mobile`,`fr`.`mother_mobile`) AS `primary_contact`,
+  `b`.`id` AS `and_id`,
+  `b`.`name` AS `and_batch`, 
+  `af`.`form_discussion_result` AS `form_discussion_result`,
+  `af`.`form_discussion_decision` AS `form_discussion_decision`,
+  `af`.`offer_date` AS `offer_date`, 
+  CONCAT(
+REPLACE(`bt`.`batch_category`,'-',''),'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batchslot`, 
+CONCAT(`bt`.`batch_category`,'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batch_slot`, 
+DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `issuance_date`, 
+FROM_UNIXTIME(`af`.`modified`) AS `modified`
+FROM (((((((`atif_gs_admission`.`admission_form` `af`
+LEFT JOIN `atif_gs_admission`.`family_registration` `fr` ON((`fr`.`gf_id` = `af`.`gf_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch` `bt` ON((`bt`.`id` = `af`.`form_batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_batch` `b` ON((`b`.`id` = `bt`.`batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch_slots` `bs` ON((`bs`.`id` = `af`.`batch_slot_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status` `st` ON((`st`.`id` = `af`.`form_status_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status_stage` `sg` ON((`sg`.`id` = `af`.`form_status_stage_id`)))
+LEFT JOIN `atif`.`staff_registered` `ast` ON((`ast`.`id` = `af`.`form_assessment_result_by`)))
+where (af.form_status_stage_id = 15)
+
+
+GROUP BY `af`.`form_no`
+ORDER BY `af`.`form_no`";
 		$result = $this->ddb->query( $query );
 		if( $result->num_rows() > 0 ){
 			$results = $result->result_array();
@@ -41,10 +257,78 @@ class Authorities_model extends CI_Model{
 	
 	public function all_applications(){
 		$this->ddb = $this->load->database('gs_admission',TRUE);	
-		$query = "select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_id = 5 or af.form_status_id = 6) 
-			UNION select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_stage_id = 7)
-			UNION select af.* from atif_gs_admission.view_admission_form as af where (af.form_status_stage_id = 15)
-			UNION select af.* from atif_gs_admission.view_admission_form as af where (af.RequestGrade = 2)";
+		$query = "SELECT `af`.`id` AS `form_id`,
+
+`af`.`form_no` AS `form_no`,
+
+`af`.`alevel_checklist` AS `alevel_checklist`,
+
+`af`.`official_name` AS `official_name`,
+`af`.`abridged_name` AS `abridged_name`,
+
+`af`.`form_batch_id` AS `form_batch_id`,
+`bt`.`batch_category` AS `batch_category`,
+`af`.`batch_slot_id` AS `batch_slot_id`,
+`bs`.`sno` AS `batch_slot_no`,
+`bs`.`time_start` AS `batch_time_submission`,
+`af`.`grade_id` AS `grade_id`,
+`af`.`grade_name` AS `grade_name`,
+`af`.`academic_session_id` AS `academic_session_id`, 
+
+ `af`.`form_status_id` AS `form_status_id`,`st`.`name` AS `status_name`,
+ `af`.`form_status_stage_id` AS `form_status_stage_id`,`sg`.`name` AS `stage_name`,
+ 
+ 
+ DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `form_issuance_date`,
+ `af`.`form_submission_date` AS `form_submission_date`,
+ `af`.`form_assessment_date` AS `form_assessment_date`,
+ `af`.`form_discussion_date` AS `form_discussion_date`,
+ `af`.`form_discussion_time` AS `form_discussion_time`,
+
+
+ `af`.`request_grade` AS `RequestGrade`,
+ `fr`.`father_name` AS `father_name`,
+ `fr`.`father_mobile` AS `father_mobile`,
+
+ `fr`.`mother_name` AS `mother_name`,
+ `fr`.`mother_mobile` AS `mother_mobile`,
+
+ `fr`.`home_address` AS `home_address`,
+ `fr`.`home_phone` AS `home_phone`,
+
+
+
+
+`fr`.`father_work_phone` AS `father_work_phone`,
+ `fr`.`father_email` AS `father_email`,
+ `fr`.`mother_company` AS `mother_company`,
+ `fr`.`mother_office_location` AS `mother_office_location`,
+ `fr`.`mother_work_phone` AS `mother_work_phone`,
+ `fr`.`mother_email` AS `mother_email`,
+ `fr`.`single_parent` AS `single_parent`,
+  IF((`fr`.`primary_contact` = 0),`fr`.`father_mobile`,`fr`.`mother_mobile`) AS `primary_contact`,
+  `b`.`id` AS `and_id`,
+  `b`.`name` AS `and_batch`, 
+  `af`.`form_discussion_result` AS `form_discussion_result`,
+  `af`.`form_discussion_decision` AS `form_discussion_decision`,
+  `af`.`offer_date` AS `offer_date`, 
+  CONCAT(
+REPLACE(`bt`.`batch_category`,'-',''),'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batchslot`, 
+CONCAT(`bt`.`batch_category`,'-', CONVERT(LPAD(`bs`.`sno`,2,'0') USING latin1)) AS `final_batch_slot`, 
+DATE_FORMAT(FROM_UNIXTIME(`af`.`created`),'%Y-%m-%d') AS `issuance_date`, 
+FROM_UNIXTIME(`af`.`modified`) AS `modified`
+FROM (((((((`atif_gs_admission`.`admission_form` `af`
+LEFT JOIN `atif_gs_admission`.`family_registration` `fr` ON((`fr`.`gf_id` = `af`.`gf_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch` `bt` ON((`bt`.`id` = `af`.`form_batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_batch` `b` ON((`b`.`id` = `bt`.`batch_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_batch_slots` `bs` ON((`bs`.`id` = `af`.`batch_slot_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status` `st` ON((`st`.`id` = `af`.`form_status_id`)))
+LEFT JOIN `atif_gs_admission`.`_form_status_stage` `sg` ON((`sg`.`id` = `af`.`form_status_stage_id`)))
+LEFT JOIN `atif`.`staff_registered` `ast` ON((`ast`.`id` = `af`.`form_assessment_result_by`)))
+
+
+GROUP BY `af`.`form_no`
+ORDER BY `af`.`form_no`";
 		$result = $this->ddb->query( $query );
 		if( $result->num_rows() > 0 ){
 			$results = $result->result_array();

@@ -1,19 +1,21 @@
 <script>
 $(document).ready(function(){
-	$('#confirmAdmissionTable').dataTable();
-	$('#CommunicationListing').dataTable();
-	$('#regretListingTable').dataTable();
-	//$('#AllApplicantTable').dataTable();
-	
+	 $('#confirmAdmissionTable').dataTable();
+	// $('#CommunicationListing').dataTable();
+	// $('#regretListingTable').dataTable();
+
 	$('#RequestForGradeTable').dataTable();
 
 
 $('#confirmAdmissionTable2').DataTable( {
+
 initComplete: function () {
 this.api().columns().every( function () {
+
 	var column = this;
 	var select = $('<select style="position: absolute;right: 31px;top: -80px;width: 250px;"><option value="">Filter list by Current Standing</option></select>')
 		.appendTo( $(column.footer()).empty() )
+
 		.on( 'change', function () {
 			var val = $.fn.dataTable.util.escapeRegex(
 				$(this).val()
@@ -31,8 +33,6 @@ this.api().columns().every( function () {
 }
 } );
 	
-	
-
 
 $('#AllApplicantTable').DataTable( {
 initComplete: function () {
@@ -276,13 +276,6 @@ $(document).on("click", "#formSubmit", function(){
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
 });
 
 
@@ -293,6 +286,7 @@ $(document).on("click", "#formSubmit", function(){
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript" src="<?=base_url();?>components/orb/js/vendors/forms/jquery.form.min.js"></script> 
 <script type="text/javascript" src="<?=base_url();?>components/orb/js/vendors/forms/jquery.validate.min.js"></script> 
 <script type="text/javascript" src="<?=base_url();?>components/orb/js/vendors/forms/jquery.maskedinput.min.js"></script> 

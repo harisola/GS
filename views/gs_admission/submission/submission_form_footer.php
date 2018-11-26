@@ -726,7 +726,26 @@ submitHandler: function(form){
     $("#ajaxloader").hide();
     //refreshForm();
     //reload_table_data();
-    call_pdf_submissionForm(res.form_id);
+    if( res.bt != '' )
+    {
+      if( res.Gid == 1 )
+      {
+        call_pdf_getDiscussionSheet_pn_n(res.form_id);
+        call_pdf_getRubiksSheet(res.bt, res.form_id );
+        
+      }else if( res.Gid == 2 )
+      {
+        call_pdf_getDiscussionSheet(res.form_id);
+        
+      }else
+      {
+
+      }
+      
+      
+      
+    }
+    //call_pdf_submissionForm(res.form_id);
     window.location.reload();
     }
   });
@@ -909,11 +928,33 @@ $(document).on("click", ".print_discussion_sheet", function(){
   
   var data_id = $(this).attr("data-id");
   var data_id = parseInt( data_id );
-  console.log(data_id);
+
+  var batch_category = $(this).attr("data-batch");
+  
+  //console.log(data_id);
+  
+  //call_pdf_getDiscussionSheet( data_id );
   
   call_pdf_getDiscussionSheet( data_id );
+  call_pdf_getRubiksSheet(batch_category, data_id)
+
+
+});
+
+
+$(document).on("click", ".print_discussion_sheet_pn_n", function(){
+  
+  var data_id = $(this).attr("data-id");
+  var data_id = parseInt( data_id );
+  var batch_category = $(this).attr("data-batch");
+
+
+  call_pdf_getDiscussionSheet_pn_n( data_id );
+  call_pdf_getRubiksSheet(batch_category, data_id)
   
 });
+
+
 
 $(document).on("change", ".switch-input",  function(){
 
@@ -1293,30 +1334,30 @@ $(document).on("keyup", "#form_no", function(){
         $("#father_name").prop("readonly",true);
         var primary_contact = parseInt( res.primary_contact);
         
-        if( primary_contact == 1 ){
-          $("#mother_name").prop("readonly",true);  
-          $("#mother_mobile").prop("readonly",true);  
-          $("#mother_name").attr("placeholder", "Mother Name *");
-          $("#mother_mobile").attr("placeholder", "Mother Mobile *");
-          $("#mother_nic").attr("placeholder", "Mother NIC *");
+        // if( primary_contact == 1 ){
+        //   $("#mother_name").prop("readonly",true);  
+        //   $("#mother_mobile").prop("readonly",true);  
+        //   $("#mother_name").attr("placeholder", "Mother Name *");
+        //   $("#mother_mobile").attr("placeholder", "Mother Mobile *");
+        //   $("#mother_nic").attr("placeholder", "Mother NIC *");
           
-          $("#father_name").attr("placeholder", "Father Name");
-          $("#father_mobile").attr("placeholder", "Father Mobile");
-          $("#father_nic").attr("placeholder", "Father NIC");
+        //   $("#father_name").attr("placeholder", "Father Name");
+        //   $("#father_mobile").attr("placeholder", "Father Mobile");
+        //   $("#father_nic").attr("placeholder", "Father NIC");
           
           
-        }else{
-          //$("#father_mobile").prop("readonly",true);  
-          $("#mother_name").attr("placeholder", "Mother Name");
-          $("#mother_mobile").attr("placeholder", "Mother Mobile");
-          $("#mother_nic").attr("placeholder", "Mother NIC");
-          $("#mother_email").attr("placeholder", "Mother Email");
+        // }else{
+        //   //$("#father_mobile").prop("readonly",true);  
+        //   $("#mother_name").attr("placeholder", "Mother Name");
+        //   $("#mother_mobile").attr("placeholder", "Mother Mobile");
+        //   $("#mother_nic").attr("placeholder", "Mother NIC");
+        //   $("#mother_email").attr("placeholder", "Mother Email");
           
-          $("#father_name").attr("placeholder", "Father Name *");
-          $("#father_mobile").attr("placeholder", "Father Mobile *");
-          $("#father_nic").attr("placeholder", "Father NIC *");
+        //   $("#father_name").attr("placeholder", "Father Name *");
+        //   $("#father_mobile").attr("placeholder", "Father Mobile *");
+        //   $("#father_nic").attr("placeholder", "Father NIC *");
           
-        }
+        // }
         
         //console.log(res.Photo_submitted);
         if( res.Photo_submitted == 1 ){
@@ -1519,6 +1560,39 @@ function call_pdf_getDiscussionSheet(FormID){
       alert('Please allow popups for this site');
   }
 }
+
+
+
+
+
+function call_pdf_getDiscussionSheet_pn_n(FormID){
+  var url = "<?php echo base_url(); ?>index.php/gs_admission/admission_form_print_ajax/discussion_sheet_pn_n?FormID="+FormID;
+  var win = window.open(url, '_blank');
+  if(win){
+      //Browser has allowed it to be opened
+      win.focus();
+  }else{
+      //Broswer has blocked it
+      alert('Please allow popups for this site');
+  }
+}
+
+
+
+// Get Discussion Sheet
+function call_pdf_getRubiksSheet(batch_category,Form_id){
+  var url = "<?php echo site_url(); ?>/gs_admission/admission_form_print_ajax/Rubiks_and_discussion_sheet?BatchID="+batch_category+"&Form_id="+Form_id;
+var win = window.open(url, '_blank');
+  if(win){
+      //Browser has allowed it to be opened
+      win.focus();
+  }else{
+      //Broswer has blocked it
+      alert('Please allow popups for this site');
+  }
+}
+
+
 
 $(document).on("click",".showBatches", function(){
   var form_id = $("#admission_grade_id").val();

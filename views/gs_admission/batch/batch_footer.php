@@ -129,7 +129,7 @@ if ($('#batchDetail').length) {
                             $html += '<td>'+$date+'</td>';
                             $html += '<td class="text-center">'+$start_time+':00'+'</td>';
                             $html += '<td class="text-center">'+$end_time+':00'+'</td>';
-                            $html += '<td class="text-center">'+""+'</td>';
+                            $html += '<td class="text-center">'+$no_of_slots+'</td>';
                             $html += '<td class="text-center">'+$duration_per_slot+'</td>';
                             $html += '</tr>';
                             $($html).prependTo('#AdmissionFormListing tbody');

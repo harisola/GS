@@ -19,7 +19,7 @@ class Comment_log extends CI_Model{
 
          '' as reason,
 
-         if( b.batch_category != '',
+         if( af.batch_slot_id > 0,
          
          CONCAT('Admission form issued', ' on <strong>', DATE_FORMAT((`b`.`date`), '%a, %b %e, %Y'), ' </strong> at <strong> ', 
          time_format(`b`.`time_start`, '%h:%i %p' ) ,

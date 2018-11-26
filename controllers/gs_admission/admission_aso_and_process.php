@@ -212,7 +212,6 @@ class Admission_aso_and_process extends CI_Controller{
 			$html .= '<div class="col-md-6 paddingBottom20 no-padding">';
 			$html .= '<select required id="decision_status" name="resultDecision">';
 				if(!empty($assessment_result[0]->form_assessment_decision)){
-					$html .= '<option value="'.$assessment_result[0]->form_assessment_decision.'">'.$assessment_result[0]->form_assessment_decision.'</option>';
 					$html .= '<option value="CFD">CFD</option>';
 					$html .= '<option value="RGT">RGT</option>';
 					$html .= '<option value="WIL">WIL</option>';
@@ -424,7 +423,6 @@ class Admission_aso_and_process extends CI_Controller{
         $html .='<div class="col-md-6 paddingBottom20 no-padding">';
         if(!empty($discussion_result_detail[0]->form_discussion_decision)){
         	$html .='<select required id="DECD" name="discussion_decision_result" data-aso="yes">';
-        	$html .='<option value="'.$discussion_result_detail[0]->form_discussion_decision.'">'.$discussion_result_detail[0]->form_discussion_decision.'</option>';
 	        $html .='<option value="OFR">OFR</option>';
 	        $html .='<option value="RGT">RGT</option>';
 	        $html .='<option value="WIL">WIL</option>';
@@ -445,6 +443,25 @@ class Admission_aso_and_process extends CI_Controller{
        $html.='<div class="reassistment_batch_slots">';
        $html.='<br><br><select class="batch" name="batch">';
        $html.='<option>Select Batch</option>';
+
+       $html.='<script>';
+       if($discussion_result_detail[0]->form_discussion_decision!=""){
+       		$html.='$("#DECD option:selected").text('.$discussion_result_detail[0]->form_discussion_decision.')';
+       		$html.='$("#DECD option:selected").val('.$discussion_result_detail[0]->form_discussion_decision.')';
+       }
+		$assessment_result =  $this->abm->get_result_discussion($form_id,$assessment_status);
+
+       if($assessment_result[0]->form_assessment_decision!=""){
+       	 	$html.='$("#decision_status option:selected").text('.$assessment_result[0]->form_assessment_decision.')';
+       		$html.='$("#decision_status option:selected").val('.$assessment_result[0]->form_assessment_decision.')';
+       }
+      
+
+
+       $html.='</script>';
+
+
+
 
        $batch =  $this->AB->getBatchDataByGradeId($grade_id);
        if(!empty($batch)){
@@ -745,10 +762,16 @@ class Admission_aso_and_process extends CI_Controller{
                         			$("#ast_name_code_"+form_id).text(ast_name_code);
                         			$("#form_assessment_result_"+form_id).text(form_assessment_result);
                         			//$("#ast_name_code_"+form_id).text(ast_name_code);
-                        			$("#dis_name_code_"+form_id).text(dis_name_code);
-                        			$("#form_discussion_result_"+form_id).text(form_discussion_result);
-                        			$("#form_discussion_decision_"+form_id).text(form_discussion_decision);
-
+                        			if(dis_name_code!=""){
+                        				$("#dis_name_code_"+form_id).text(dis_name_code);
+                        			}
+                        			if(form_discussion_result!=""){
+                        				$("#form_discussion_result_"+form_id).text(form_discussion_result);
+                        			}
+                        			if(form_discussion_decision!=""){
+                        				$("#form_discussion_decision_"+form_id).text(form_discussion_decision);
+                        			}
+                    
                         			if(form_discussion_decision == ""){
                         				$("#offer_"+form_id).text("");
 
@@ -1334,8 +1357,7 @@ class Admission_aso_and_process extends CI_Controller{
 		$batch_aso_and =  $this->abm->get_aso_and($batch_id);
 		$data['batch_aso_and_new'] =  $this->abm->get_aso_and_new($batch_id);
 		$data['batch_aso_old'] =  $this->abm->get_aso_and_previous($batch_id);
-		// print_r($data['batch_aso_and_new']);
-		// die;
+		
 		if(!empty($data['batch_aso_and_new'])||!empty($data['batch_aso_old'])){
 			if(!empty($data['batch_aso_and_new'][0]->and_id)){
 				@$batch = $data['batch_aso_and_new'][0]->and_id;
@@ -1345,10 +1367,7 @@ class Admission_aso_and_process extends CI_Controller{
 		}else{
 			$batch = '';
 		}
-		// print_r($data['batch_aso_and_new']);
-		// die;
-		// echo $batch;
-		// die;
+		
 		if($batch == 1){
 		    $this->load->view('gs_admission/aso_and/and_test',$data);
 		}

@@ -22,21 +22,19 @@ class Ajax_base extends CI_Controller{
 		$phone_numbers = array();
 		$user_phone_number = '';
 		$flag = 0;
-		
 		for( $i=0; $i < count($phone_code); $i++){
 
 			if (strpos($phone_code[$i], '92') !== false && $flag != 1) {
 				$flag = 1;
-			    $user_phone_number = '0' . $phone_number[$i];
+			    $user_phone_number = '0' .str_replace('-','',$phone_number[$i]);
 			} else {
-				array_push( $phone_numbers, $phone_code[$i] . '-' . $phone_number[$i] );
+				array_push( $phone_numbers, $phone_code[$i] . '-' .$phone_number[$i]);
 			}
 			
 		}
 
 		$data['phone_numbers'] = implode(",", $phone_numbers);
 		$data['local_number'] =  $user_phone_number;
-
 		return $data;
 
 	}
@@ -51,7 +49,7 @@ class Ajax_base extends CI_Controller{
 		$phone_numbers = array();
 		for( $i=0; $i < count($phone_code); $i++){
 			
-			array_push( $phone_numbers, $phone_code[$i] . '-' . $phone_number[$i] );
+			array_push( $phone_numbers, $phone_code[$i] . '-' .str_replace('-','',$phone_number[$i]));
 		}
 
 		$data['phone_numbers'] = implode(",", $phone_numbers);
@@ -66,11 +64,14 @@ class Ajax_base extends CI_Controller{
 		public function get_data(){
 
 					//var_dump($f_no);
+			 // var_dump($this->input->post());
+			/*var_dump($fatherNumberData);
+			 die();*/
 
 			$fatherNumberData  = $this->findLocalNumber($this->input->post("father_mobile_code"), $this->input->post("father_mobile_phone") );
+		
 			$motherNumberData  = $this->findLocalNumber($this->input->post("mother_mobile_code"), $this->input->post("mother_mobile_phone") );
 			$studentNumberData = $this->mergeStudentMobile($this->input->post("student_mobile_code"), $this->input->post("student_mobile_phone") );
-
 			$autoSubmissionDate = true;
 			$this->load->model('gs_admission/ajax_base_model', 'AB');
 
@@ -103,7 +104,7 @@ class Ajax_base extends CI_Controller{
 			} else {
 				$mother_mobile = '';
 			}
-
+			
 			
 			//$this->input->post("mother_mobile");
 			$mother_mobile_other = $motherNumberData['phone_numbers'];
@@ -331,7 +332,7 @@ class Ajax_base extends CI_Controller{
 
 
 							);
-							
+
 							
 							if( $insert_family_info == 1 ){
 								$fr = $this->AB->set("family_registration",$data2);
@@ -431,6 +432,7 @@ class Ajax_base extends CI_Controller{
 							"modified" =>time(),
 							"modified_by" =>$this->session->userdata("user_id")
 							);
+
 							$where2 = array("id"=> $Fmly_Reg_ID);
 							
 							$table_name = "family_registration";
@@ -466,7 +468,7 @@ class Ajax_base extends CI_Controller{
 				 // var_dump(+"comment_logs"+$comment_logs);
 				 // die();
 			}
-			
+
 			echo  json_encode( $data3 );
 		}
 		
@@ -730,10 +732,11 @@ class Ajax_base extends CI_Controller{
 	 */
 	 
 		public function form_submission(){
-			
-			
 			// var_dump($this->input->post());
 			// exit;
+
+			// var_dump($fatherNumberData);
+			//  die();
 			$this->load->model('gs_admission/ajax_base_model', 'AB');
 			$fatherNumberData  = $this->findLocalNumber($this->input->post("father_mobile_code"), $this->input->post("father_mobile_phone") );
 			$motherNumberData  = $this->findLocalNumber($this->input->post("mother_mobile_code"), $this->input->post("mother_mobile_phone") );
@@ -824,11 +827,27 @@ class Ajax_base extends CI_Controller{
 			$reAllocateSlot = $this->input->post("reAllocateSlot");
 			
 			// Condition for Updation the Form
-			
+
+			$flagSlot = 0; 
 			if($current_batch_id == $batch_name && $submission_time ==  $current_slot_id){
 				$reAllocateBatch = '';
 				$reAllocateSlot = '';
 			}else{
+				$flagSlot = 1;
+				$reAllocateBatch = $batch_name;
+				$reAllocateSlot = $submission_time;
+			}
+
+			if($submissionStage == 1 && $this->input->post("reAllocateBatch") != '' && $this->input->post("reAllocateSlot") != ''){
+				$reAllocateBatch  = $this->input->post("reAllocateBatch");
+				$reAllocateSlot = $this->input->post("reAllocateSlot");
+				$flagSlot = 0;
+			}else{
+				$reAllocateBatch = '';
+				$reAllocateSlot = '';
+			}
+
+			if($flagSlot == 1){
 				$reAllocateBatch = $batch_name;
 				$reAllocateSlot = $submission_time;
 			}
@@ -928,6 +947,7 @@ class Ajax_base extends CI_Controller{
 
 			if($reAllocateBatch == '' && $reAllocateSlot == '' ){
 				$toBeInform = 1;
+				
 				$admission_detail =  $this->admission_detail($form_id);
 				$slot_id = $admission_detail[0]->batch_slot_id;
 
@@ -963,8 +983,8 @@ class Ajax_base extends CI_Controller{
 
 			}
 			
-			
 
+		
 			if( $toBeInform == 0 ){
 				
 				$data = array(
@@ -1123,7 +1143,28 @@ class Ajax_base extends CI_Controller{
 				}
 							
 				
-				$data4 = array("form_id" => $form_id);
+				$bat = $this->AB->get_form_batch_title($form_id);
+				if( !empty($bat) )
+				{
+					$bt = $bat["Batch_Title"];
+				}else
+				{
+					$bt='';
+				}
+
+				if( $grade_id == 1 || $grade_id == 2 )
+				{
+					$Gid=1;
+				}elseif( $grade_id == 15 || $grade_id == 16 )
+				{
+					$Gid=2;
+				}
+				else 
+				{
+					$Gid=0;
+				}
+				
+				$data4 = array("form_id" => $form_id, "bt"=>$bt, 'Gid' => $Gid );
 				
 				// //Sub for Submission
 				//zk
@@ -1299,13 +1340,13 @@ class Ajax_base extends CI_Controller{
         	$referal_code = '-';
         }
 
-        if ($OLDGSID != ''){
+        if ($OLDGSID != '' && $OLDGSID != 0){
         	 $OLDGSID = 'GS-ID: '.$OLDGSID;
         }else {
         	$OLDGSID = '';
         }
 
-        if ($GTID != ''){
+        if ($GTID != '' && $GTID != 0){
         	$GTID = 'GT-ID: '.$GTID;
         }else {
         	$GTID = '';

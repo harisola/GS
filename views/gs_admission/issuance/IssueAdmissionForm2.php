@@ -44,10 +44,6 @@
 			<hr />
             <div class="col-md-12 paddingBottom0">
                 <div class="col-md-6" style="margin-top:-18px;">
-                    <input id="c3" name="late_issuance" style="display:block; visibility:hidden;" type="checkbox"> 
-                    <label for="c3">Late Issuance</label>
-                </div><!-- col-md-6 -->
-                <div class="col-md-6" style="margin-top:-18px;">
                   <input id="alevel_student_check" name="alevel_student_check" style="display:block; visibility:hidden;" type="checkbox"> 
                   <label id="alevel_student_check_label" for="alevel_student_check">Alevel</label>
                 </div><!-- col-md-6 -->
@@ -1093,7 +1089,7 @@ if ($('#mother_nic').length) {
 	
 // father mobile
 if ($('#father_mobile').length) {
-  $('#father_mobile').mask('0399-9999999', {
+  $('#father_mobile').mask('999-9999999', {
         placeholder: 'X'
    });
 }	
@@ -1101,7 +1097,7 @@ if ($('#father_mobile').length) {
 
 // mother_mobile 
 if ($('#mother_mobile').length) {
-  $('#mother_mobile').mask('0399-9999999', {
+  $('#mother_mobile').mask('999-9999999', {
         placeholder: 'X'
    });
 }	

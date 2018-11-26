@@ -490,6 +490,7 @@ rules: {
 	official_name: { required: true, lettersonly:true },
 	call_name: { required: true, lettersonly:true, rangelength: [3, 9]},
 	date_of_birth: { required: true },
+	admission_grade: { required: true },
 	requestGrade: { required: function(){
 		if( $("#request_grade").is(':checked') ){
 			return true
@@ -616,6 +617,7 @@ f_nic: { required: '' },
 	official_name: { required: '', lettersonly:'' },
 	call_name: { required: '', lettersonly:'' },
 	date_of_birth: { required: '', lettersonly:'' },
+	admission_grade: { required: '' },
 	requestGrade: { required: 'Requested Grade!' },
 	//single_parent: { required: '' },
 	father_name: { required: '', lettersonly: '' },
@@ -723,7 +725,7 @@ $(document).on("change click","#batch",function(){
 			$('#admission_grade').val($('#alevel_grade_selectBox').val());
 			$('#admission_grade').hide();
 		    $('#alevel_grade_selectBox').show();
-		    $("#date_of_birth").datepicker("destroy");
+		    /*$("#date_of_birth").datepicker("destroy");
 			$('#date_of_birth').datepicker({
 				changeMonth: true,
 		        changeYear: true,
@@ -733,7 +735,7 @@ $(document).on("change click","#batch",function(){
 				prevText: '<i class="fa fa-chevron-left"></i>',
 				nextText: '<i class="fa fa-chevron-right"></i>',
 			
-			});	
+			});	*/
 	  	var admission_grade_id = $('#alevel_grade_selectBox').val();
 	  	var admission_grade = $("#alevel_grade_selectBox option:selected").text();
 
@@ -742,7 +744,7 @@ $(document).on("change click","#batch",function(){
 		$('.alevel_checklist').show();
 
 		} else {
-			$("#date_of_birth").datepicker("destroy");
+			/*$("#date_of_birth").datepicker("destroy");
 			$('#date_of_birth').datepicker({
 				changeMonth: true,
 		        changeYear: true,
@@ -753,7 +755,7 @@ $(document).on("change click","#batch",function(){
 				onSelect: function(date) {
 					getadmissiongradedob(date);
 				},
-			});
+			});*/
 		  	$('#alevel_grade_selectBox').hide();
 		    $('#admission_grade').val('');
 		    $('#admission_grade').show();
@@ -803,14 +805,18 @@ function getadmissiongradedob(dateOfBirth){
 					
 					
 					if($.isEmptyObject(res.dob[0])){
-
-					   $("#admission_grade").val('');
-						$("#admission_grade_id").val(0);
+						if ($("#alevel_student_check").is(":checked")) {	
+						   
+						}else 
+						{
+							$("#admission_grade").val('');
+						   $("#admission_grade_id").val(0);
+						}
 
 					}else{
 
 					  $("#admission_grade").val( res.dob[0].grade_name );
-						$("#admission_grade_id").val( parseInt( res.dob[0].grade_id ) );	
+					  $("#admission_grade_id").val( parseInt( res.dob[0].grade_id ) );	
 
 					}
 					

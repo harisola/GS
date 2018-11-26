@@ -12,10 +12,15 @@ class Frontoffice_communication extends CI_Controller{
 		$form_stage = $this->input->post("form_stage");
 		$form_id = $this->input->post("form_id");
 		$FOStatus = $this->input->post("FOStatus");
+
+		$given_batch_id = $this->input->post('form_batch_id');
 		$given_slot_id = $this->input->post("given_slot_id");
+
 		$currentStage = $this->input->post("currentStage");
 		$comments = $this->input->post("comments");
-		
+
+		$currentStaged = $this->input->post('currentStaged');
+
 		
 		$lastID = $this->addLogs($form_id, $FOStatus, $comments );
 		
@@ -43,6 +48,13 @@ class Frontoffice_communication extends CI_Controller{
 		elseif(  $FOStatus == 'CMM' ){
 			$stage_id=1; // 7 For Communite
 			$this->changeStage($form_id, $stage_id );
+		}elseif($FOStatus == 'EXTENSION' && $currentStaged == 'Submission'){
+			// IF Extension
+			$stage_id=10;
+			$this->UpdateBatch($form_id,$given_batch_id,$given_slot_id);
+			
+			$this->changeStage($form_id, $stage_id );
+
 		}else{
 			$stage_id=11; // 11 For No Response
 			$this->changeStage($form_id, $stage_id );
@@ -128,6 +140,55 @@ class Frontoffice_communication extends CI_Controller{
 			);	
 		$where = array("id"=> $form_id);
 		$this->ff->update_function( $table, $data, $where);
+	}
+
+	// Update Batch Slots
+	public function UpdateBatch($form_id,$given_batch_id,$given_slot_id){
+
+		
+		$this->load->model('gs_admission/frontoffice_followup_model', 'ff');
+		$admission_data = $this->ff->get_admission_data($form_id);
+		$form_previous_batch_id = $admission_data[0]['form_batch_id'];
+		$form_previous_slot_id = $admission_data[0]['batch_slot_id'];
+
+		$where  = array(
+			'form_batch_id' => $form_previous_batch_id,
+			'id' => $form_previous_slot_id
+		);
+
+		
+		$data = array(
+			'revised_batch_slot_id' => $given_slot_id
+		);
+
+		$flag_update = $this->ff->update_function('atif_gs_admission._form_batch_slots',$data,$where);
+
+		//admission slot update 
+
+		$where = array(
+			'form_batch_id'=>$given_batch_id,
+			'id' => $given_slot_id
+		);
+
+		$data = array(
+			'admission_form_id' => $form_id
+		);
+
+		$flag_update_admission = $this->ff->update_function('atif_gs_admission._form_batch_slots',$data,$where);
+
+		// Admission form update
+
+		$where = array(
+			'id' => $form_id
+		);
+
+		$data = array(
+			'form_batch_id' => $given_batch_id,
+			'batch_slot_id' => $given_slot_id
+		);
+
+		$flag_update_admission = $this->ff->update_function('atif_gs_admission.admission_form',$data,$where);
+
 	}
 	
 	

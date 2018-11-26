@@ -69,7 +69,8 @@ class Admission_batch_setup extends CI_Controller{
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
-        foreach($batch_detail as $detail){
+        foreach($batch_detail as $detail)
+        {
         $html .= '<tr>';
         $html .= '<td>'.$detail->slot.'</td>';
         $html .= '<td>'.$detail->default_appointment.'<input type="hidden" class="batch_slot_id" value="'.$detail->slot_id.'">&nbsp;&nbsp;&nbsp;<input type="time" class="batch_slot_time" value="'.$detail->slot_time.'"></td>';
@@ -88,17 +89,19 @@ class Admission_batch_setup extends CI_Controller{
                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                   </div>';
     	$html .= '</div>';
-    	$html .= '<script>';
-    	$html .= '$(document).ready(function() {
- 				  $("#BatchListingList").dataTable();
-				  });';
-		$html .= '</script>';
+
+    	$html .= '<script>'; 
+    	$html .= '$(document).ready(function() { 
+ 				   $("#BatchListingList").dataTable(); 
+				  });'; 
+		$html .= '</script>'; 
+
 		$html .= '<style>';
-		$html .= '.modal-dialog {
-    			  width: 80%;
-    			  margin: 10% auto !important;
-		}';
-		$html .= '</style>';
+		$html .= '.modal-dialog { 
+    			  width: 80%; 
+    			  margin: 10% auto !important; 
+		}'; 
+		$html .= '</style>'; 
     	echo $html;
     }
 

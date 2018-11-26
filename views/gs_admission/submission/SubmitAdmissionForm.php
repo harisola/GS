@@ -899,10 +899,18 @@ border:#888;
                                     <a href="#" class="hoverAction">Action <i class="fa fa-angle-down" aria-hidden="true"></i></a>
                                     <div class="actionItems">
                                         <ul>
-                                            <li><a href="#" class="view_n_print" data-id="<?=$fl["Form_id"];?>">Print Form</a></li>
-                                            <?php if($fl['Grade_id'] == 15 || $fl['Grade_id'] == 16)  { ?>
-                                                <li><a href="#" class="print_discussion_sheet" data-id="<?=$fl["Form_id"];?>">Print Discussion Sheet</a></li>
-                                            <?php } ?>
+                                           <?php if( $fl["Print_Form_level"] == 1 ){ ?>
+                                                <li><a href="#" class="print_discussion_sheet" data-id="<?=$fl["Form_id"];?>" data-batch="<?=$fl["Batch_Title"];?>">Print Discussion Sheet</a></li>
+                                            <?php }/*else{ ?>
+ <li><a href="#" class="view_n_print" data-id="<?=$fl["Form_id"];?>">Print Form</a></li>
+                                            <?php } */?>
+
+                                            <?php if( $fl["Print_Form_pn_n"] == 1 ){ ?>
+                                                <li><a href="#" class="print_discussion_sheet_pn_n" data-id="<?=$fl["Form_id"];?>" data-batch="<?=$fl["Batch_Title"];?>">Print Discussion Sheet</a></li>
+                                            <?php }?>
+
+
+
                                             <li><a href="#" class="view_n_Edit" data-id="<?=$fl["Form_id"];?>">View and Edit Details</a></li>
                                         </ul>
                                         <!-- actionIteamsUL-->

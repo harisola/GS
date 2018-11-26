@@ -32,12 +32,12 @@ af.id as form_id, af.form_no, af.form_submission_date, af.grade_name,
 DATEDIFF(CURDATE(), af.form_submission_date) as day_diff,
 af.official_name as applicant_name,
 fr.father_name, fr.father_mobile, fr.mother_mobile,
-'Submission' as current_standing, 'Submission Date expired' as current_status_1
+'Submission' as current_standing, IF(af.grade_id <= 2 or af.grade_id = 17,'Submission, Assessment and Discussion Date expired','Submission and Assessment Date Expired') as current_status_1
 
 from atif_gs_admission.admission_form as af
 left join atif_gs_admission.family_registration as fr
     on fr.gf_id = af.gf_id
-where af.form_assessment_date = '0000-00-00'
+where af.form_assessment_date < CURDATE()
 and af.form_submission_date < CURDATE() /***** Current Date is here *****/
 and af.form_status_stage_id != 7
 and af.form_status_stage_id != 6
@@ -45,43 +45,7 @@ and af.form_status_stage_id != 15
 and af.form_status_stage_id != 20
 ) AS SUBMISSION_FOLLOWUP
 
-UNION
-SELECT
-form_id, form_no, form_assessment_date as form_submission_date, day_diff as day_passed, grade_name,
-IF(day_diff = 1, '(1 day ago)', CONCAT('(', day_diff, ' days ago)')) as day_diff,
-applicant_name, father_name, father_mobile, mother_mobile, current_standing,
-current_status_1
 
-FROM
-(select
-af.id as form_id, af.form_no, af.form_assessment_date, af.grade_name,
-/***** Current Date is here *****/
-DATEDIFF(CURDATE(), af.form_assessment_date) as day_diff,
-af.official_name as applicant_name,
-fr.father_name, fr.father_mobile, fr.mother_mobile,
-'Assessment' as current_standing, 'Assessment Date expired' as current_status_1
-
-from atif_gs_admission.admission_form as af
-left join atif_gs_admission.family_registration as fr
-    on fr.gf_id = af.gf_id
-left join (select lgs.admission_form_id, from_unixtime(lgs.modified) as thisDate 
-	from atif_gs_admission.log_form_status lgs
-	where lgs.new_form_status = 3
-	and lgs.new_form_stage = 4) as lgs
-	on lgs.admission_form_id = af.id
-
-
-where af.form_discussion_result = ''
-and af.form_assessment_date != '0000-00-00'
-and af.form_assessment_date != '2001-01-01'
-and af.form_assessment_date < CURDATE() /***** Current Date is here *****/
-and lgs.thisDate is null
-and af.form_status_stage_id != 7
-and af.form_status_stage_id != 6
-and af.form_status_stage_id != 15
-and af.form_status_stage_id != 20
-
-) AS ASSESSMENT_FOLLOWUP
 
 
 UNION
@@ -1143,7 +1107,64 @@ order by form_no";
 			}
 	}
 
+	// GET Admission Data
+	public function get_admission_data($form_id){
+		$query = "SELECT * FROM atif_gs_admission.admission_form where id = '".$form_id."'";
+		$result = $this->ddb->query( $query );
+		if( $result->num_rows() > 0 ){
+			$results = $result->result_array();
+			return $results;
+		}else{ 
+				return FALSE; 
+		}
+	}
 
+	public function get_by_all($tablename, $select='', $where=null, $group=''){
+
+		// Table Name
+
+		// Selection
+
+		$this->db->from($tablename);
+		if($select == ''){
+			$this->db->select();
+		}
+		else if($select != ''){
+			$this->db->select($select);
+		}
+
+		// Where Condition
+
+		if($where == null){
+
+		}
+		else if($where != null){
+			$this->db->where($where);
+		}
+
+
+
+		//Group By
+
+		if($group == ''){
+		}
+		else if($group != ''){
+			$this->db->group_by($group);
+		}
+
+		// Get Query Result
+
+		$query = $this->db->get();
+		$row = $query->result();
+
+		if($row == null){
+			return false;
+		}
+		else if($row != null){
+			return $row;
+		}
+
+	}
 	
 }
 ?>

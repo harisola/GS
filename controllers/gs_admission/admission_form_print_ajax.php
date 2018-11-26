@@ -39,13 +39,20 @@ class Admission_form_print_ajax extends CI_Controller{
         $BatchCategory = $data['form_submission'][0]->batch_category;
         $Batch = $data['form_submission'][0]->batch;
         $Process = $data['form_submission'][0]->process;
+
+         
+
         $myProcess=explode(',', $Process);
         $ProcessPartA=$myProcess[0];
         if($ProcessPartA=='Submission'){
         	$ProcessPartA=$ProcessPartA.',';
+        	$Process=$myProcess[1];
+        }
+        else {
+        	$ProcessPartA='';	
         }
 
-        $Process=$myProcess[1];
+        
 
         $DateTime = $data['form_submission'][0]->date_time;
 
@@ -1129,6 +1136,130 @@ class Admission_form_print_ajax extends CI_Controller{
 
 
 
+public function discussion_sheet_pn_n(){
+
+
+$form_id = $this->input->GET('FormID');
+
+
+
+	$this->load->model('admission/admission_batch_model');
+     $data['admission_batch'] = $this->admission_batch_model->getbatchadmissiondetailPN_N($form_id);
+
+
+
+
+
+        // Overall Font Size
+		$font_size = 10;
+		$font_name = 'Arial';
+		$gender_mark_size = 26;
+		$now_date = date('d-M-Y');
+		$now_time = date('h:i a');
+
+
+		require_once('components/pdf/fpdf/fpdf.php');
+		require_once('components/pdf/fpdi/fpdi.php');
+
+		
+		// initiate FPDI
+		$pdf = new FPDI();
+
+	//	var_dump($data['admission_batch']); exit;
+
+		// get the page count
+		if ($data['admission_batch'][0]->grade_id >= 10 and $data['admission_batch'][0]->grade_id <= 16){
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetSC(19).pdf');
+		}else{
+			
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/DiscussionSheetNC(19).pdf');
+		}
+		// Border On
+		$bo = 0;
+
+
+
+		// iterate through all pages
+		for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+		    // import a page
+		    $templateId = $pdf->importPage($pageNo);
+		    // get the size of the imported page
+		    $size = $pdf->getTemplateSize($templateId);
+
+		    foreach ($data['admission_batch'] as $student) {
+
+		    		// PDF write -- Variables are here
+
+		    	$FormNo = $student->form_no;
+		    	$GFID = $student->gf_id;
+		    	$DisDate = $student->form_assessment_date;
+		    	$Grade = $student->grade_name;
+		    	$Batch = $student->batch_category;
+		    	$BatchNum = $student->batch_slot_no;
+		    	$ApplicantName = ucwords($student->applicant_name);
+		    	$DOB = $student->dob;
+		    	$FatherName = ucwords($student->father_name);
+	    		$MotherName = ucwords($student->mother_name);
+
+		    	// create a page (landscape or portrait depending on the imported page size)
+			    if ($size['w'] > $size['h']) {
+			        $pdf->AddPage('L', array($size['w'], $size['h']));
+			    } else {
+			        $pdf->AddPage('P', array($size['w'], $size['h']));
+			    }		    
+
+			    // use the imported page
+		    	$pdf->useTemplate($templateId);
+
+		    	if ($templateId == 1){
+		    		
+		    		$pdf->SetFont($font_name);
+				    $pdf->SetFont($font_name,'B',11	);
+
+				    // Form #
+				    $pdf->SetXY(105, 6.5);
+				    $pdf->Cell(39, 9, $FormNo, $bo, 2, 'C', 0);
+
+				    // GF-ID
+				    $pdf->SetXY(163.5, 6.5);
+				    $pdf->Cell(39, 9, $GFID, $bo, 2, 'C', 0);
+
+				    // Discussion Date
+				    $pdf->SetTextColor(255,255,255);
+				    $pdf->SetXY(7, 15.7);
+				    $pdf->Cell(72, 8, 'Date: '.$DisDate, $bo, 0, 'L', 0);
+				    $pdf->Cell(52, 8, $Grade, $bo, 0, 'C', 0);
+				    $pdf->Cell(71, 8, $Batch.'-'.$BatchNum, $bo, 2, 'R', 0);
+
+				    // Applicat Name
+				    $pdf->SetTextColor(0,0,0);
+				    $pdf->SetXY(35, 23.7);
+				    $pdf->Cell(109, 9, $ApplicantName, $bo, 2, 'C', 0);
+
+				    // Date of Birth
+				    $pdf->SetXY(163.5, 23.7);
+				    $pdf->Cell(38.5, 9, $DOB, $bo, 2, 'C', 0);
+
+				    // Father Name
+				    $pdf->SetXY(35, 32.7);
+				    $pdf->Cell(69, 9, $FatherName, $bo, 2, 'C', 0);
+
+				    // Mother Name
+				    $pdf->SetXY(130, 32.7);
+				    $pdf->Cell(72, 9, $MotherName, $bo, 2, 'C', 0);
+
+				    /*$pdf->SetXY(179, 53);
+				    $pdf->Cell(34, 9, $Grade, $bo, 2, 'C', 0);
+				    */
+				}	
+		    }
+		}
+
+		// Output the new PDF
+		$pdf->Output('DiscussionSheet_' . '.pdf', 'I');
+		//$pdf->Output();
+    }
+
 
 
 
@@ -1251,6 +1382,99 @@ class Admission_form_print_ajax extends CI_Controller{
 
 
 
+
+
+
+public function Rubiks_and_discussion_sheet(){
+		$BatchID = $this->input->GET('BatchID');
+		$Form_id = $this->input->GET('Form_id');
+
+
+		$this->load->model('admission/admission_batch_model');
+
+   $data['admission_batch'] = $this->admission_batch_model->get_rubiks_discussion($BatchID,$Form_id);
+
+        $Class = substr($BatchID, 0, 1);
+
+
+        // Overall Font Size
+		$font_size = 10;
+		$font_name = 'Arial';
+		$gender_mark_size = 26;
+		$now_date = date('d-M-Y');
+		$now_time = date('h:i a');
+
+
+		require_once('components/pdf/fpdf/fpdf.php');
+		require_once('components/pdf/fpdi/fpdi.php');
+
+		
+		// initiate FPDI
+		$pdf = new FPDI();
+
+
+
+		// get the page count
+		if($Class=='A'){
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/AssessmentSheetPN(1718).pdf');
+		}else if($Class=='B'){
+			$pageCount = $pdf->setSourceFile('components/pdf/admission/AssessmentSheetN(1718).pdf');
+		}
+		// Border On
+		$bo = 0;
+
+
+
+		// iterate through all pages
+		for ($pageNo = 1; $pageNo <= $pageCount; $pageNo++) {
+		    // import a page
+		    $templateId = $pdf->importPage($pageNo);
+		    // get the size of the imported page
+		    $size = $pdf->getTemplateSize($templateId);
+
+		    foreach ($data['admission_batch'] as $student) {
+
+		    		// PDF write -- Variables are here
+		    	$ApplicantName = ucwords($student->applicant_name);
+		    	$Batch = $student->batch_category;
+		    	$BatchNum = $student->batch_slot_no;
+		    	$AssDate = $student->simple_form_assessment_date;
+		    	$Age = $student->age;
+
+		    	// create a page (landscape or portrait depending on the imported page size)
+			    if ($size['w'] > $size['h']) {
+			        $pdf->AddPage('L', array($size['w'], $size['h']));
+			    } else {
+			        $pdf->AddPage('P', array($size['w'], $size['h']));
+			    }		    
+
+			    // use the imported page
+		    	$pdf->useTemplate($templateId);
+
+		    	if ($templateId == 1){
+
+		    		
+		    		$pdf->SetFont($font_name);
+				    $pdf->SetFont($font_name,'',9	);
+				    $pdf->SetXY(38, 3);
+				    $pdf->Cell(50, 9, $ApplicantName, $bo, 2, 'C', 0);
+
+				    $pdf->SetXY(129, 3);
+				    $pdf->Cell(20, 9, $Age, $bo, 2, 'C', 0);
+
+				    $pdf->SetXY(165, 3);
+				    $pdf->Cell(15, 9, $Batch, $bo, 2, 'C', 0);
+
+				    $pdf->SetXY(188, 3);
+				    $pdf->Cell(15, 9, $AssDate, $bo, 2, 'L', 0);
+				}	
+		    }
+		}
+
+		// Output the new PDF
+		$pdf->Output('DiscussionSheet_' . '.pdf', 'I');
+		//$pdf->Output();
+    }
 
 
 

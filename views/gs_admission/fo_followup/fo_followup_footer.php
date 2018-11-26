@@ -160,6 +160,8 @@ $(document).on("click", ".followup_row", function(){
 		var form_id = parseInt( spt[1] );
 		var currentStage = spt[2];
 
+
+
 		var thisText = $(this).text();
 		var fllwUpLists = $("#followup_lists");
 		fllwUpLists.switchClass( "col-md-12", "col-md-7", 1000, "easeInOutQuad" );
@@ -180,31 +182,29 @@ $(document).on("click", ".followup_row", function(){
 $(document).on("change", "#FOStatus", function(){
 	var status = $('#FOStatus option:selected').val();
 	var currentStage = $('#currentStage').val();
-	//console.log(status  );
+	var currentStaging = $('#currentStaged').val();
+
 	//if( status != '' && status == 'Ext' ){
 		
 	if( status == 'Ext' || status == 'FHD'  ){
 		var dateToday = new Date();		
 		if( currentStage == 'Submission' || currentStage == 'All_applicantion' ||  currentStage == 'Fee Bill' || currentStage == 'Discussion' || currentStage == 'Offer'){
-			$(".displayNone2").show("fast");
 			
+			$(".displayNone2").show("fast");
 			if( status == 'FHD' ){
-	var maxDate = '+30d';
+				var maxDate = '+30d';
 			}else {
 				var maxDate = '+90d';
 			}
 			
-
 			$('#submission_ext').datepicker({
 			dateFormat: 'yy-mm-dd',
 			minDate: dateToday,
 			maxDate: maxDate,
 			prevText: '<i class="fa fa-chevron-left"></i>',
 			nextText: '<i class="fa fa-chevron-right"></i>',
-			
-		});	
-	
-	
+			});
+
 			$(".displayNone").hide("fast");
 		}else if( currentStage == 'Assessment' ){
 			$(".displayNone2").hide("fast");
@@ -218,7 +218,14 @@ $(document).on("change", "#FOStatus", function(){
 		$(".displayNone").hide("fast");	
 		$(".displayNone2").hide("fast");
 	}
-	
+
+	// Extension for status If Required
+
+	if(status == 'EXTENSION' && currentStaging == 'Submission'){
+		$('.displayNone').show("show");
+	}else{
+		$('.displayNone').hide('fast');
+	}
 	
 });
 $(document).on("click", "#addFollowUp", function(){

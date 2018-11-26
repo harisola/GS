@@ -65,33 +65,37 @@ $in_out = "out";
 <input type="hidden" name="form_id" id="form_id" value="<?=$form_id;?>" />
 <input type="hidden" name="given_slot_id" id="given_slot_id" value="<?=$give_slot_id;?>" />
 <input type="hidden" name="form_batch_id" id="form_batch_id" value="<?=$form_batch_id;?>" />
-<?php $currentStage='All_applicantion';?>
-<input type="hidden" name="currentStage" id="currentStage" value="<?=$currentStage;?>" />
-<div class="row statusDisplay">
-<div class="col-md-4">
-<select id="FOStatus" name="FOStatus">
-<option value="">Status *</option>
-<!--option value="Ext">Extension</option -->
-<option value="NI">Not Interested</option>
-<option value="NR">No Response</option>
-<option value="FHD">Followup Hold</option>
-</select>
-</div><!-- col-md-4 -->
+<?php $currentStaging='All_applicantion';?>
+<input type="hidden" name="currentStage" id="currentStage" value="<?=$currentStaging;?>" />
+<!-- Current Staging  -->
+<input type="hidden" name="currentStaged" id="currentStaged" value="<?=$currentStage;?>" />
 
-<div class="col-md-4 displayNone IfExt">
-<select id="batch_id" name="batch_id">
-<option value="">Batch *</option>
-<?php if(!empty($batch)){
-foreach( $batch as $b ){
-	$id = $b["formBatchID"];
-	$cat_name = $b["batchCategory"];
-	$BDate = $b["BDate"];
-?>
-<option value="<?=$id;?>" <?php if( $id == $form_batch_id){ echo "selected"; } ?>> <?=$cat_name;?> (<?=$BDate;?>)</option>	
-<?php } 
-} ?>
-</select>
-</div><!-- col-md-4 -->
+<div class="row statusDisplay">
+	<div class="col-md-4">
+		<select id="FOStatus" name="FOStatus">
+			<option value="">Status *</option>
+			<!--option value="Ext">Extension</option -->
+			<option value="NI">Not Interested</option>
+			<option value="NR">No Response</option>
+			<option value="EXTENSION">Extension</option>
+			<option value="FHD">Followup Hold</option>
+		</select>
+	</div><!-- col-md-4 -->
+
+	<div class="col-md-4 displayNone IfExt">
+		<select id="batch_id" name="batch_id">
+			<option value="">Batch *</option>
+			<?php if(!empty($batch)){
+			foreach( $batch as $b ){
+				$id = $b["formBatchID"];
+				$cat_name = $b["batchCategory"];
+				$BDate = $b["BDate"];
+			?>
+			<option value="<?=$id;?>" <?php if( $id == $form_batch_id){ echo "selected"; } ?>> <?=$cat_name;?> (<?=$BDate;?>)</option>	
+			<?php } 
+			} ?>
+		</select>
+	</div><!-- col-md-4 -->
 
 <div class="col-md-4 displayNone IfExt">
 <select id="time_slot" name="time_slot">

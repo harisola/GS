@@ -136,6 +136,12 @@
                                       <th width="" class="text-center">Current Status</th>
                                   </tr>
                               </thead>
+<tfoot>
+                <tr>
+                  <td colspan="5">Filter list by Current Standing</td>
+                </tr>
+                
+                </tfoot>
                               <tbody> 
 							    <?php if(!empty($Not_Interested)){
 								  foreach( $Not_Interested as $ca ){ ?>
@@ -147,7 +153,7 @@
                                       <td class="text-center"><?=$ca["final_batch_slot"];?> - <?=$ca["grade_name"];?></td>
                                       <td class="text-left">Not Interested </td>
                                   </tr>
-                                 </tr>
+                                  
 								  <?php } ?>
 								  
 							  <?php } else{?>
@@ -187,6 +193,12 @@
                                       <th width="" class="text-center">Current Status</th>
                                   </tr>
                               </thead>
+                              <tfoot>
+                <tr>
+                  <td colspan="5">Filter list by Current Standing</td>
+                </tr>
+                
+                </tfoot>
                               <tbody>  <?php if(!empty($Regret)){
 								  foreach( $Regret as $ca ){ ?>
                                   <tr data-id="<?=$ca["form_id"] ?>">
@@ -197,7 +209,7 @@
                                       <td class="text-center"><?=$ca["final_batch_slot"];?> <?php //$ca["batch_category"];?> - <?=$ca["grade_name"];?></td>
                                       <td class="text-left">Regret </td>
                                   </tr>
-                                 </tr>
+                             
 								  <?php } ?>
 								  
 							  <?php } else{?>
@@ -238,7 +250,7 @@
                                       <th width="" class="text-center">Form #</th> 
                                       <th width="">Applicant Name<br /><small>Submission Date</small></th> 
                                       <th width="">Father Name<br /><small>Father/Mother Mobile</small></th> 
-									  <th width="" class="text-center no-sort">Admission Grade</th>
+									                    <th width="" class="text-center no-sort">Admission Grade</th>
                                       <th width="" class="text-center">Request For Grade</th>
 									  
                                   </tr>
@@ -246,7 +258,7 @@
 							  
 							  	<tfoot>
 								<tr>
-									<td colspan="4">Filter list by Current Standing</td>
+									<td colspan="5">Filter list by Current Standing</td>
 								</tr>
 								
 								</tfoot>

@@ -341,6 +341,9 @@ $(document).ready(function(){
 
 var ViewLog = function(admission_form_id){
 
+
+$('#Generations_AjaxLoader').show();
+
 	var form_id = admission_form_id;
 	var type = 'internalMishandle' ;
 	var currentStage = 'Offer';
@@ -366,7 +369,7 @@ var ViewLog = function(admission_form_id){
 		 	$('.statusDisplay').css('display','');
 		 	}
 		},
-		complete:function(){ },
+		complete:function(){ $('#Generations_AjaxLoader').hide(); },
 		error:function(){}
 	});
 

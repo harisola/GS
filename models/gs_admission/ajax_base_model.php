@@ -127,8 +127,11 @@ if(af.form_assessment_date <= '2001-01-01', '-', date_format(af.form_assessment_
 if(af.form_assessment_date <= '2001-01-01', '-', time_format(fbs.time_start, '%h:%i %p')) as form_assessment_time,
 af.referal_code,
 
-if(af.grade_id=1 or af.grade_id=2 or af.grade_id=15 or af.grade_id=16, 1, 0 ) as Print_Form,
+if(af.grade_id=1 or af.grade_id=2, 1, 0 ) as Print_Form_pn_n,
+if(af.grade_id=15 or af.grade_id=16, 1, 0 ) as Print_Form_level,
 REPLACE(fb.batch_category, '-', '') as Batch_Title
+
+
 
 from atif_gs_admission.admission_form AS af 
 left join atif_gs_admission.family_registration AS fr on (fr.gf_id = af.gf_id)
@@ -1008,7 +1011,7 @@ group by form_batch_id) as available_slots
 
 
 where available_slots > 0
-and batch_date >= curdate()
+and batch_date > curdate()
 and grade_id = ".$grade_id."";
 
 

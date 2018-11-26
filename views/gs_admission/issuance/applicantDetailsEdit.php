@@ -445,6 +445,7 @@
 		<input type="text" class="" placeholder="Father Name *" name="father_name" id="father_name" value="<?=$data_id["Father_name"];?>" /><br /><br />
 		    <div class="input_fields_wrap_father" style="margin-bottom: 14px;">
                            				<!-- <label>Mobile</label> -->
+
        <?php $flag = 0; if($data_id["Father_mobile"] != ''){ 
                            		$flag = 1;
                            		?>
@@ -670,7 +671,13 @@
                                               <option data-countryCode="ZM" value="260">+260</option>
                                               <option data-countryCode="ZW" value="263">+263</option>
                                         </select>
-                                            <input name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone " placeholder="Mobile" id="father_mobile_phone[]" value="<?php echo str_replace("-","",substr( $data_id["Father_mobile"], 1)); ?>" style="padding-left:60px;" /> 
+                                        <?php                                            
+                                        // echo str_replace("-","",substr( $data_id["Father_mobile"], 1)); 
+ ?>
+                                            <input name="father_mobile_phone[]" type="text" class="col-md-10 father_mobile_phone " placeholder="Mobile" id="father_mobile_phone[]" value="<?=  str_replace("-"," ",substr( $data_id["Father_mobile"], 1)); 
+
+
+                                            ?>" style="padding-left:60px;" /> 
                                             <button class="add_field_button_father">+</button>
                                         </div>
                                 <?php } else { ?>
